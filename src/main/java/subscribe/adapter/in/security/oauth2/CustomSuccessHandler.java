@@ -12,14 +12,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import subscribe.adapter.in.security.JwtManager;
-import subscribe.application.token.service.TokenCrudService;
+import subscribe.application.token.service.RefreshTokenCrudService;
+import subscribe.domain.token.RefreshToken;
 
 @Component
 @RequiredArgsConstructor
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
 	private final JwtManager jwtManager;
-	private final TokenCrudService tokenCrudService;
+	private final RefreshTokenCrudService tokenCrudService;
 
 	@Override
 	public void onAuthenticationSuccess(
@@ -31,8 +32,16 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		String providerId = oAuth2User.getName();
 
 		String accessToken = jwtManager.createAccessToken(providerId, new Date());
+
 		String refreshToken = jwtManager.createRefreshToken(providerId, new Date());
-		tokenCrudService.saveRefreshToken(refreshToken);
+		tokenCrudService.saveRefreshToken(
+			new RefreshToken(
+				refreshToken,
+				jwtManager.getProviderId(refreshToken),
+				jwtManager.getIssuedAt(refreshToken),
+				jwtManager.getExpiration(refreshToken)
+			)
+		);
 
 		// 리다이렉트
 		response.sendRedirect("temporary");

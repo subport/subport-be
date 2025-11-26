@@ -1,6 +1,8 @@
 package subscribe.application.token.port.in;
 
-public interface SaveTokenUseCase {
+import subscribe.domain.token.RefreshToken;
 
-	void saveToken(String token);
+public interface SaveRefreshTokenUseCase {
+
+	void saveRefreshToken(RefreshToken refreshToken);
 }
