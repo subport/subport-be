@@ -53,6 +53,14 @@ public class JwtManager {
 		return getAllClaims(token).getSubject();
 	}
 
+	public Date getIssuedAt(String token) {
+		return getAllClaims(token).getIssuedAt();
+	}
+
+	public Date getExpiration(String token) {
+		return getAllClaims(token).getExpiration();
+	}
+
 	// 인증 헤더 검증
 	public void verifyAuthorizationHeader(String authorizationHeader) {
 		if (authorizationHeader == null || !authorizationHeader.startsWith(BEARER_PREFIX)) {
@@ -62,7 +70,7 @@ public class JwtManager {
 
 	// 토큰 만료 검증
 	public void verifyTokenExpiration(String token, Date now) {
-		if (getAllClaims(token).getExpiration().before(now)) {
+		if (getExpiration(token).before(now)) {
 			throw new CustomException(ErrorCode.TOKEN_EXPIRED);
 		}
 	}
