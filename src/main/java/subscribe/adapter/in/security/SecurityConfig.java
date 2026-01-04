@@ -28,6 +28,7 @@ public class SecurityConfig {
 	private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 	private final JwtAuthFilter jwtAuthFilter;
 
+	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		return http.csrf(AbstractHttpConfigurer::disable)
 			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
