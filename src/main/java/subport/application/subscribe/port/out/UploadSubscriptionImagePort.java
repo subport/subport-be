@@ -2,7 +2,7 @@ package subport.application.subscribe.port.out;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public interface SaveSubscriptionImagePort {
+public interface UploadSubscriptionImagePort {
 
-	String saveSubscriptionImage(MultipartFile image);
+	String upload(MultipartFile image);
 }

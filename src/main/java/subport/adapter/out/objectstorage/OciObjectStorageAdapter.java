@@ -13,11 +13,11 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
-import subport.application.subscribe.port.out.SaveSubscriptionImagePort;
+import subport.application.subscribe.port.out.UploadSubscriptionImagePort;
 
 @Component
 @RequiredArgsConstructor
-public class OciObjectStorageAdapter implements SaveSubscriptionImagePort {
+public class OciObjectStorageAdapter implements UploadSubscriptionImagePort {
 
 	private static final String IMAGE_TYPE_PREFIX = "image/";
 	private static final int MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -34,7 +34,7 @@ public class OciObjectStorageAdapter implements SaveSubscriptionImagePort {
 	private String region;
 
 	@Override
-	public String saveSubscriptionImage(MultipartFile image) {
+	public String upload(MultipartFile image) {
 		validateFile(image);
 
 		String fileName = generateFileName(image.getOriginalFilename());
