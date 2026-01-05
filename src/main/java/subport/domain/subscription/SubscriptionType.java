@@ -1,49 +1,36 @@
 package subport.domain.subscription;
 
 import lombok.Getter;
+import subport.application.exception.CustomException;
+import subport.application.exception.ErrorCode;
 
 @Getter
-public class SubscriptionType {
+public enum SubscriptionType {
 
-	private final Long id;
+	OTT("OTT"),
+	MUSIC_STREAMING("음원 스트리밍"),
+	VIDEO_STREAMING("동영상 스트리밍"),
+	AI("AI"),
+	SHOPPING("쇼핑"),
+	FOOD("배달/음식"),
+	BOOK("도서"),
+	MESSENGER("메신저"),
+	VPN("VPN"),
+	CREATIVE_TOOL("크리에이티브 툴"),
+	ETC("기타");
 
-	private final String name;
+	private final String displayName;
 
-	private final boolean isDefault;
-
-	private final Long memberId;
-
-	private SubscriptionType(
-		Long id,
-		String name,
-		Long memberId
-	) {
-		this.id = id;
-		this.name = name;
-		this.isDefault = false;
-		this.memberId = memberId;
+	SubscriptionType(String displayName) {
+		this.displayName = displayName;
 	}
 
-	public static SubscriptionType withId(
-		Long id,
-		String name,
-		Long memberId
-	) {
-		return new SubscriptionType(
-			id,
-			name,
-			memberId
-		);
-	}
-
-	public static SubscriptionType withoutId(
-		String name,
-		Long memberId
-	) {
-		return new SubscriptionType(
-			null,
-			name,
-			memberId
-		);
+	public static SubscriptionType fromDisplayName(String displayName) {
+		for (SubscriptionType type : SubscriptionType.values()) {
+			if (type.displayName.equals(displayName)) {
+				return type;
+			}
+		}
+		throw new CustomException(ErrorCode.INVALID_SUBSCRIPTION_TYPE);
 	}
 }

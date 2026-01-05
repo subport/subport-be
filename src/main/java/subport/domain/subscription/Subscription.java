@@ -1,7 +1,5 @@
 package subport.domain.subscription;
 
-import java.time.LocalDate;
-
 import lombok.Getter;
 
 @Getter
@@ -11,88 +9,64 @@ public class Subscription {
 
 	private final String name;
 
-	private final Long typeId;
+	private final SubscriptionType type;
 
-	private final Long planId;
+	private final String logoImageUrl;
 
-	private final int headCount;
+	private final String planUrl;
 
-	private final LocalDate startAt;
-
-	private final LocalDate endAt;
-
-	private final boolean isActive;
-
-	private final String memo;
+	private final boolean systemProvided;
 
 	private final Long memberId;
 
 	private Subscription(
 		Long id,
 		String name,
-		Long typeId,
-		Long planId,
-		int headCount,
-		LocalDate startAt,
-		LocalDate endAt,
-		String memo,
+		SubscriptionType type,
+		String logoImageUrl,
+		String planUrl,
 		Long memberId
 	) {
 		this.id = id;
 		this.name = name;
-		this.typeId = typeId;
-		this.planId = planId;
-		this.headCount = headCount;
-		this.startAt = startAt;
-		this.endAt = endAt;
-		this.isActive = true;
-		this.memo = memo;
+		this.type = type;
+		this.logoImageUrl = logoImageUrl;
+		this.planUrl = planUrl;
+		this.systemProvided = false;
 		this.memberId = memberId;
 	}
 
 	public static Subscription withId(
 		Long id,
 		String name,
-		Long typeId,
-		Long planId,
-		int headCount,
-		LocalDate startAt,
-		LocalDate endAt,
-		String memo,
+		SubscriptionType type,
+		String logoImageUrl,
+		String planUrl,
 		Long memberId
 	) {
 		return new Subscription(
 			id,
 			name,
-			typeId,
-			planId,
-			headCount,
-			startAt,
-			endAt,
-			memo,
+			type,
+			logoImageUrl,
+			planUrl,
 			memberId
 		);
 	}
 
 	public static Subscription withoutId(
 		String name,
-		Long typeId,
-		Long planId,
-		int headCount,
-		LocalDate startAt,
-		LocalDate endAt,
-		String memo,
+		SubscriptionType type,
+		String logoImageUrl,
+		String planUrl,
 		Long memberId
 	) {
 		return new Subscription(
 			null,
 			name,
-			typeId,
-			planId,
-			headCount,
-			startAt,
-			endAt,
-			memo,
+			type,
+			logoImageUrl,
+			planUrl,
 			memberId
 		);
 	}

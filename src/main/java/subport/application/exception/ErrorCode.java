@@ -20,7 +20,10 @@ public enum ErrorCode {
 	// 이미지 파일 관련
 	INVALID_IMAGE_FILE_TYPE(HttpStatus.BAD_REQUEST, "이미지 파일만 업로드 가능합니다."),
 	INVALID_IMAGE_FILE_SIZE(HttpStatus.BAD_REQUEST, "이미지 파일의 크기는 5MB를 초과할 수 없습니다."),
-	FILE_READ_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 파일 읽기에 실패했습니다.");
+	FILE_READ_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 파일 읽기에 실패했습니다."),
+
+	// 구독 관련
+	INVALID_SUBSCRIPTION_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 구독 타입입니다.");
 
 	private final HttpStatus httpStatus;
 	private final String message;

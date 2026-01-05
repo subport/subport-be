@@ -2,7 +2,7 @@ package subport.application.subscribe.port.out;
 
 import subport.domain.subscription.Subscription;
 
-public interface SaveSubscriptionPort {
+public interface SaveCustomSubscriptionPort {
 
-	void saveSubscription(Subscription subscription);
+	void save(Subscription subscription);
 }

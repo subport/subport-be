@@ -1,8 +1,8 @@
 package subport.adapter.out.persistence.subscription;
 
-import java.time.LocalDate;
-
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,6 +13,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import subport.adapter.out.persistence.BaseTimeEntity;
 import subport.adapter.out.persistence.member.MemberJpaEntity;
+import subport.domain.subscription.SubscriptionType;
 
 @Entity
 @Table(name = "subscription")
@@ -25,40 +26,65 @@ public class SubscriptionJpaEntity extends BaseTimeEntity {
 
 	private String name;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	private SubscriptionTypeJpaEntity type;
+	@Enumerated(value = EnumType.STRING)
+	private SubscriptionType type;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	private SubscriptionPlanJpaEntity plan;
+	private String logoImageUrl;
 
-	private int headCount;
+	private String planUrl;
 
-	private LocalDate startAt;
-
-	private LocalDate endAt;
-
-	private String memo;
+	private boolean systemProvided;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	private MemberJpaEntity member;
 
-	public SubscriptionJpaEntity(
+	private SubscriptionJpaEntity(
 		String name,
-		SubscriptionTypeJpaEntity type,
-		SubscriptionPlanJpaEntity plan,
-		int headCount,
-		LocalDate startAt,
-		LocalDate endAt,
-		String memo,
+		SubscriptionType type,
+		String logoImageUrl,
+		String planUrl,
+		boolean systemProvided,
 		MemberJpaEntity member
 	) {
 		this.name = name;
 		this.type = type;
-		this.plan = plan;
-		this.headCount = headCount;
-		this.startAt = startAt;
-		this.endAt = endAt;
-		this.memo = memo;
+		this.logoImageUrl = logoImageUrl;
+		this.planUrl = planUrl;
+		this.systemProvided = systemProvided;
 		this.member = member;
+	}
+
+	public static SubscriptionJpaEntity customSubscription(
+		String name,
+		SubscriptionType type,
+		String logoImageUrl,
+		String planUrl,
+		MemberJpaEntity member
+	) {
+		return new SubscriptionJpaEntity(
+			name,
+			type,
+			logoImageUrl,
+			planUrl,
+			false,
+			member
+		);
+	}
+
+	public static SubscriptionJpaEntity systemSubscription(
+		String name,
+		SubscriptionType type,
+		String logoImageUrl,
+		String planUrl,
+		MemberJpaEntity member
+	) {
+		return new SubscriptionJpaEntity(
+			name,
+			type,
+			logoImageUrl,
+			planUrl,
+			true,
+			null
+		);
 	}
 }

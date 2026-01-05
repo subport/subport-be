@@ -8,20 +8,28 @@ import subport.domain.subscription.Subscription;
 @Component
 public class SubscriptionMapper {
 
-	public SubscriptionJpaEntity toJpaEntity(
+	public SubscriptionJpaEntity toCustomSubscriptionJpaEntity(
 		Subscription subscription,
-		SubscriptionTypeJpaEntity subscriptionTypeEntity,
-		SubscriptionPlanJpaEntity subscriptionPlanEntity,
 		MemberJpaEntity memberEntity
 	) {
-		return new SubscriptionJpaEntity(
+		return SubscriptionJpaEntity.customSubscription(
 			subscription.getName(),
-			subscriptionTypeEntity,
-			subscriptionPlanEntity,
-			subscription.getHeadCount(),
-			subscription.getStartAt(),
-			subscription.getEndAt(),
-			subscription.getMemo(),
+			subscription.getType(),
+			subscription.getLogoImageUrl(),
+			subscription.getPlanUrl(),
+			memberEntity
+		);
+	}
+
+	public SubscriptionJpaEntity toSystemSubscriptionJpaEntity(
+		Subscription subscription,
+		MemberJpaEntity memberEntity
+	) {
+		return SubscriptionJpaEntity.systemSubscription(
+			subscription.getName(),
+			subscription.getType(),
+			subscription.getLogoImageUrl(),
+			subscription.getPlanUrl(),
 			memberEntity
 		);
 	}
