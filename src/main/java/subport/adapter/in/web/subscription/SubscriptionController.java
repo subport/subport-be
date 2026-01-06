@@ -21,7 +21,7 @@ public class SubscriptionController {
 	private final RegisterCustomSubscriptionUseCase registerCustomSubscriptionUseCase;
 
 	@PostMapping
-	public ResponseEntity<Void> saveCustomSubscription(
+	public ResponseEntity<Void> registerCustomSubscription(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
 		@RequestPart RegisterCustomSubscriptionRequest request,
 		@RequestPart(required = false) MultipartFile image
@@ -32,8 +32,7 @@ public class SubscriptionController {
 			image
 		);
 
-		return ResponseEntity
-			.ok()
+		return ResponseEntity.ok()
 			.build();
 	}
 }
