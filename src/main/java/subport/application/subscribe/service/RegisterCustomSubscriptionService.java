@@ -26,14 +26,19 @@ public class RegisterCustomSubscriptionService implements RegisterCustomSubscrip
 		RegisterCustomSubscriptionRequest request,
 		MultipartFile image
 	) {
-		String publicUrl = ociObjectStorageAdapter.upload(image);
+		String logoImageUrl = null; // 기본 이미지 디자인 완성되면 대체
+		if (image != null) {
+			logoImageUrl = ociObjectStorageAdapter.upload(image);
+		}
+
 		Subscription subscription = Subscription.withoutId(
 			request.name(),
 			SubscriptionType.fromDisplayName(request.type()),
-			publicUrl,
+			logoImageUrl,
 			null,
 			memberId
 		);
+
 		saveCustomSubscriptionPort.save(subscription);
 	}
 }
