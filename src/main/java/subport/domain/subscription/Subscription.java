@@ -25,6 +25,7 @@ public class Subscription {
 		SubscriptionType type,
 		String logoImageUrl,
 		String planUrl,
+		boolean systemProvided,
 		Long memberId
 	) {
 		this.id = id;
@@ -32,7 +33,7 @@ public class Subscription {
 		this.type = type;
 		this.logoImageUrl = logoImageUrl;
 		this.planUrl = planUrl;
-		this.systemProvided = false;
+		this.systemProvided = systemProvided;
 		this.memberId = memberId;
 	}
 
@@ -50,6 +51,7 @@ public class Subscription {
 			type,
 			logoImageUrl,
 			planUrl,
+			false,
 			memberId
 		);
 	}
@@ -67,6 +69,7 @@ public class Subscription {
 			type,
 			logoImageUrl,
 			planUrl,
+			false,
 			memberId
 		);
 	}

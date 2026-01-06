@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 import subport.adapter.out.persistence.member.MemberJpaEntity;
 import subport.adapter.out.persistence.member.SpringDataMemberRepository;
-import subport.application.subscribe.port.out.SaveCustomSubscriptionPort;
+import subport.application.subscription.port.out.SaveCustomSubscriptionPort;
 import subport.domain.subscription.Subscription;
 
 @Component

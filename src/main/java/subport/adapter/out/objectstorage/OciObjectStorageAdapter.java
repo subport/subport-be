@@ -13,7 +13,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
-import subport.application.subscribe.port.out.UploadSubscriptionImagePort;
+import subport.application.subscription.port.out.UploadSubscriptionImagePort;
 
 @Component
 @RequiredArgsConstructor

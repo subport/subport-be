@@ -1,4 +1,4 @@
-package subport.application.subscribe.port.out;
+package subport.application.subscription.port.out;
 
 import subport.domain.subscription.Subscription;
 

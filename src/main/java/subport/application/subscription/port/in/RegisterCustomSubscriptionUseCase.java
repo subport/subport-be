@@ -1,4 +1,4 @@
-package subport.application.subscribe.port.in;
+package subport.application.subscription.port.in;
 
 import org.springframework.web.multipart.MultipartFile;
 

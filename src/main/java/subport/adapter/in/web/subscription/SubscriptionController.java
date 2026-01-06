@@ -10,8 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import subport.adapter.in.security.oauth2.CustomOAuth2User;
-import subport.application.subscribe.port.in.RegisterCustomSubscriptionRequest;
-import subport.application.subscribe.port.in.RegisterCustomSubscriptionUseCase;
+import subport.application.subscription.port.in.RegisterCustomSubscriptionRequest;
+import subport.application.subscription.port.in.RegisterCustomSubscriptionUseCase;
 
 @RestController
 @RequestMapping("/api/subscriptions")

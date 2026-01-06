@@ -1,4 +1,4 @@
-package subport.application.subscribe.service;
+package subport.application.subscription.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -6,9 +6,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import subport.adapter.out.objectstorage.OciObjectStorageAdapter;
-import subport.application.subscribe.port.in.RegisterCustomSubscriptionRequest;
-import subport.application.subscribe.port.in.RegisterCustomSubscriptionUseCase;
-import subport.application.subscribe.port.out.SaveCustomSubscriptionPort;
+import subport.application.subscription.port.in.RegisterCustomSubscriptionRequest;
+import subport.application.subscription.port.in.RegisterCustomSubscriptionUseCase;
+import subport.application.subscription.port.out.SaveCustomSubscriptionPort;
 import subport.domain.subscription.Subscription;
 import subport.domain.subscription.SubscriptionType;
 
