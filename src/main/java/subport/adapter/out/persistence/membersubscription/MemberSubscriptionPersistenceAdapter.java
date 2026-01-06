@@ -22,13 +22,13 @@ public class MemberSubscriptionPersistenceAdapter implements SaveMemberSubscript
 	@Override
 	public void save(MemberSubscription memberSubscription) {
 		MemberJpaEntity memberEntity = memberRepository.getReferenceById(memberSubscription.getMemberId());
-		SubscriptionJpaEntity subscriptionJpaEntity = subscriptionRepository.getReferenceById(
+		SubscriptionJpaEntity subscriptionEntity = subscriptionRepository.getReferenceById(
 			memberSubscription.getSubscriptionId());
 
 		MemberSubscriptionJpaEntity memberSubscriptionEntity = memberSubscriptionMapper.toJpaEntity(
 			memberSubscription,
 			memberEntity,
-			subscriptionJpaEntity
+			subscriptionEntity
 		);
 
 		memberSubscriptionRepository.save(memberSubscriptionEntity);
