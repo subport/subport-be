@@ -38,7 +38,7 @@ public class SubscriptionJpaEntity extends BaseTimeEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private MemberJpaEntity member;
 
-	private SubscriptionJpaEntity(
+	public SubscriptionJpaEntity(
 		String name,
 		SubscriptionType type,
 		String logoImageUrl,
@@ -52,39 +52,5 @@ public class SubscriptionJpaEntity extends BaseTimeEntity {
 		this.planUrl = planUrl;
 		this.systemProvided = systemProvided;
 		this.member = member;
-	}
-
-	public static SubscriptionJpaEntity customSubscription(
-		String name,
-		SubscriptionType type,
-		String logoImageUrl,
-		String planUrl,
-		MemberJpaEntity member
-	) {
-		return new SubscriptionJpaEntity(
-			name,
-			type,
-			logoImageUrl,
-			planUrl,
-			false,
-			member
-		);
-	}
-
-	public static SubscriptionJpaEntity systemSubscription(
-		String name,
-		SubscriptionType type,
-		String logoImageUrl,
-		String planUrl,
-		MemberJpaEntity member
-	) {
-		return new SubscriptionJpaEntity(
-			name,
-			type,
-			logoImageUrl,
-			planUrl,
-			true,
-			null
-		);
 	}
 }

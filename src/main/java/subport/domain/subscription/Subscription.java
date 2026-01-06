@@ -42,7 +42,6 @@ public class Subscription {
 		String name,
 		SubscriptionType type,
 		String logoImageUrl,
-		String planUrl,
 		Long memberId
 	) {
 		return new Subscription(
@@ -50,7 +49,7 @@ public class Subscription {
 			name,
 			type,
 			logoImageUrl,
-			planUrl,
+			null,
 			false,
 			memberId
 		);
@@ -60,7 +59,6 @@ public class Subscription {
 		String name,
 		SubscriptionType type,
 		String logoImageUrl,
-		String planUrl,
 		Long memberId
 	) {
 		return new Subscription(
@@ -68,7 +66,7 @@ public class Subscription {
 			name,
 			type,
 			logoImageUrl,
-			planUrl,
+			null,
 			false,
 			memberId
 		);

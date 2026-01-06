@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import subport.adapter.out.objectstorage.OciObjectStorageAdapter;
 import subport.application.subscription.port.in.RegisterCustomSubscriptionRequest;
 import subport.application.subscription.port.in.RegisterCustomSubscriptionUseCase;
-import subport.application.subscription.port.out.SaveCustomSubscriptionPort;
+import subport.application.subscription.port.out.SaveSubscriptionPort;
 import subport.domain.subscription.Subscription;
 import subport.domain.subscription.SubscriptionType;
 
@@ -16,7 +16,7 @@ import subport.domain.subscription.SubscriptionType;
 @RequiredArgsConstructor
 public class RegisterCustomSubscriptionService implements RegisterCustomSubscriptionUseCase {
 
-	private final SaveCustomSubscriptionPort saveCustomSubscriptionPort;
+	private final SaveSubscriptionPort saveSubscriptionPort;
 	private final OciObjectStorageAdapter ociObjectStorageAdapter;
 
 	@Transactional
@@ -35,10 +35,9 @@ public class RegisterCustomSubscriptionService implements RegisterCustomSubscrip
 			request.name(),
 			SubscriptionType.fromDisplayName(request.type()),
 			logoImageUrl,
-			null,
 			memberId
 		);
 
-		saveCustomSubscriptionPort.save(subscription);
+		saveSubscriptionPort.save(subscription);
 	}
 }
