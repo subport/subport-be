@@ -30,6 +30,8 @@ public class MemberSubscription {
 
 	private final Long subscriptionId;
 
+	private final Long subscriptionPlanId;
+
 	private MemberSubscription(
 		Long id,
 		LocalDate startDate,
@@ -40,7 +42,8 @@ public class MemberSubscription {
 		LocalDate terminationDate,
 		LocalDate nextPaymentDate,
 		Long memberId,
-		Long subscriptionId
+		Long subscriptionId,
+		Long subscriptionPlanId
 	) {
 		this.id = id;
 		this.startDate = startDate;
@@ -57,6 +60,7 @@ public class MemberSubscription {
 		this.nextPaymentDate = nextPaymentDate;
 		this.memberId = memberId;
 		this.subscriptionId = subscriptionId;
+		this.subscriptionPlanId = subscriptionPlanId;
 	}
 
 	public static MemberSubscription withId(
@@ -69,7 +73,8 @@ public class MemberSubscription {
 		LocalDate terminationDate,
 		LocalDate nextPaymentDate,
 		Long memberId,
-		Long subscriptionId
+		Long subscriptionId,
+		Long subscriptionPlanId
 	) {
 		return new MemberSubscription(
 			id,
@@ -81,7 +86,8 @@ public class MemberSubscription {
 			terminationDate,
 			nextPaymentDate,
 			memberId,
-			subscriptionId
+			subscriptionId,
+			subscriptionPlanId
 		);
 	}
 
@@ -94,7 +100,8 @@ public class MemberSubscription {
 		LocalDate terminationDate,
 		LocalDate nextPaymentDate,
 		Long memberId,
-		Long subscriptionId
+		Long subscriptionId,
+		Long subscriptionPlanId
 	) {
 		return new MemberSubscription(
 			null,
@@ -106,7 +113,8 @@ public class MemberSubscription {
 			terminationDate,
 			nextPaymentDate,
 			memberId,
-			subscriptionId
+			subscriptionId,
+			subscriptionPlanId
 		);
 	}
 }

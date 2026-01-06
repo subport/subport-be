@@ -31,7 +31,8 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 			null,
 			nextPaymentDate,
 			memberId,
-			request.subscriptionId()
+			request.subscriptionId(),
+			request.subscriptionPlanId()
 		);
 
 		saveMemberSubscriptionPort.save(memberSubscription);

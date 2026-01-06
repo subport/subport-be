@@ -10,12 +10,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import subport.adapter.out.persistence.BaseTimeEntity;
 import subport.adapter.out.persistence.member.MemberJpaEntity;
 import subport.adapter.out.persistence.subscription.SubscriptionJpaEntity;
+import subport.adapter.out.persistence.subscription.SubscriptionPlanJpaEntity;
 
 @Entity
 @Table(name = "member_subscription")
@@ -50,6 +52,10 @@ public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private SubscriptionJpaEntity subscription;
 
+	@JoinColumn(name = "subscription_plan_id", nullable = false)
+	@OneToOne(fetch = FetchType.LAZY)
+	private SubscriptionPlanJpaEntity subscriptionPlan;
+
 	public MemberSubscriptionJpaEntity(
 		LocalDate startDate,
 		Integer reminderDaysBeforeEnd,
@@ -60,7 +66,8 @@ public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 		LocalDate terminationDate,
 		LocalDate nextPaymentDate,
 		MemberJpaEntity member,
-		SubscriptionJpaEntity subscription
+		SubscriptionJpaEntity subscription,
+		SubscriptionPlanJpaEntity subscriptionPlan
 	) {
 		this.startDate = startDate;
 		this.reminderDaysBeforeEnd = reminderDaysBeforeEnd;
@@ -72,5 +79,6 @@ public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 		this.nextPaymentDate = nextPaymentDate;
 		this.member = member;
 		this.subscription = subscription;
+		this.subscriptionPlan = subscriptionPlan;
 	}
 }

@@ -9,6 +9,7 @@ public record RegisterMemberSubscriptionRequest(
 	String memo,
 	boolean dutchPay,
 	BigDecimal dutchPayAmount,
-	Long subscriptionId
+	Long subscriptionId,
+	Long subscriptionPlanId
 ) {
 }
