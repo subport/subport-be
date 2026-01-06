@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import subport.adapter.out.persistence.BaseTimeEntity;
 import subport.adapter.out.persistence.member.MemberJpaEntity;
+import subport.domain.subscription.SubscriptionAmountUnit;
 
 @Entity
 @Table(name = "subscription_plan")
@@ -21,31 +22,37 @@ public class SubscriptionPlanJpaEntity extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String subscriptionName;
-
 	private String planName;
 
 	private int amount;
 
+	private SubscriptionAmountUnit amountUnit;
+
 	private int durationMonths;
 
-	private boolean isDefault;
+	private boolean systemProvided;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	private MemberJpaEntity member;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	private SubscriptionJpaEntity subscription;
+
 	public SubscriptionPlanJpaEntity(
-		String subscriptionName,
 		String planName,
 		int amount,
+		SubscriptionAmountUnit amountUnit,
 		int durationMonths,
-		MemberJpaEntity member
+		boolean systemProvided,
+		MemberJpaEntity member,
+		SubscriptionJpaEntity subscription
 	) {
-		this.subscriptionName = subscriptionName;
 		this.planName = planName;
 		this.amount = amount;
+		this.amountUnit = amountUnit;
 		this.durationMonths = durationMonths;
-		this.isDefault = false;
+		this.systemProvided = systemProvided;
 		this.member = member;
+		this.subscription = subscription;
 	}
 }

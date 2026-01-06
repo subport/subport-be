@@ -7,67 +7,78 @@ public class SubscriptionPlan {
 
 	private final Long id;
 
-	private final String subscriptionName;
-
 	private final String planName;
 
 	private final int amount;
 
+	private final SubscriptionAmountUnit amountUnit;
+
 	private final int durationMonths;
 
-	private final boolean isDefault;
+	private final boolean systemProvided;
 
 	private final Long memberId;
 
+	private final Long subscriptionId;
+
 	private SubscriptionPlan(
 		Long id,
-		String subscriptionName,
 		String planName,
 		int amount,
+		SubscriptionAmountUnit amountUnit,
 		int durationMonths,
-		Long memberId
+		boolean systemProvided,
+		Long memberId,
+		Long subscriptionId
 	) {
 		this.id = id;
-		this.subscriptionName = subscriptionName;
 		this.planName = planName;
 		this.amount = amount;
+		this.amountUnit = amountUnit;
 		this.durationMonths = durationMonths;
-		this.isDefault = false;
+		this.systemProvided = systemProvided;
 		this.memberId = memberId;
+		this.subscriptionId = subscriptionId;
 	}
 
 	public static SubscriptionPlan withId(
 		Long id,
-		String subscriptionName,
 		String planName,
 		int amount,
+		SubscriptionAmountUnit amountUnit,
 		int durationMonths,
-		Long memberId
+		Long memberId,
+		Long subscriptionId
 	) {
 		return new SubscriptionPlan(
 			id,
-			subscriptionName,
 			planName,
 			amount,
+			amountUnit,
 			durationMonths,
-			memberId
+			false,
+			memberId,
+			subscriptionId
 		);
 	}
 
 	public static SubscriptionPlan withoutId(
-		String subscriptionName,
 		String planName,
 		int amount,
+		SubscriptionAmountUnit amountUnit,
 		int durationMonths,
-		Long memberId
+		Long memberId,
+		Long subscriptionId
 	) {
 		return new SubscriptionPlan(
 			null,
-			subscriptionName,
 			planName,
 			amount,
+			amountUnit,
 			durationMonths,
-			memberId
+			false,
+			memberId,
+			subscriptionId
 		);
 	}
 }
