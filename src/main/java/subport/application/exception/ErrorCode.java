@@ -23,7 +23,10 @@ public enum ErrorCode {
 	FILE_READ_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 파일 읽기에 실패했습니다."),
 
 	// 구독 관련
+	SUBSCRIPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 구독 서비스입니다."),
 	INVALID_SUBSCRIPTION_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 구독 타입입니다."),
+	SYSTEM_SUBSCRIPTION_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공 구독 서비스는 수정할 수 없습니다."),
+	SUBSCRIPTION_FORBIDDEN(HttpStatus.FORBIDDEN, "본인의 구독 서비스만 수정할 수 있습니다."),
 
 	// 구독 플랜 관련
 	INVALID_AMOUNT_UNIT(HttpStatus.BAD_REQUEST, "유효하지 않은 통화 단위입니다.");

@@ -7,13 +7,13 @@ public class Subscription {
 
 	private final Long id;
 
-	private final String name;
+	private String name;
 
-	private final SubscriptionType type;
+	private SubscriptionType type;
 
-	private final String logoImageUrl;
+	private String logoImageUrl;
 
-	private final String planUrl;
+	private String planUrl;
 
 	private final boolean systemProvided;
 
@@ -42,6 +42,8 @@ public class Subscription {
 		String name,
 		SubscriptionType type,
 		String logoImageUrl,
+		String planUrl,
+		boolean systemProvided,
 		Long memberId
 	) {
 		return new Subscription(
@@ -49,8 +51,8 @@ public class Subscription {
 			name,
 			type,
 			logoImageUrl,
-			null,
-			false,
+			planUrl,
+			systemProvided,
 			memberId
 		);
 	}
@@ -59,6 +61,8 @@ public class Subscription {
 		String name,
 		SubscriptionType type,
 		String logoImageUrl,
+		String planUrl,
+		boolean systemProvided,
 		Long memberId
 	) {
 		return new Subscription(
@@ -66,9 +70,23 @@ public class Subscription {
 			name,
 			type,
 			logoImageUrl,
-			null,
-			false,
+			planUrl,
+			systemProvided,
 			memberId
 		);
+	}
+
+	public void update(
+		String name,
+		SubscriptionType type,
+		String logoImageUrl,
+		String planUrl
+	) {
+		this.name = name;
+		this.type = type;
+		if (logoImageUrl != null) {
+			this.logoImageUrl = logoImageUrl;
+		}
+		this.planUrl = planUrl;
 	}
 }

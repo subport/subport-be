@@ -8,7 +8,6 @@ import subport.domain.subscription.Subscription;
 @Component
 public class SubscriptionMapper {
 
-	// 설계 잘못함
 	public SubscriptionJpaEntity toJpaEntity(
 		Subscription subscription,
 		MemberJpaEntity memberEntity
@@ -20,6 +19,20 @@ public class SubscriptionMapper {
 			subscription.getPlanUrl(),
 			subscription.isSystemProvided(),
 			memberEntity
+		);
+	}
+
+	public Subscription toDomain(
+		SubscriptionJpaEntity subscriptionEntity
+	) {
+		return Subscription.withId(
+			subscriptionEntity.getId(),
+			subscriptionEntity.getName(),
+			subscriptionEntity.getType(),
+			subscriptionEntity.getLogoImageUrl(),
+			subscriptionEntity.getPlanUrl(),
+			subscriptionEntity.isSystemProvided(),
+			subscriptionEntity.getMember().getId()
 		);
 	}
 }
