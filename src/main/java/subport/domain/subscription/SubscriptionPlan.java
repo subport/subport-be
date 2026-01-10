@@ -9,13 +9,13 @@ public class SubscriptionPlan {
 
 	private final Long id;
 
-	private final String planName;
+	private String planName;
 
-	private final BigDecimal amount;
+	private BigDecimal amount;
 
-	private final SubscriptionAmountUnit amountUnit;
+	private SubscriptionAmountUnit amountUnit;
 
-	private final int durationMonths;
+	private int durationMonths;
 
 	private final boolean systemProvided;
 
@@ -84,5 +84,17 @@ public class SubscriptionPlan {
 			memberId,
 			subscriptionId
 		);
+	}
+
+	public void update(
+		String planName,
+		BigDecimal amount,
+		SubscriptionAmountUnit amountUnit,
+		int durationMonths
+	) {
+		this.planName = planName;
+		this.amount = amount;
+		this.amountUnit = amountUnit;
+		this.durationMonths = durationMonths;
 	}
 }

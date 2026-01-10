@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 import subport.adapter.out.persistence.BaseTimeEntity;
 import subport.adapter.out.persistence.member.MemberJpaEntity;
 import subport.domain.subscription.SubscriptionAmountUnit;
+import subport.domain.subscription.SubscriptionPlan;
 
 @Entity
 @Table(name = "subscription_plan")
@@ -64,5 +65,12 @@ public class SubscriptionPlanJpaEntity extends BaseTimeEntity {
 		this.systemProvided = systemProvided;
 		this.member = member;
 		this.subscription = subscription;
+	}
+
+	public void apply(SubscriptionPlan subscriptionPlan) {
+		this.planName = subscriptionPlan.getPlanName();
+		this.amount = subscriptionPlan.getAmount();
+		this.amountUnit = subscriptionPlan.getAmountUnit();
+		this.durationMonths = subscriptionPlan.getDurationMonths();
 	}
 }

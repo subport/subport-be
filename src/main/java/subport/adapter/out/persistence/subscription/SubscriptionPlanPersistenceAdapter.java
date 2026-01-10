@@ -7,9 +7,12 @@ import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 import subport.adapter.out.persistence.member.MemberJpaEntity;
 import subport.adapter.out.persistence.member.SpringDataMemberRepository;
+import subport.application.exception.CustomException;
+import subport.application.exception.ErrorCode;
 import subport.application.subscription.port.out.DeleteSubscriptionPlanPort;
 import subport.application.subscription.port.out.LoadSubscriptionPlanPort;
 import subport.application.subscription.port.out.SaveSubscriptionPlanPort;
+import subport.application.subscription.port.out.UpdateSubscriptionPlanPort;
 import subport.domain.subscription.SubscriptionPlan;
 
 @Component
@@ -17,6 +20,7 @@ import subport.domain.subscription.SubscriptionPlan;
 public class SubscriptionPlanPersistenceAdapter implements
 	SaveSubscriptionPlanPort,
 	LoadSubscriptionPlanPort,
+	UpdateSubscriptionPlanPort,
 	DeleteSubscriptionPlanPort {
 
 	private final SpringDataSubscriptionPlanRepository subscriptionPlanRepository;
@@ -40,10 +44,26 @@ public class SubscriptionPlanPersistenceAdapter implements
 	}
 
 	@Override
+	public SubscriptionPlan load(Long subscriptionPlanId) {
+		SubscriptionPlanJpaEntity subscriptionPlanEntity = subscriptionPlanRepository.findById(subscriptionPlanId)
+			.orElseThrow(() -> new CustomException(ErrorCode.PLAN_NOT_FOUND));
+
+		return subscriptionPlanMapper.toDomain(subscriptionPlanEntity);
+	}
+
+	@Override
 	public List<SubscriptionPlan> loadByMemberIdAndSubscriptionId(Long memberId, Long subscriptionId) {
 		return subscriptionPlanRepository.findByIdAccessibleToMember(memberId, subscriptionId).stream()
 			.map(subscriptionPlanMapper::toDomain)
 			.toList();
+	}
+
+	@Override
+	public void update(SubscriptionPlan subscriptionPlan) {
+		SubscriptionPlanJpaEntity subscriptionPlanEntity = subscriptionPlanRepository.findById(subscriptionPlan.getId())
+			.orElseThrow(() -> new CustomException(ErrorCode.PLAN_NOT_FOUND));
+
+		subscriptionPlanEntity.apply(subscriptionPlan);
 	}
 
 	@Override
