@@ -25,8 +25,9 @@ public enum ErrorCode {
 	// 구독 관련
 	SUBSCRIPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 구독 서비스입니다."),
 	INVALID_SUBSCRIPTION_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 구독 타입입니다."),
-	SYSTEM_SUBSCRIPTION_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공 구독 서비스는 수정할 수 없습니다."),
-	SUBSCRIPTION_FORBIDDEN(HttpStatus.FORBIDDEN, "본인의 구독 서비스만 수정할 수 있습니다."),
+	SYSTEM_SUBSCRIPTION_WRITE_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공 구독 서비스는 수정 및 삭제가 불가능합니다."),
+	SUBSCRIPTION_WRITE_FORBIDDEN(HttpStatus.FORBIDDEN, "본인의 구독 서비스가 아니면 수정 및 삭제가 불가능합니다."),
+	SUBSCRIPTION_READ_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공이 아니면 본인의 구독 서비스만 조회가 가능합니다."),
 
 	// 구독 플랜 관련
 	INVALID_AMOUNT_UNIT(HttpStatus.BAD_REQUEST, "유효하지 않은 통화 단위입니다.");

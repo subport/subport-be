@@ -26,11 +26,11 @@ public class DeleteCustomSubscriptionService implements DeleteCustomSubscription
 		Subscription subscription = loadSubscriptionPort.load(subscriptionId);
 
 		if (subscription.isSystemProvided()) {
-			throw new CustomException(ErrorCode.SYSTEM_SUBSCRIPTION_FORBIDDEN);
+			throw new CustomException(ErrorCode.SYSTEM_SUBSCRIPTION_WRITE_FORBIDDEN);
 		}
 
 		if (!memberId.equals(subscription.getMemberId())) {
-			throw new CustomException(ErrorCode.SUBSCRIPTION_FORBIDDEN);
+			throw new CustomException(ErrorCode.SUBSCRIPTION_WRITE_FORBIDDEN);
 		}
 
 		// 관련 플랜 삭제

@@ -34,11 +34,11 @@ public class UpdateCustomSubscriptionService implements UpdateCustomSubscription
 		Subscription subscription = loadSubscriptionPort.load(subscriptionId);
 
 		if (subscription.isSystemProvided()) {
-			throw new CustomException(ErrorCode.SYSTEM_SUBSCRIPTION_FORBIDDEN);
+			throw new CustomException(ErrorCode.SYSTEM_SUBSCRIPTION_WRITE_FORBIDDEN);
 		}
 
 		if (!memberId.equals(subscription.getMemberId())) {
-			throw new CustomException(ErrorCode.SUBSCRIPTION_FORBIDDEN);
+			throw new CustomException(ErrorCode.SUBSCRIPTION_WRITE_FORBIDDEN);
 		}
 
 		String logoImageUrl = null; // 기본 이미지 디자인 완성되면 대체
