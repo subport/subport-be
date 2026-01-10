@@ -28,6 +28,7 @@ import subport.application.subscription.port.in.UpdateCustomSubscriptionRequest;
 import subport.application.subscription.port.in.UpdateCustomSubscriptionUseCase;
 import subport.application.subscription.port.out.ListSubscriptionsResponse;
 import subport.application.subscription.port.out.ReadSubscriptionResponse;
+import subport.application.subscription.port.out.RegisterCustomSubscriptionResponse;
 
 @RestController
 @RequestMapping("/api/subscriptions")
@@ -42,19 +43,15 @@ public class SubscriptionController {
 	private final ListSubscriptionTypesUseCase listSubscriptionTypesUseCase;
 
 	@PostMapping
-	public ResponseEntity<Void> registerCustomSubscription(
+	public ResponseEntity<RegisterCustomSubscriptionResponse> registerCustomSubscription(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
 		@RequestPart RegisterCustomSubscriptionRequest request,
 		@RequestPart(required = false) MultipartFile image
 	) {
-		registerCustomSubscriptionUseCase.register(
+		return ResponseEntity.ok(registerCustomSubscriptionUseCase.register(
 			oAuth2User.getMemberId(),
 			request,
-			image
-		);
-
-		return ResponseEntity.ok()
-			.build();
+			image));
 	}
 
 	@PutMapping("/{id}")

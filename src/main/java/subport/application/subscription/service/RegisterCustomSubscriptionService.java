@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.RequiredArgsConstructor;
 import subport.application.subscription.port.in.RegisterCustomSubscriptionRequest;
 import subport.application.subscription.port.in.RegisterCustomSubscriptionUseCase;
+import subport.application.subscription.port.out.RegisterCustomSubscriptionResponse;
 import subport.application.subscription.port.out.SaveSubscriptionPort;
 import subport.application.subscription.port.out.UploadSubscriptionImagePort;
 import subport.domain.subscription.Subscription;
@@ -21,7 +22,7 @@ public class RegisterCustomSubscriptionService implements RegisterCustomSubscrip
 
 	@Transactional
 	@Override
-	public void register(
+	public RegisterCustomSubscriptionResponse register(
 		Long memberId,
 		RegisterCustomSubscriptionRequest request,
 		MultipartFile image
@@ -40,6 +41,6 @@ public class RegisterCustomSubscriptionService implements RegisterCustomSubscrip
 			memberId
 		);
 
-		saveSubscriptionPort.save(subscription);
+		return new RegisterCustomSubscriptionResponse(saveSubscriptionPort.save(subscription));
 	}
 }
