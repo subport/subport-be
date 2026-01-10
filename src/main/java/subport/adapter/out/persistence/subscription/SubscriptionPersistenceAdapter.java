@@ -7,6 +7,7 @@ import subport.adapter.out.persistence.member.MemberJpaEntity;
 import subport.adapter.out.persistence.member.SpringDataMemberRepository;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
+import subport.application.subscription.port.out.DeleteSubscriptionPort;
 import subport.application.subscription.port.out.LoadSubscriptionPort;
 import subport.application.subscription.port.out.SaveSubscriptionPort;
 import subport.application.subscription.port.out.UpdateSubscriptionPort;
@@ -17,7 +18,8 @@ import subport.domain.subscription.Subscription;
 public class SubscriptionPersistenceAdapter implements
 	SaveSubscriptionPort,
 	LoadSubscriptionPort,
-	UpdateSubscriptionPort {
+	UpdateSubscriptionPort,
+	DeleteSubscriptionPort {
 
 	private final SpringDataSubscriptionRepository subscriptionRepository;
 	private final SpringDataMemberRepository memberRepository;
@@ -52,5 +54,10 @@ public class SubscriptionPersistenceAdapter implements
 			.orElseThrow(() -> new CustomException(ErrorCode.SUBSCRIPTION_NOT_FOUND));
 
 		subscriptionEntity.apply(subscription);
+	}
+
+	@Override
+	public void delete(Long subscriptionId) {
+		subscriptionRepository.deleteById(subscriptionId);
 	}
 }

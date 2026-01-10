@@ -2,6 +2,7 @@ package subport.adapter.in.web.subscription;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import subport.adapter.in.security.oauth2.CustomOAuth2User;
+import subport.application.subscription.port.in.DeleteCustomSubscriptionUseCase;
 import subport.application.subscription.port.in.RegisterCustomSubscriptionPlanRequest;
 import subport.application.subscription.port.in.RegisterCustomSubscriptionPlanUseCase;
 import subport.application.subscription.port.in.RegisterCustomSubscriptionRequest;
@@ -28,6 +30,7 @@ public class SubscriptionController {
 	private final RegisterCustomSubscriptionUseCase registerCustomSubscriptionUseCase;
 	private final RegisterCustomSubscriptionPlanUseCase registerCustomSubscriptionPlanUseCase;
 	private final UpdateCustomSubscriptionUseCase updateCustomSubscriptionUseCase;
+	private final DeleteCustomSubscriptionUseCase deleteCustomSubscriptionUseCase;
 
 	@PostMapping
 	public ResponseEntity<Void> registerCustomSubscription(
@@ -57,6 +60,20 @@ public class SubscriptionController {
 			subscriptionId,
 			request,
 			image
+		);
+
+		return ResponseEntity.noContent()
+			.build();
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deleteCustomSubscription(
+		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
+		@PathVariable("id") Long subscriptionId
+	) {
+		deleteCustomSubscriptionUseCase.delete(
+			oAuth2User.getMemberId(),
+			subscriptionId
 		);
 
 		return ResponseEntity.noContent()

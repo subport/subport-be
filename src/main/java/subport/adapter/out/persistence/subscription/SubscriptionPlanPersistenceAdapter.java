@@ -5,12 +5,15 @@ import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 import subport.adapter.out.persistence.member.MemberJpaEntity;
 import subport.adapter.out.persistence.member.SpringDataMemberRepository;
+import subport.application.subscription.port.out.DeleteSubscriptionPlanPort;
 import subport.application.subscription.port.out.SaveSubscriptionPlanPort;
 import subport.domain.subscription.SubscriptionPlan;
 
 @Component
 @RequiredArgsConstructor
-public class SubscriptionPlanPersistenceAdapter implements SaveSubscriptionPlanPort {
+public class SubscriptionPlanPersistenceAdapter implements
+	SaveSubscriptionPlanPort,
+	DeleteSubscriptionPlanPort {
 
 	private final SpringDataSubscriptionPlanRepository subscriptionPlanRepository;
 	private final SpringDataMemberRepository memberRepository;
@@ -30,5 +33,15 @@ public class SubscriptionPlanPersistenceAdapter implements SaveSubscriptionPlanP
 		);
 
 		subscriptionPlanRepository.save(subscriptionPlanEntity);
+	}
+
+	@Override
+	public void deleteById(Long planId) {
+		subscriptionPlanRepository.deleteById(planId);
+	}
+
+	@Override
+	public void deleteBySubscriptionId(Long subscriptionId) {
+		subscriptionPlanRepository.deleteAllBySubscriptionId(subscriptionId);
 	}
 }
