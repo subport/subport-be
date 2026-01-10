@@ -47,6 +47,7 @@ public class SubscriptionPlan {
 		int amount,
 		SubscriptionAmountUnit amountUnit,
 		int durationMonths,
+		boolean systemProvided,
 		Long memberId,
 		Long subscriptionId
 	) {
@@ -56,7 +57,7 @@ public class SubscriptionPlan {
 			amount,
 			amountUnit,
 			durationMonths,
-			false,
+			systemProvided,
 			memberId,
 			subscriptionId
 		);
@@ -67,6 +68,7 @@ public class SubscriptionPlan {
 		int amount,
 		SubscriptionAmountUnit amountUnit,
 		int durationMonths,
+		boolean systemProvided,
 		Long memberId,
 		Long subscriptionId
 	) {
@@ -76,7 +78,7 @@ public class SubscriptionPlan {
 			amount,
 			amountUnit,
 			durationMonths,
-			false,
+			systemProvided,
 			memberId,
 			subscriptionId
 		);

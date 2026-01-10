@@ -30,6 +30,7 @@ public class RegisterCustomSubscriptionPlanService implements RegisterCustomSubs
 			request.amount(),
 			SubscriptionAmountUnit.fromString(request.amountUnit()),
 			request.durationMonths(),
+			false,
 			memberId,
 			subscriptionId
 		);
