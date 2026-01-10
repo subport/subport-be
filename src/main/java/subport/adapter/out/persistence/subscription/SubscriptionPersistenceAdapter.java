@@ -1,5 +1,7 @@
 package subport.adapter.out.persistence.subscription;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -41,11 +43,18 @@ public class SubscriptionPersistenceAdapter implements
 	}
 
 	@Override
-	public Subscription load(Long id) {
-		SubscriptionJpaEntity subscriptionEntity = subscriptionRepository.findById(id)
+	public Subscription load(Long subscriptionId) {
+		SubscriptionJpaEntity subscriptionEntity = subscriptionRepository.findById(subscriptionId)
 			.orElseThrow(() -> new CustomException(ErrorCode.SUBSCRIPTION_NOT_FOUND));
 
 		return subscriptionMapper.toDomain(subscriptionEntity);
+	}
+
+	@Override
+	public List<Subscription> loadByMemberId(Long memberId) {
+		return subscriptionRepository.findByMemberIdOrSystemProvided(memberId, true).stream()
+			.map(subscriptionMapper::toDomain)
+			.toList();
 	}
 
 	@Override

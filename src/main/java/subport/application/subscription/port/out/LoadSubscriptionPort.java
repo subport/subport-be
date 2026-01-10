@@ -1,8 +1,12 @@
 package subport.application.subscription.port.out;
 
+import java.util.List;
+
 import subport.domain.subscription.Subscription;
 
 public interface LoadSubscriptionPort {
 
-	Subscription load(Long id);
+	Subscription load(Long subscriptionId);
+
+	List<Subscription> loadByMemberId(Long memberId);
 }

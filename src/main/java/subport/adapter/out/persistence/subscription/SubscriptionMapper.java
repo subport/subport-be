@@ -25,6 +25,12 @@ public class SubscriptionMapper {
 	public Subscription toDomain(
 		SubscriptionJpaEntity subscriptionEntity
 	) {
+		Long memberId = null;
+		MemberJpaEntity memberEntity = subscriptionEntity.getMember();
+		if (memberEntity != null) {
+			memberId = memberEntity.getId();
+		}
+
 		return Subscription.withId(
 			subscriptionEntity.getId(),
 			subscriptionEntity.getName(),
@@ -32,7 +38,7 @@ public class SubscriptionMapper {
 			subscriptionEntity.getLogoImageUrl(),
 			subscriptionEntity.getPlanUrl(),
 			subscriptionEntity.isSystemProvided(),
-			subscriptionEntity.getMember().getId()
+			memberId
 		);
 	}
 }

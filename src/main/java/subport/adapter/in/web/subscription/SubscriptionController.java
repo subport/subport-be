@@ -3,6 +3,7 @@ package subport.adapter.in.web.subscription;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,12 +16,14 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.RequiredArgsConstructor;
 import subport.adapter.in.security.oauth2.CustomOAuth2User;
 import subport.application.subscription.port.in.DeleteCustomSubscriptionUseCase;
+import subport.application.subscription.port.in.ReadSubscriptionUseCase;
 import subport.application.subscription.port.in.RegisterCustomSubscriptionPlanRequest;
 import subport.application.subscription.port.in.RegisterCustomSubscriptionPlanUseCase;
 import subport.application.subscription.port.in.RegisterCustomSubscriptionRequest;
 import subport.application.subscription.port.in.RegisterCustomSubscriptionUseCase;
 import subport.application.subscription.port.in.UpdateCustomSubscriptionRequest;
 import subport.application.subscription.port.in.UpdateCustomSubscriptionUseCase;
+import subport.application.subscription.port.out.ListSubscriptionsResponse;
 
 @RestController
 @RequestMapping("/api/subscriptions")
@@ -31,6 +34,7 @@ public class SubscriptionController {
 	private final RegisterCustomSubscriptionPlanUseCase registerCustomSubscriptionPlanUseCase;
 	private final UpdateCustomSubscriptionUseCase updateCustomSubscriptionUseCase;
 	private final DeleteCustomSubscriptionUseCase deleteCustomSubscriptionUseCase;
+	private final ReadSubscriptionUseCase readSubscriptionUseCase;
 
 	@PostMapping
 	public ResponseEntity<Void> registerCustomSubscription(
@@ -78,6 +82,12 @@ public class SubscriptionController {
 
 		return ResponseEntity.noContent()
 			.build();
+	}
+
+	@GetMapping
+	public ResponseEntity<ListSubscriptionsResponse> listSubscriptions(
+		@AuthenticationPrincipal CustomOAuth2User oAuth2User) {
+		return ResponseEntity.ok(readSubscriptionUseCase.list(oAuth2User.getMemberId()));
 	}
 
 	@PostMapping("/{id}/plans")
