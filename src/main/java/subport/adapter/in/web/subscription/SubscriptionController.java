@@ -1,5 +1,7 @@
 package subport.adapter.in.web.subscription;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.RequiredArgsConstructor;
 import subport.adapter.in.security.oauth2.CustomOAuth2User;
 import subport.application.subscription.port.in.DeleteCustomSubscriptionUseCase;
+import subport.application.subscription.port.in.ListSubscriptionTypesUseCase;
 import subport.application.subscription.port.in.ReadSubscriptionUseCase;
 import subport.application.subscription.port.in.RegisterCustomSubscriptionPlanRequest;
 import subport.application.subscription.port.in.RegisterCustomSubscriptionPlanUseCase;
@@ -36,6 +39,7 @@ public class SubscriptionController {
 	private final UpdateCustomSubscriptionUseCase updateCustomSubscriptionUseCase;
 	private final DeleteCustomSubscriptionUseCase deleteCustomSubscriptionUseCase;
 	private final ReadSubscriptionUseCase readSubscriptionUseCase;
+	private final ListSubscriptionTypesUseCase listSubscriptionTypesUseCase;
 
 	@PostMapping
 	public ResponseEntity<Void> registerCustomSubscription(
@@ -116,5 +120,10 @@ public class SubscriptionController {
 
 		return ResponseEntity.ok()
 			.build();
+	}
+
+	@GetMapping("/types")
+	public ResponseEntity<List<String>> listSubscriptionTypes() {
+		return ResponseEntity.ok(listSubscriptionTypesUseCase.list());
 	}
 }
