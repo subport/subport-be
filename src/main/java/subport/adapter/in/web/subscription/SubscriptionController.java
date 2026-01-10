@@ -24,6 +24,7 @@ import subport.application.subscription.port.in.RegisterCustomSubscriptionUseCas
 import subport.application.subscription.port.in.UpdateCustomSubscriptionRequest;
 import subport.application.subscription.port.in.UpdateCustomSubscriptionUseCase;
 import subport.application.subscription.port.out.ListSubscriptionsResponse;
+import subport.application.subscription.port.out.ReadSubscriptionResponse;
 
 @RestController
 @RequestMapping("/api/subscriptions")
@@ -84,9 +85,20 @@ public class SubscriptionController {
 			.build();
 	}
 
+	@GetMapping("/{id}")
+	public ResponseEntity<ReadSubscriptionResponse> readSubscription(
+		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
+		@PathVariable("id") Long subscriptionId
+	) {
+		return ResponseEntity.ok(readSubscriptionUseCase.read(
+			oAuth2User.getMemberId(),
+			subscriptionId));
+	}
+
 	@GetMapping
 	public ResponseEntity<ListSubscriptionsResponse> listSubscriptions(
-		@AuthenticationPrincipal CustomOAuth2User oAuth2User) {
+		@AuthenticationPrincipal CustomOAuth2User oAuth2User
+	) {
 		return ResponseEntity.ok(readSubscriptionUseCase.list(oAuth2User.getMemberId()));
 	}
 
