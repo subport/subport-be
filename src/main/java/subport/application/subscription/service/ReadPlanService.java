@@ -9,6 +9,7 @@ import subport.application.exception.ErrorCode;
 import subport.application.subscription.port.in.ReadPlanUseCase;
 import subport.application.subscription.port.out.ListPlansResponse;
 import subport.application.subscription.port.out.LoadPlanPort;
+import subport.application.subscription.port.out.LoadSubscriptionPort;
 import subport.application.subscription.port.out.ReadPlanResponse;
 import subport.domain.subscription.Plan;
 
@@ -18,6 +19,7 @@ import subport.domain.subscription.Plan;
 public class ReadPlanService implements ReadPlanUseCase {
 
 	private final LoadPlanPort loadPlanPort;
+	private final LoadSubscriptionPort loadSubscriptionPort;
 
 	@Override
 	public ReadPlanResponse read(Long memberId, Long planId) {
@@ -32,6 +34,8 @@ public class ReadPlanService implements ReadPlanUseCase {
 
 	@Override
 	public ListPlansResponse list(Long memberId, Long subscriptionId) {
+		loadSubscriptionPort.load(subscriptionId);
+
 		return ListPlansResponse.fromDomains(
 			loadPlanPort.loadByMemberIdAndSubscriptionId(memberId, subscriptionId));
 	}
