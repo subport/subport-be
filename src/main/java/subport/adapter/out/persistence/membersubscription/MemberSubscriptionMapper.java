@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 import subport.adapter.out.persistence.member.MemberJpaEntity;
 import subport.adapter.out.persistence.subscription.SubscriptionJpaEntity;
-import subport.adapter.out.persistence.subscription.SubscriptionPlanJpaEntity;
+import subport.adapter.out.persistence.subscription.PlanJpaEntity;
 import subport.domain.membersubscription.MemberSubscription;
 
 @Component
@@ -14,7 +14,7 @@ public class MemberSubscriptionMapper {
 		MemberSubscription memberSubscription,
 		MemberJpaEntity memberEntity,
 		SubscriptionJpaEntity subscriptionEntity,
-		SubscriptionPlanJpaEntity subscriptionPlanEntity
+		PlanJpaEntity subscriptionPlanEntity
 	) {
 		return new MemberSubscriptionJpaEntity(
 			memberSubscription.getStartDate(),

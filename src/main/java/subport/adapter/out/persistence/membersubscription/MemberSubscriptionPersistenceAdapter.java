@@ -5,10 +5,10 @@ import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 import subport.adapter.out.persistence.member.MemberJpaEntity;
 import subport.adapter.out.persistence.member.SpringDataMemberRepository;
-import subport.adapter.out.persistence.subscription.SpringDataSubscriptionPlanRepository;
+import subport.adapter.out.persistence.subscription.SpringDataPlanRepository;
 import subport.adapter.out.persistence.subscription.SpringDataSubscriptionRepository;
 import subport.adapter.out.persistence.subscription.SubscriptionJpaEntity;
-import subport.adapter.out.persistence.subscription.SubscriptionPlanJpaEntity;
+import subport.adapter.out.persistence.subscription.PlanJpaEntity;
 import subport.application.membersubscription.port.out.SaveMemberSubscriptionPort;
 import subport.domain.membersubscription.MemberSubscription;
 
@@ -19,7 +19,7 @@ public class MemberSubscriptionPersistenceAdapter implements SaveMemberSubscript
 	private final SpringDataMemberSubscriptionRepository memberSubscriptionRepository;
 	private final SpringDataMemberRepository memberRepository;
 	private final SpringDataSubscriptionRepository subscriptionRepository;
-	private final SpringDataSubscriptionPlanRepository subscriptionPlanRepository;
+	private final SpringDataPlanRepository subscriptionPlanRepository;
 	private final MemberSubscriptionMapper memberSubscriptionMapper;
 
 	@Override
@@ -27,7 +27,7 @@ public class MemberSubscriptionPersistenceAdapter implements SaveMemberSubscript
 		MemberJpaEntity memberEntity = memberRepository.getReferenceById(memberSubscription.getMemberId());
 		SubscriptionJpaEntity subscriptionEntity = subscriptionRepository.getReferenceById(
 			memberSubscription.getSubscriptionId());
-		SubscriptionPlanJpaEntity subscriptionPlanEntity = subscriptionPlanRepository.getReferenceById(
+		PlanJpaEntity subscriptionPlanEntity = subscriptionPlanRepository.getReferenceById(
 			memberSubscription.getSubscriptionPlanId());
 
 		MemberSubscriptionJpaEntity memberSubscriptionEntity = memberSubscriptionMapper.toJpaEntity(

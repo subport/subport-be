@@ -5,11 +5,11 @@ import java.math.BigDecimal;
 import lombok.Getter;
 
 @Getter
-public class SubscriptionPlan {
+public class Plan {
 
 	private final Long id;
 
-	private String planName;
+	private String name;
 
 	private BigDecimal amount;
 
@@ -23,9 +23,9 @@ public class SubscriptionPlan {
 
 	private final Long subscriptionId;
 
-	private SubscriptionPlan(
+	private Plan(
 		Long id,
-		String planName,
+		String name,
 		BigDecimal amount,
 		SubscriptionAmountUnit amountUnit,
 		int durationMonths,
@@ -34,7 +34,7 @@ public class SubscriptionPlan {
 		Long subscriptionId
 	) {
 		this.id = id;
-		this.planName = planName;
+		this.name = name;
 		this.amount = amount;
 		this.amountUnit = amountUnit;
 		this.durationMonths = durationMonths;
@@ -43,9 +43,9 @@ public class SubscriptionPlan {
 		this.subscriptionId = subscriptionId;
 	}
 
-	public static SubscriptionPlan withId(
+	public static Plan withId(
 		Long id,
-		String planName,
+		String name,
 		BigDecimal amount,
 		SubscriptionAmountUnit amountUnit,
 		int durationMonths,
@@ -53,9 +53,9 @@ public class SubscriptionPlan {
 		Long memberId,
 		Long subscriptionId
 	) {
-		return new SubscriptionPlan(
+		return new Plan(
 			id,
-			planName,
+			name,
 			amount,
 			amountUnit,
 			durationMonths,
@@ -65,8 +65,8 @@ public class SubscriptionPlan {
 		);
 	}
 
-	public static SubscriptionPlan withoutId(
-		String planName,
+	public static Plan withoutId(
+		String name,
 		BigDecimal amount,
 		SubscriptionAmountUnit amountUnit,
 		int durationMonths,
@@ -74,9 +74,9 @@ public class SubscriptionPlan {
 		Long memberId,
 		Long subscriptionId
 	) {
-		return new SubscriptionPlan(
+		return new Plan(
 			null,
-			planName,
+			name,
 			amount,
 			amountUnit,
 			durationMonths,
@@ -87,12 +87,12 @@ public class SubscriptionPlan {
 	}
 
 	public void update(
-		String planName,
+		String name,
 		BigDecimal amount,
 		SubscriptionAmountUnit amountUnit,
 		int durationMonths
 	) {
-		this.planName = planName;
+		this.name = name;
 		this.amount = amount;
 		this.amountUnit = amountUnit;
 		this.durationMonths = durationMonths;

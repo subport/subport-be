@@ -6,22 +6,28 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
-import subport.application.subscription.port.in.DeleteCustomPlanUseCase;
-import subport.application.subscription.port.out.DeletePlanPort;
+import subport.application.subscription.port.in.UpdateCustomPlanRequest;
+import subport.application.subscription.port.in.UpdateCustomPlanUseCase;
 import subport.application.subscription.port.out.LoadPlanPort;
+import subport.application.subscription.port.out.UpdatePlanPort;
+import subport.domain.subscription.SubscriptionAmountUnit;
 import subport.domain.subscription.Plan;
 
 @Service
 @RequiredArgsConstructor
-public class DeleteCustomPlanService implements DeleteCustomPlanUseCase {
+public class UpdateCustomPlanService implements UpdateCustomPlanUseCase {
 
 	private final LoadPlanPort loadPlanPort;
-	private final DeletePlanPort deletePlanPort;
+	private final UpdatePlanPort updatePlanPort;
 
 	@Transactional
 	@Override
-	public void delete(Long memberId, Long planId) {
-		Plan plan = loadPlanPort.load(planId);
+	public void update(
+		Long memberId,
+		UpdateCustomPlanRequest request,
+		Long subscriptionPlanId
+	) {
+		Plan plan = loadPlanPort.load(subscriptionPlanId);
 
 		if (plan.isSystemProvided()) {
 			throw new CustomException(ErrorCode.SYSTEM_PLAN_WRITE_FORBIDDEN);
@@ -31,6 +37,13 @@ public class DeleteCustomPlanService implements DeleteCustomPlanUseCase {
 			throw new CustomException(ErrorCode.PLAN_WRITE_FORBIDDEN);
 		}
 
-		deletePlanPort.deleteById(planId);
+		plan.update(
+			request.name(),
+			request.amount(),
+			SubscriptionAmountUnit.fromString(request.amountUnit()),
+			request.durationMonths()
+		);
+
+		updatePlanPort.update(plan);
 	}
 }

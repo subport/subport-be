@@ -18,19 +18,19 @@ import lombok.NoArgsConstructor;
 import subport.adapter.out.persistence.BaseTimeEntity;
 import subport.adapter.out.persistence.member.MemberJpaEntity;
 import subport.domain.subscription.SubscriptionAmountUnit;
-import subport.domain.subscription.SubscriptionPlan;
+import subport.domain.subscription.Plan;
 
 @Entity
-@Table(name = "subscription_plan")
+@Table(name = "plan")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class SubscriptionPlanJpaEntity extends BaseTimeEntity {
+public class PlanJpaEntity extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String planName;
+	private String name;
 
 	private BigDecimal amount;
 
@@ -49,8 +49,8 @@ public class SubscriptionPlanJpaEntity extends BaseTimeEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private SubscriptionJpaEntity subscription;
 
-	public SubscriptionPlanJpaEntity(
-		String planName,
+	public PlanJpaEntity(
+		String name,
 		BigDecimal amount,
 		SubscriptionAmountUnit amountUnit,
 		int durationMonths,
@@ -58,7 +58,7 @@ public class SubscriptionPlanJpaEntity extends BaseTimeEntity {
 		MemberJpaEntity member,
 		SubscriptionJpaEntity subscription
 	) {
-		this.planName = planName;
+		this.name = name;
 		this.amount = amount;
 		this.amountUnit = amountUnit;
 		this.durationMonths = durationMonths;
@@ -67,10 +67,10 @@ public class SubscriptionPlanJpaEntity extends BaseTimeEntity {
 		this.subscription = subscription;
 	}
 
-	public void apply(SubscriptionPlan subscriptionPlan) {
-		this.planName = subscriptionPlan.getPlanName();
-		this.amount = subscriptionPlan.getAmount();
-		this.amountUnit = subscriptionPlan.getAmountUnit();
-		this.durationMonths = subscriptionPlan.getDurationMonths();
+	public void apply(Plan plan) {
+		this.name = plan.getName();
+		this.amount = plan.getAmount();
+		this.amountUnit = plan.getAmountUnit();
+		this.durationMonths = plan.getDurationMonths();
 	}
 }

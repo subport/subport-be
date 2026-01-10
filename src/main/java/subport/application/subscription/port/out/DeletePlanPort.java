@@ -1,6 +1,6 @@
 package subport.application.subscription.port.out;
 
-public interface DeleteSubscriptionPlanPort {
+public interface DeletePlanPort {
 
 	void deleteById(Long planId);
 

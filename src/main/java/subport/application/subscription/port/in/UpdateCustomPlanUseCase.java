@@ -1,10 +1,10 @@
 package subport.application.subscription.port.in;
 
-public interface UpdateCustomSubscriptionPlanUseCase {
+public interface UpdateCustomPlanUseCase {
 
 	void update(
 		Long memberId,
-		UpdateCustomSubscriptionPlanRequest request,
+		UpdateCustomPlanRequest request,
 		Long subscriptionPlanId
 	);
 }

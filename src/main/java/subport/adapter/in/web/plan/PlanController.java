@@ -1,4 +1,4 @@
-package subport.adapter.in.web.subscriptionplan;
+package subport.adapter.in.web.plan;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,36 +13,36 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import subport.adapter.in.security.oauth2.CustomOAuth2User;
 import subport.application.subscription.port.in.DeleteCustomPlanUseCase;
-import subport.application.subscription.port.in.ReadSubscriptionPlansUseCase;
-import subport.application.subscription.port.in.UpdateCustomSubscriptionPlanRequest;
-import subport.application.subscription.port.in.UpdateCustomSubscriptionPlanUseCase;
-import subport.application.subscription.port.out.ReadSubscriptionPlanResponse;
+import subport.application.subscription.port.in.ReadPlanUseCase;
+import subport.application.subscription.port.in.UpdateCustomPlanRequest;
+import subport.application.subscription.port.in.UpdateCustomPlanUseCase;
+import subport.application.subscription.port.out.ReadPlanResponse;
 
 @RestController
 @RequestMapping("/api/plans")
 @RequiredArgsConstructor
-public class SubscriptionPlanController {
+public class PlanController {
 
-	private final ReadSubscriptionPlansUseCase readSubscriptionPlansUseCase;
-	private final UpdateCustomSubscriptionPlanUseCase updateCustomSubscriptionPlanUseCase;
+	private final ReadPlanUseCase readPlanUseCase;
+	private final UpdateCustomPlanUseCase updateCustomPlanUseCase;
 	private final DeleteCustomPlanUseCase deleteCustomPlanUseCase;
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ReadSubscriptionPlanResponse> readPlan(
+	public ResponseEntity<ReadPlanResponse> readPlan(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
 		@PathVariable("id") Long planId
 	) {
-		return ResponseEntity.ok(readSubscriptionPlansUseCase.read(
+		return ResponseEntity.ok(readPlanUseCase.read(
 			oAuth2User.getMemberId(), planId));
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Void> updateSubscriptionPlan(
+	public ResponseEntity<Void> updateCustomPlan(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
-		@RequestBody UpdateCustomSubscriptionPlanRequest request,
+		@RequestBody UpdateCustomPlanRequest request,
 		@PathVariable("id") Long subscriptionPlanId
 	) {
-		updateCustomSubscriptionPlanUseCase.update(
+		updateCustomPlanUseCase.update(
 			oAuth2User.getMemberId(),
 			request,
 			subscriptionPlanId
@@ -53,7 +53,7 @@ public class SubscriptionPlanController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteSubscriptionPlan(
+	public ResponseEntity<Void> deleteCustomPlan(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
 		@PathVariable("id") Long planId
 	) {

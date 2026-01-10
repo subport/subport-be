@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.subscription.port.in.DeleteCustomSubscriptionUseCase;
-import subport.application.subscription.port.out.DeleteSubscriptionPlanPort;
+import subport.application.subscription.port.out.DeletePlanPort;
 import subport.application.subscription.port.out.DeleteSubscriptionPort;
 import subport.application.subscription.port.out.LoadSubscriptionPort;
 import subport.domain.subscription.Subscription;
@@ -18,7 +18,7 @@ public class DeleteCustomSubscriptionService implements DeleteCustomSubscription
 
 	private final LoadSubscriptionPort loadSubscriptionPort;
 	private final DeleteSubscriptionPort deleteSubscriptionPort;
-	private final DeleteSubscriptionPlanPort deleteSubscriptionPlanPort;
+	private final DeletePlanPort deletePlanPort;
 
 	@Transactional
 	@Override
@@ -34,7 +34,7 @@ public class DeleteCustomSubscriptionService implements DeleteCustomSubscription
 		}
 
 		// 관련 플랜 삭제
-		deleteSubscriptionPlanPort.deleteBySubscriptionId(subscriptionId);
+		deletePlanPort.deleteBySubscriptionId(subscriptionId);
 
 		deleteSubscriptionPort.delete(subscription.getId());
 

@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 import subport.adapter.out.persistence.BaseTimeEntity;
 import subport.adapter.out.persistence.member.MemberJpaEntity;
 import subport.adapter.out.persistence.subscription.SubscriptionJpaEntity;
-import subport.adapter.out.persistence.subscription.SubscriptionPlanJpaEntity;
+import subport.adapter.out.persistence.subscription.PlanJpaEntity;
 
 @Entity
 @Table(name = "member_subscription")
@@ -54,7 +54,7 @@ public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 
 	@JoinColumn(name = "subscription_plan_id", nullable = false)
 	@OneToOne(fetch = FetchType.LAZY)
-	private SubscriptionPlanJpaEntity subscriptionPlan;
+	private PlanJpaEntity subscriptionPlan;
 
 	public MemberSubscriptionJpaEntity(
 		LocalDate startDate,
@@ -67,7 +67,7 @@ public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 		LocalDate nextPaymentDate,
 		MemberJpaEntity member,
 		SubscriptionJpaEntity subscription,
-		SubscriptionPlanJpaEntity subscriptionPlan
+		PlanJpaEntity subscriptionPlan
 	) {
 		this.startDate = startDate;
 		this.reminderDaysBeforeEnd = reminderDaysBeforeEnd;
