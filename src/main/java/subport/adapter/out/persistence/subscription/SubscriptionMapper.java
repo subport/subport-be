@@ -25,9 +25,11 @@ public class SubscriptionMapper {
 	public Subscription toDomain(
 		SubscriptionJpaEntity subscriptionEntity
 	) {
-		Long memberId = null;
+		boolean systemProvided = subscriptionEntity.isSystemProvided();
 		MemberJpaEntity memberEntity = subscriptionEntity.getMember();
-		if (memberEntity != null) {
+
+		Long memberId = null;
+		if (!systemProvided && memberEntity != null) {
 			memberId = memberEntity.getId();
 		}
 
@@ -37,7 +39,7 @@ public class SubscriptionMapper {
 			subscriptionEntity.getType(),
 			subscriptionEntity.getLogoImageUrl(),
 			subscriptionEntity.getPlanUrl(),
-			subscriptionEntity.isSystemProvided(),
+			systemProvided,
 			memberId
 		);
 	}
