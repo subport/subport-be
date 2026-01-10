@@ -1,6 +1,10 @@
 package subport.adapter.out.persistence.subscription;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,8 +31,9 @@ public class SubscriptionPlanJpaEntity extends BaseTimeEntity {
 
 	private String planName;
 
-	private int amount;
+	private BigDecimal amount;
 
+	@Enumerated(value = EnumType.STRING)
 	private SubscriptionAmountUnit amountUnit;
 
 	private int durationMonths;
@@ -45,7 +50,7 @@ public class SubscriptionPlanJpaEntity extends BaseTimeEntity {
 
 	public SubscriptionPlanJpaEntity(
 		String planName,
-		int amount,
+		BigDecimal amount,
 		SubscriptionAmountUnit amountUnit,
 		int durationMonths,
 		boolean systemProvided,

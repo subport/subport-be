@@ -23,4 +23,25 @@ public class SubscriptionPlanMapper {
 			subscriptionEntity
 		);
 	}
+
+	public SubscriptionPlan toDomain(SubscriptionPlanJpaEntity subscriptionPlanEntity) {
+		boolean systemProvided = subscriptionPlanEntity.isSystemProvided();
+		MemberJpaEntity memberEntity = subscriptionPlanEntity.getMember();
+
+		Long memberId = null;
+		if (!systemProvided && memberEntity != null) {
+			memberId = memberEntity.getId();
+		}
+
+		return SubscriptionPlan.withId(
+			subscriptionPlanEntity.getId(),
+			subscriptionPlanEntity.getPlanName(),
+			subscriptionPlanEntity.getAmount(),
+			subscriptionPlanEntity.getAmountUnit(),
+			subscriptionPlanEntity.getDurationMonths(),
+			systemProvided,
+			memberId,
+			subscriptionPlanEntity.getSubscription().getId()
+		);
+	}
 }

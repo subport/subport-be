@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import subport.adapter.in.security.oauth2.CustomOAuth2User;
 import subport.application.subscription.port.in.DeleteCustomSubscriptionUseCase;
 import subport.application.subscription.port.in.ListSubscriptionTypesUseCase;
+import subport.application.subscription.port.in.ReadSubscriptionPlansUseCase;
 import subport.application.subscription.port.in.ReadSubscriptionUseCase;
 import subport.application.subscription.port.in.RegisterCustomSubscriptionPlanRequest;
 import subport.application.subscription.port.in.RegisterCustomSubscriptionPlanUseCase;
@@ -26,6 +27,7 @@ import subport.application.subscription.port.in.RegisterCustomSubscriptionReques
 import subport.application.subscription.port.in.RegisterCustomSubscriptionUseCase;
 import subport.application.subscription.port.in.UpdateCustomSubscriptionRequest;
 import subport.application.subscription.port.in.UpdateCustomSubscriptionUseCase;
+import subport.application.subscription.port.out.ListSubscriptionPlansResponse;
 import subport.application.subscription.port.out.ListSubscriptionsResponse;
 import subport.application.subscription.port.out.ReadSubscriptionResponse;
 import subport.application.subscription.port.out.RegisterCustomSubscriptionPlanResponse;
@@ -37,10 +39,13 @@ import subport.application.subscription.port.out.RegisterCustomSubscriptionRespo
 public class SubscriptionController {
 
 	private final RegisterCustomSubscriptionUseCase registerCustomSubscriptionUseCase;
-	private final RegisterCustomSubscriptionPlanUseCase registerCustomSubscriptionPlanUseCase;
 	private final UpdateCustomSubscriptionUseCase updateCustomSubscriptionUseCase;
 	private final DeleteCustomSubscriptionUseCase deleteCustomSubscriptionUseCase;
 	private final ReadSubscriptionUseCase readSubscriptionUseCase;
+
+	private final RegisterCustomSubscriptionPlanUseCase registerCustomSubscriptionPlanUseCase;
+	private final ReadSubscriptionPlansUseCase readSubscriptionPlansUseCase;
+
 	private final ListSubscriptionTypesUseCase listSubscriptionTypesUseCase;
 
 	@PostMapping
@@ -113,6 +118,16 @@ public class SubscriptionController {
 		return ResponseEntity.ok(registerCustomSubscriptionPlanUseCase.register(
 			oAuth2User.getMemberId(),
 			request,
+			subscriptionId));
+	}
+
+	@GetMapping("/{id}/plans")
+	public ResponseEntity<ListSubscriptionPlansResponse> listSubscriptionPlans(
+		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
+		@PathVariable("id") Long subscriptionId
+	) {
+		return ResponseEntity.ok(readSubscriptionPlansUseCase.list(
+			oAuth2User.getMemberId(),
 			subscriptionId));
 	}
 

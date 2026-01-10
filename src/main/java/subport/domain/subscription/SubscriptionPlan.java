@@ -1,5 +1,7 @@
 package subport.domain.subscription;
 
+import java.math.BigDecimal;
+
 import lombok.Getter;
 
 @Getter
@@ -9,7 +11,7 @@ public class SubscriptionPlan {
 
 	private final String planName;
 
-	private final int amount;
+	private final BigDecimal amount;
 
 	private final SubscriptionAmountUnit amountUnit;
 
@@ -24,7 +26,7 @@ public class SubscriptionPlan {
 	private SubscriptionPlan(
 		Long id,
 		String planName,
-		int amount,
+		BigDecimal amount,
 		SubscriptionAmountUnit amountUnit,
 		int durationMonths,
 		boolean systemProvided,
@@ -44,7 +46,7 @@ public class SubscriptionPlan {
 	public static SubscriptionPlan withId(
 		Long id,
 		String planName,
-		int amount,
+		BigDecimal amount,
 		SubscriptionAmountUnit amountUnit,
 		int durationMonths,
 		boolean systemProvided,
@@ -65,7 +67,7 @@ public class SubscriptionPlan {
 
 	public static SubscriptionPlan withoutId(
 		String planName,
-		int amount,
+		BigDecimal amount,
 		SubscriptionAmountUnit amountUnit,
 		int durationMonths,
 		boolean systemProvided,

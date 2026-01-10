@@ -1,11 +1,14 @@
 package subport.adapter.out.persistence.subscription;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import subport.adapter.out.persistence.member.MemberJpaEntity;
 import subport.adapter.out.persistence.member.SpringDataMemberRepository;
 import subport.application.subscription.port.out.DeleteSubscriptionPlanPort;
+import subport.application.subscription.port.out.LoadSubscriptionPlanPort;
 import subport.application.subscription.port.out.SaveSubscriptionPlanPort;
 import subport.domain.subscription.SubscriptionPlan;
 
@@ -13,6 +16,7 @@ import subport.domain.subscription.SubscriptionPlan;
 @RequiredArgsConstructor
 public class SubscriptionPlanPersistenceAdapter implements
 	SaveSubscriptionPlanPort,
+	LoadSubscriptionPlanPort,
 	DeleteSubscriptionPlanPort {
 
 	private final SpringDataSubscriptionPlanRepository subscriptionPlanRepository;
@@ -33,6 +37,13 @@ public class SubscriptionPlanPersistenceAdapter implements
 		);
 
 		return subscriptionPlanRepository.save(subscriptionPlanEntity).getId();
+	}
+
+	@Override
+	public List<SubscriptionPlan> loadByMemberIdAndSubscriptionId(Long memberId, Long subscriptionId) {
+		return subscriptionPlanRepository.findByIdAccessibleToMember(memberId, subscriptionId).stream()
+			.map(subscriptionPlanMapper::toDomain)
+			.toList();
 	}
 
 	@Override
