@@ -1,6 +1,7 @@
 package subport.application.subscription.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import subport.application.subscription.port.in.ReadSubscriptionPlansUseCase;
@@ -8,6 +9,7 @@ import subport.application.subscription.port.out.ListSubscriptionPlansResponse;
 import subport.application.subscription.port.out.LoadSubscriptionPlanPort;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ReadSubscriptionPlansService implements ReadSubscriptionPlansUseCase {
 
