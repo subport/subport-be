@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import subport.adapter.out.persistence.BaseTimeEntity;
 import subport.adapter.out.persistence.member.MemberJpaEntity;
@@ -17,6 +18,7 @@ import subport.domain.subscription.SubscriptionAmountUnit;
 @Entity
 @Table(name = "subscription_plan")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class SubscriptionPlanJpaEntity extends BaseTimeEntity {
 
 	@Id

@@ -21,7 +21,7 @@ public class SubscriptionPlanPersistenceAdapter implements
 	private final SubscriptionPlanMapper subscriptionPlanMapper;
 
 	@Override
-	public void save(SubscriptionPlan subscriptionPlan) {
+	public Long save(SubscriptionPlan subscriptionPlan) {
 		MemberJpaEntity memberEntity = memberRepository.getReferenceById(subscriptionPlan.getMemberId());
 		SubscriptionJpaEntity subscriptionEntity = subscriptionRepository.getReferenceById(
 			subscriptionPlan.getSubscriptionId());
@@ -32,7 +32,7 @@ public class SubscriptionPlanPersistenceAdapter implements
 			subscriptionEntity
 		);
 
-		subscriptionPlanRepository.save(subscriptionPlanEntity);
+		return subscriptionPlanRepository.save(subscriptionPlanEntity).getId();
 	}
 
 	@Override

@@ -4,5 +4,5 @@ import subport.domain.subscription.SubscriptionPlan;
 
 public interface SaveSubscriptionPlanPort {
 
-	void save(SubscriptionPlan subscriptionPlan);
+	Long save(SubscriptionPlan subscriptionPlan);
 }

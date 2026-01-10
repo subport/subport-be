@@ -28,6 +28,7 @@ import subport.application.subscription.port.in.UpdateCustomSubscriptionRequest;
 import subport.application.subscription.port.in.UpdateCustomSubscriptionUseCase;
 import subport.application.subscription.port.out.ListSubscriptionsResponse;
 import subport.application.subscription.port.out.ReadSubscriptionResponse;
+import subport.application.subscription.port.out.RegisterCustomSubscriptionPlanResponse;
 import subport.application.subscription.port.out.RegisterCustomSubscriptionResponse;
 
 @RestController
@@ -104,19 +105,15 @@ public class SubscriptionController {
 	}
 
 	@PostMapping("/{id}/plans")
-	public ResponseEntity<Void> registerCustomSubscriptionPlan(
+	public ResponseEntity<RegisterCustomSubscriptionPlanResponse> registerCustomSubscriptionPlan(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
 		@RequestBody RegisterCustomSubscriptionPlanRequest request,
 		@PathVariable("id") Long subscriptionId
 	) {
-		registerCustomSubscriptionPlanUseCase.register(
+		return ResponseEntity.ok(registerCustomSubscriptionPlanUseCase.register(
 			oAuth2User.getMemberId(),
 			request,
-			subscriptionId
-		);
-
-		return ResponseEntity.ok()
-			.build();
+			subscriptionId));
 	}
 
 	@GetMapping("/types")
