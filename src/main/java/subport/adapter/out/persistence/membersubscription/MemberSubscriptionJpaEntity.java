@@ -13,15 +13,17 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import subport.adapter.out.persistence.BaseTimeEntity;
 import subport.adapter.out.persistence.member.MemberJpaEntity;
-import subport.adapter.out.persistence.subscription.SubscriptionJpaEntity;
 import subport.adapter.out.persistence.subscription.PlanJpaEntity;
+import subport.adapter.out.persistence.subscription.SubscriptionJpaEntity;
 
 @Entity
 @Table(name = "member_subscription")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 
 	@Id

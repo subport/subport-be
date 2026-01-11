@@ -22,12 +22,16 @@ public enum ErrorCode {
 	INVALID_IMAGE_FILE_SIZE(HttpStatus.BAD_REQUEST, "이미지 파일의 크기는 5MB를 초과할 수 없습니다."),
 	FILE_READ_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 파일 읽기에 실패했습니다."),
 
-	// 구독 관련
+	// 구독 서비스 관련
 	SUBSCRIPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 구독 서비스입니다."),
 	INVALID_SUBSCRIPTION_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 구독 타입입니다."),
 	SYSTEM_SUBSCRIPTION_WRITE_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공 구독 서비스는 수정 및 삭제가 불가능합니다."),
 	SUBSCRIPTION_WRITE_FORBIDDEN(HttpStatus.FORBIDDEN, "본인이 등록한 구독 서비스가 아니면 수정 및 삭제가 불가능합니다."),
 	SUBSCRIPTION_READ_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공이 아니면 본인이 등록한 구독 서비스만 조회가 가능합니다."),
+
+	// 구독 관련
+	DUTCH_PAY_AMOUNT_MISSING(HttpStatus.BAD_REQUEST, "더치페이를 선택했으면 더치페이 금액을 반드시 입력해야 합니다."),
+	DUTCH_PAY_AMOUNT_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "더치페이를 선택하지 않았으면 금액을 입력할 수 없습니다."),
 
 	// 플랜 관련
 	PLAN_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 플랜입니다."),

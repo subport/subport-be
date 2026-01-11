@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import subport.adapter.in.security.oauth2.CustomOAuth2User;
 import subport.application.membersubscription.port.in.RegisterMemberSubscriptionRequest;
 import subport.application.membersubscription.port.in.RegisterMemberSubscriptionUseCase;
+import subport.application.membersubscription.port.out.RegisterMemberSubscriptionResponse;
 
 @RestController
 @RequestMapping("/api/member-subscriptions")
@@ -20,16 +21,12 @@ public class MemberSubscriptionController {
 	private final RegisterMemberSubscriptionUseCase registerMemberSubscriptionUseCase;
 
 	@PostMapping
-	ResponseEntity<Void> registerMemberSubscription(
+	ResponseEntity<RegisterMemberSubscriptionResponse> registerMemberSubscription(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
 		@RequestBody RegisterMemberSubscriptionRequest request
 	) {
-		registerMemberSubscriptionUseCase.register(
+		return ResponseEntity.ok(registerMemberSubscriptionUseCase.register(
 			oAuth2User.getMemberId(),
-			request
-		);
-
-		return ResponseEntity.ok()
-			.build();
+			request));
 	}
 }
