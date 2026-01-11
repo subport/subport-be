@@ -40,12 +40,12 @@ public class PlanController {
 	public ResponseEntity<Void> updateCustomPlan(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
 		@RequestBody UpdateCustomPlanRequest request,
-		@PathVariable("id") Long subscriptionPlanId
+		@PathVariable("id") Long planId
 	) {
 		updateCustomPlanUseCase.update(
 			oAuth2User.getMemberId(),
 			request,
-			subscriptionPlanId
+			planId
 		);
 
 		return ResponseEntity.noContent()

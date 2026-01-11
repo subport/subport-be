@@ -26,7 +26,7 @@ public class MemberSubscriptionPersistenceAdapter implements
 	private final SpringDataMemberSubscriptionRepository memberSubscriptionRepository;
 	private final SpringDataMemberRepository memberRepository;
 	private final SpringDataSubscriptionRepository subscriptionRepository;
-	private final SpringDataPlanRepository subscriptionPlanRepository;
+	private final SpringDataPlanRepository planRepository;
 	private final MemberSubscriptionMapper memberSubscriptionMapper;
 
 	@Override
@@ -34,14 +34,14 @@ public class MemberSubscriptionPersistenceAdapter implements
 		MemberJpaEntity memberEntity = memberRepository.getReferenceById(memberSubscription.getMemberId());
 		SubscriptionJpaEntity subscriptionEntity = subscriptionRepository.getReferenceById(
 			memberSubscription.getSubscriptionId());
-		PlanJpaEntity subscriptionPlanEntity = subscriptionPlanRepository.getReferenceById(
-			memberSubscription.getSubscriptionPlanId());
+		PlanJpaEntity planEntity = planRepository.getReferenceById(
+			memberSubscription.getPlanId());
 
 		MemberSubscriptionJpaEntity memberSubscriptionEntity = memberSubscriptionMapper.toJpaEntity(
 			memberSubscription,
 			memberEntity,
 			subscriptionEntity,
-			subscriptionPlanEntity
+			planEntity
 		);
 
 		return memberSubscriptionRepository.save(memberSubscriptionEntity).getId();

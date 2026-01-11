@@ -10,8 +10,8 @@ import subport.application.subscription.port.in.UpdateCustomPlanRequest;
 import subport.application.subscription.port.in.UpdateCustomPlanUseCase;
 import subport.application.subscription.port.out.LoadPlanPort;
 import subport.application.subscription.port.out.UpdatePlanPort;
-import subport.domain.subscription.SubscriptionAmountUnit;
 import subport.domain.subscription.Plan;
+import subport.domain.subscription.SubscriptionAmountUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -25,9 +25,9 @@ public class UpdateCustomPlanService implements UpdateCustomPlanUseCase {
 	public void update(
 		Long memberId,
 		UpdateCustomPlanRequest request,
-		Long subscriptionPlanId
+		Long planId
 	) {
-		Plan plan = loadPlanPort.load(subscriptionPlanId);
+		Plan plan = loadPlanPort.load(planId);
 
 		if (plan.isSystemProvided()) {
 			throw new CustomException(ErrorCode.SYSTEM_PLAN_WRITE_FORBIDDEN);

@@ -6,7 +6,7 @@ import subport.domain.subscription.Plan;
 
 public interface LoadPlanPort {
 
-	Plan load(Long subscriptionPlanId);
+	Plan load(Long planId);
 
 	List<Plan> loadByMemberIdAndSubscriptionId(Long memberId, Long subscriptionId);
 }

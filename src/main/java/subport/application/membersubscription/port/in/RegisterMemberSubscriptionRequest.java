@@ -10,6 +10,6 @@ public record RegisterMemberSubscriptionRequest(
 	boolean dutchPay,
 	BigDecimal dutchPayAmount,
 	Long subscriptionId,
-	Long subscriptionPlanId
+	Long planId
 ) {
 }

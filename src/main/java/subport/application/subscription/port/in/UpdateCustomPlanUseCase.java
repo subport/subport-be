@@ -5,6 +5,6 @@ public interface UpdateCustomPlanUseCase {
 	void update(
 		Long memberId,
 		UpdateCustomPlanRequest request,
-		Long subscriptionPlanId
+		Long planId
 	);
 }

@@ -56,7 +56,7 @@ public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 
 	@JoinColumn(name = "subscription_plan_id", nullable = false)
 	@OneToOne(fetch = FetchType.LAZY)
-	private PlanJpaEntity subscriptionPlan;
+	private PlanJpaEntity plan;
 
 	public MemberSubscriptionJpaEntity(
 		LocalDate startDate,
@@ -69,7 +69,7 @@ public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 		LocalDate nextPaymentDate,
 		MemberJpaEntity member,
 		SubscriptionJpaEntity subscription,
-		PlanJpaEntity subscriptionPlan
+		PlanJpaEntity plan
 	) {
 		this.startDate = startDate;
 		this.reminderDaysBeforeEnd = reminderDaysBeforeEnd;
@@ -81,6 +81,6 @@ public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 		this.nextPaymentDate = nextPaymentDate;
 		this.member = member;
 		this.subscription = subscription;
-		this.subscriptionPlan = subscriptionPlan;
+		this.plan = plan;
 	}
 }

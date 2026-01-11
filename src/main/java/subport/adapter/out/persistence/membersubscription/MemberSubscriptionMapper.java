@@ -14,7 +14,7 @@ public class MemberSubscriptionMapper {
 		MemberSubscription memberSubscription,
 		MemberJpaEntity memberEntity,
 		SubscriptionJpaEntity subscriptionEntity,
-		PlanJpaEntity subscriptionPlanEntity
+		PlanJpaEntity planEntity
 	) {
 		return new MemberSubscriptionJpaEntity(
 			memberSubscription.getStartDate(),
@@ -27,7 +27,7 @@ public class MemberSubscriptionMapper {
 			memberSubscription.getNextPaymentDate(),
 			memberEntity,
 			subscriptionEntity,
-			subscriptionPlanEntity
+			planEntity
 		);
 	}
 
@@ -43,7 +43,7 @@ public class MemberSubscriptionMapper {
 			memberSubscriptionEntity.getNextPaymentDate(),
 			memberSubscriptionEntity.getMember().getId(),
 			memberSubscriptionEntity.getSubscription().getId(),
-			memberSubscriptionEntity.getSubscriptionPlan().getId()
+			memberSubscriptionEntity.getPlan().getId()
 		);
 	}
 }

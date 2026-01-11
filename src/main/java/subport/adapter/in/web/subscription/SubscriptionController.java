@@ -110,7 +110,7 @@ public class SubscriptionController {
 	}
 
 	@PostMapping("/{id}/plans")
-	public ResponseEntity<RegisterCustomPlanResponse> registerCustomSubscriptionPlan(
+	public ResponseEntity<RegisterCustomPlanResponse> registerCustomPlan(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
 		@RequestBody RegisterCustomPlanRequest request,
 		@PathVariable("id") Long subscriptionId
@@ -122,7 +122,7 @@ public class SubscriptionController {
 	}
 
 	@GetMapping("/{id}/plans")
-	public ResponseEntity<ListPlansResponse> listSubscriptionPlans(
+	public ResponseEntity<ListPlansResponse> listPlans(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
 		@PathVariable("id") Long subscriptionId
 	) {

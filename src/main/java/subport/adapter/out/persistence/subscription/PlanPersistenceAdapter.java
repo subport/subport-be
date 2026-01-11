@@ -23,7 +23,7 @@ public class PlanPersistenceAdapter implements
 	UpdatePlanPort,
 	DeletePlanPort {
 
-	private final SpringDataPlanRepository subscriptionPlanRepository;
+	private final SpringDataPlanRepository planRepository;
 	private final SpringDataMemberRepository memberRepository;
 	private final SpringDataSubscriptionRepository subscriptionRepository;
 	private final PlanMapper planMapper;
@@ -34,45 +34,45 @@ public class PlanPersistenceAdapter implements
 		SubscriptionJpaEntity subscriptionEntity = subscriptionRepository.getReferenceById(
 			plan.getSubscriptionId());
 
-		PlanJpaEntity subscriptionPlanEntity = planMapper.toJpaEntity(
+		PlanJpaEntity planEntity = planMapper.toJpaEntity(
 			plan,
 			memberEntity,
 			subscriptionEntity
 		);
 
-		return subscriptionPlanRepository.save(subscriptionPlanEntity).getId();
+		return planRepository.save(planEntity).getId();
 	}
 
 	@Override
-	public Plan load(Long subscriptionPlanId) {
-		PlanJpaEntity subscriptionPlanEntity = subscriptionPlanRepository.findById(subscriptionPlanId)
+	public Plan load(Long planId) {
+		PlanJpaEntity planEntity = planRepository.findById(planId)
 			.orElseThrow(() -> new CustomException(ErrorCode.PLAN_NOT_FOUND));
 
-		return planMapper.toDomain(subscriptionPlanEntity);
+		return planMapper.toDomain(planEntity);
 	}
 
 	@Override
 	public List<Plan> loadByMemberIdAndSubscriptionId(Long memberId, Long subscriptionId) {
-		return subscriptionPlanRepository.findByIdAccessibleToMember(memberId, subscriptionId).stream()
+		return planRepository.findByIdAccessibleToMember(memberId, subscriptionId).stream()
 			.map(planMapper::toDomain)
 			.toList();
 	}
 
 	@Override
 	public void update(Plan plan) {
-		PlanJpaEntity subscriptionPlanEntity = subscriptionPlanRepository.findById(plan.getId())
+		PlanJpaEntity planEntity = planRepository.findById(plan.getId())
 			.orElseThrow(() -> new CustomException(ErrorCode.PLAN_NOT_FOUND));
 
-		subscriptionPlanEntity.apply(plan);
+		planEntity.apply(plan);
 	}
 
 	@Override
 	public void deleteById(Long planId) {
-		subscriptionPlanRepository.deleteById(planId);
+		planRepository.deleteById(planId);
 	}
 
 	@Override
 	public void deleteBySubscriptionId(Long subscriptionId) {
-		subscriptionPlanRepository.deleteAllBySubscriptionId(subscriptionId);
+		planRepository.deleteAllBySubscriptionId(subscriptionId);
 	}
 }
