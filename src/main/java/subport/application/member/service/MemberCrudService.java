@@ -22,6 +22,7 @@ public class MemberCrudService implements UpdateMemberUseCase {
 			memberId,
 			null,
 			request.nickname(),
+			null,
 			request.email()
 		);
 		updateMemberPort.updateMember(member);

@@ -11,17 +11,21 @@ public class Member {
 
 	private String nickname;
 
+	private String profileImageUrl;
+
 	private String email;
 
 	private Member(
 		Long id,
 		String providerId,
 		String nickname,
+		String profileImageUrl,
 		String email
 	) {
 		this.id = id;
 		this.providerId = providerId;
 		this.nickname = nickname;
+		this.profileImageUrl = profileImageUrl;
 		this.email = email;
 	}
 
@@ -29,12 +33,14 @@ public class Member {
 		Long id,
 		String providerId,
 		String nickname,
+		String profileImageUrl,
 		String email
 	) {
 		return new Member(
 			id,
 			providerId,
 			nickname,
+			profileImageUrl,
 			email
 		);
 	}
@@ -42,12 +48,14 @@ public class Member {
 	public static Member withoutId(
 		String providerId,
 		String nickname,
+		String profileImageUrl,
 		String email
 	) {
 		return new Member(
 			null,
 			providerId,
 			nickname,
+			profileImageUrl,
 			email
 		);
 	}

@@ -5,6 +5,7 @@ import subport.domain.member.Member;
 public record OAuth2UserInfo(
 	String providerId,
 	String nickname,
+	String profileImageUrl,
 	String email
 ) {
 
@@ -12,6 +13,7 @@ public record OAuth2UserInfo(
 		return Member.withoutId(
 			providerId,
 			nickname,
+			profileImageUrl,
 			email
 		);
 	}

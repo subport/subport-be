@@ -11,6 +11,7 @@ public class MemberMapper {
 		return new MemberJpaEntity(
 			member.getProviderId(),
 			member.getNickname(),
+			member.getProfileImageUrl(),
 			member.getEmail()
 		);
 	}
