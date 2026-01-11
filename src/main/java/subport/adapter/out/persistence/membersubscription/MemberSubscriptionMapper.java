@@ -3,8 +3,8 @@ package subport.adapter.out.persistence.membersubscription;
 import org.springframework.stereotype.Component;
 
 import subport.adapter.out.persistence.member.MemberJpaEntity;
-import subport.adapter.out.persistence.subscription.SubscriptionJpaEntity;
 import subport.adapter.out.persistence.subscription.PlanJpaEntity;
+import subport.adapter.out.persistence.subscription.SubscriptionJpaEntity;
 import subport.domain.membersubscription.MemberSubscription;
 
 @Component
@@ -28,6 +28,22 @@ public class MemberSubscriptionMapper {
 			memberEntity,
 			subscriptionEntity,
 			subscriptionPlanEntity
+		);
+	}
+
+	public MemberSubscription toDomain(MemberSubscriptionJpaEntity memberSubscriptionEntity) {
+		return MemberSubscription.withId(
+			memberSubscriptionEntity.getId(),
+			memberSubscriptionEntity.getStartDate(),
+			memberSubscriptionEntity.getReminderDaysBeforeEnd(),
+			memberSubscriptionEntity.getMemo(),
+			memberSubscriptionEntity.isDutchPay(),
+			memberSubscriptionEntity.getDutchPayAmount(),
+			memberSubscriptionEntity.getTerminationDate(),
+			memberSubscriptionEntity.getNextPaymentDate(),
+			memberSubscriptionEntity.getMember().getId(),
+			memberSubscriptionEntity.getSubscription().getId(),
+			memberSubscriptionEntity.getSubscriptionPlan().getId()
 		);
 	}
 }
