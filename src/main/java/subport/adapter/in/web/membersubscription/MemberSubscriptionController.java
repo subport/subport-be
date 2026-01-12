@@ -15,6 +15,8 @@ import subport.adapter.in.security.oauth2.CustomOAuth2User;
 import subport.application.membersubscription.port.in.DeleteMemberSubscriptionUseCase;
 import subport.application.membersubscription.port.in.RegisterMemberSubscriptionRequest;
 import subport.application.membersubscription.port.in.RegisterMemberSubscriptionUseCase;
+import subport.application.membersubscription.port.in.UpdateMemberSubscriptionDutchPayRequest;
+import subport.application.membersubscription.port.in.UpdateMemberSubscriptionDutchPayUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionPlanRequest;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionPlanUseCase;
 import subport.application.membersubscription.port.out.RegisterMemberSubscriptionResponse;
@@ -26,6 +28,7 @@ public class MemberSubscriptionController {
 
 	private final RegisterMemberSubscriptionUseCase registerMemberSubscriptionUseCase;
 	private final UpdateMemberSubscriptionPlanUseCase updateMemberSubscriptionPlanUseCase;
+	private final UpdateMemberSubscriptionDutchPayUseCase updateMemberSubscriptionDutchPayUseCase;
 	private final DeleteMemberSubscriptionUseCase deleteMemberSubscriptionUseCase;
 
 	@PostMapping
@@ -45,6 +48,22 @@ public class MemberSubscriptionController {
 		@PathVariable("id") Long memberSubscriptionId
 	) {
 		updateMemberSubscriptionPlanUseCase.updatePlan(
+			oAuth2User.getMemberId(),
+			request,
+			memberSubscriptionId
+		);
+
+		return ResponseEntity.noContent()
+			.build();
+	}
+
+	@PutMapping("/{id}/dutch-pay")
+	public ResponseEntity<Void> updateMemberSubscriptionDutchPay(
+		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
+		@RequestBody UpdateMemberSubscriptionDutchPayRequest request,
+		@PathVariable("id") Long memberSubscriptionId
+	) {
+		updateMemberSubscriptionDutchPayUseCase.updateDutchPay(
 			oAuth2User.getMemberId(),
 			request,
 			memberSubscriptionId

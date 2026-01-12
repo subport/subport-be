@@ -1,11 +1,15 @@
 package subport.application.membersubscription.service;
 
+import java.math.BigDecimal;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
+import subport.application.membersubscription.port.in.UpdateMemberSubscriptionDutchPayRequest;
+import subport.application.membersubscription.port.in.UpdateMemberSubscriptionDutchPayUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionPlanRequest;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionPlanUseCase;
 import subport.application.membersubscription.port.out.LoadMemberSubscriptionPort;
@@ -17,7 +21,9 @@ import subport.domain.subscription.Plan;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UpdateMemberSubscriptionService implements UpdateMemberSubscriptionPlanUseCase {
+public class UpdateMemberSubscriptionService implements
+	UpdateMemberSubscriptionPlanUseCase,
+	UpdateMemberSubscriptionDutchPayUseCase {
 
 	private final LoadMemberSubscriptionPort loadMemberSubscriptionPort;
 	private final UpdateMemberSubscriptionPort updateMemberSubscriptionPort;
@@ -47,6 +53,32 @@ public class UpdateMemberSubscriptionService implements UpdateMemberSubscription
 		}
 
 		memberSubscription.updatePlan(newPlanId);
+
+		updateMemberSubscriptionPort.update(memberSubscription);
+	}
+
+	@Override
+	public void updateDutchPay(
+		Long memberId,
+		UpdateMemberSubscriptionDutchPayRequest request,
+		Long memberSubscriptionId
+	) {
+		MemberSubscription memberSubscription = loadMemberSubscriptionPort.load(memberSubscriptionId);
+
+		if (!memberSubscription.getMemberId().equals(memberId)) {
+			throw new CustomException(ErrorCode.MEMBER_SUBSCRIPTION_FORBIDDEN);
+		}
+
+		boolean dutchPay = request.dutchPay();
+		BigDecimal dutchPayAmount = request.dutchPayAmount();
+		if (dutchPay && dutchPayAmount == null) {
+			throw new CustomException(ErrorCode.DUTCH_PAY_AMOUNT_MISSING);
+		}
+		if (!dutchPay && dutchPayAmount != null) {
+			throw new CustomException(ErrorCode.DUTCH_PAY_AMOUNT_NOT_ALLOWED);
+		}
+
+		memberSubscription.updateDutchPay(dutchPay, dutchPayAmount);
 
 		updateMemberSubscriptionPort.update(memberSubscription);
 	}

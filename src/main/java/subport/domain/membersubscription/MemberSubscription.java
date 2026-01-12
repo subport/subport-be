@@ -16,9 +16,9 @@ public class MemberSubscription {
 
 	private final String memo;
 
-	private final boolean dutchPay;
+	private boolean dutchPay;
 
-	private final BigDecimal dutchPayAmount;
+	private BigDecimal dutchPayAmount;
 
 	private final boolean active;
 
@@ -120,5 +120,10 @@ public class MemberSubscription {
 
 	public void updatePlan(Long planId) {
 		this.planId = planId;
+	}
+
+	public void updateDutchPay(boolean dutchPay, BigDecimal dutchPayAmount) {
+		this.dutchPay = dutchPay;
+		this.dutchPayAmount = dutchPayAmount;
 	}
 }

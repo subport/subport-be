@@ -84,24 +84,24 @@ public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 		this.plan = plan;
 	}
 
-	public void changeReminderDaysBeforeEnd(Integer reminderDaysBeforeEnd) {
+	public void updateReminderDaysBeforeEnd(Integer reminderDaysBeforeEnd) {
 		this.reminderDaysBeforeEnd = reminderDaysBeforeEnd;
 	}
 
-	public void changeMemo(String memo) {
+	public void updateMemo(String memo) {
 		this.memo = memo;
 	}
 
-	public void changeDutchPay(boolean dutchPay, BigDecimal dutchPayAmount) {
+	public void updateDutchPay(boolean dutchPay, BigDecimal dutchPayAmount) {
 		this.dutchPay = dutchPay;
 		this.dutchPayAmount = dutchPayAmount;
 	}
 
-	public void changeActive(boolean active) {
+	public void updateActive(boolean active) {
 		this.active = active;
 	}
 
-	public void changePlan(PlanJpaEntity plan) {
+	public void updatePlan(PlanJpaEntity plan) {
 		this.plan = plan;
 	}
 }
