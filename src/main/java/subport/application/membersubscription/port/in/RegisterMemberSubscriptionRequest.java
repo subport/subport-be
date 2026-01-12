@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 public record RegisterMemberSubscriptionRequest(
 	LocalDate startDate,
-	Integer reminderDaysBeforeEnd,
+	Integer reminderDaysBefore,
 	String memo,
 	boolean dutchPay,
 	BigDecimal dutchPayAmount,

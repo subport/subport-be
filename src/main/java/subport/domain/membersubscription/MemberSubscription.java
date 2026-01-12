@@ -12,7 +12,7 @@ public class MemberSubscription {
 
 	private final LocalDate startDate;
 
-	private Integer reminderDaysBeforeEnd;
+	private Integer reminderDaysBefore;
 
 	private String memo;
 
@@ -35,7 +35,7 @@ public class MemberSubscription {
 	private MemberSubscription(
 		Long id,
 		LocalDate startDate,
-		Integer reminderDaysBeforeEnd,
+		Integer reminderDaysBefore,
 		String memo,
 		boolean dutchPay,
 		BigDecimal dutchPayAmount,
@@ -47,7 +47,7 @@ public class MemberSubscription {
 	) {
 		this.id = id;
 		this.startDate = startDate;
-		this.reminderDaysBeforeEnd = reminderDaysBeforeEnd;
+		this.reminderDaysBefore = reminderDaysBefore;
 		this.memo = memo;
 		this.dutchPay = dutchPay;
 		if (dutchPay) {
@@ -66,7 +66,7 @@ public class MemberSubscription {
 	public static MemberSubscription withId(
 		Long id,
 		LocalDate startDate,
-		Integer reminderDaysBeforeEnd,
+		Integer reminderDaysBefore,
 		String memo,
 		boolean dutchPay,
 		BigDecimal dutchPayAmount,
@@ -79,7 +79,7 @@ public class MemberSubscription {
 		return new MemberSubscription(
 			id,
 			startDate,
-			reminderDaysBeforeEnd,
+			reminderDaysBefore,
 			memo,
 			dutchPay,
 			dutchPayAmount,
@@ -93,7 +93,7 @@ public class MemberSubscription {
 
 	public static MemberSubscription withoutId(
 		LocalDate startDate,
-		Integer reminderDaysBeforeEnd,
+		Integer reminderDaysBefore,
 		String memo,
 		boolean dutchPay,
 		BigDecimal dutchPayAmount,
@@ -106,7 +106,7 @@ public class MemberSubscription {
 		return new MemberSubscription(
 			null,
 			startDate,
-			reminderDaysBeforeEnd,
+			reminderDaysBefore,
 			memo,
 			dutchPay,
 			dutchPayAmount,
@@ -118,6 +118,14 @@ public class MemberSubscription {
 		);
 	}
 
+	public void updateReminderDaysBefore(Integer reminderDaysBefore) {
+		this.reminderDaysBefore = reminderDaysBefore;
+	}
+
+	public void updateMemo(String memo) {
+		this.memo = memo;
+	}
+
 	public void updatePlan(Long planId) {
 		this.planId = planId;
 	}
@@ -125,13 +133,5 @@ public class MemberSubscription {
 	public void updateDutchPay(boolean dutchPay, BigDecimal dutchPayAmount) {
 		this.dutchPay = dutchPay;
 		this.dutchPayAmount = dutchPayAmount;
-	}
-
-	public void updateReminderDaysBeforeEnd(Integer reminderDaysBeforeEnd) {
-		this.reminderDaysBeforeEnd = reminderDaysBeforeEnd;
-	}
-
-	public void updateMemo(String memo) {
-		this.memo = memo;
 	}
 }

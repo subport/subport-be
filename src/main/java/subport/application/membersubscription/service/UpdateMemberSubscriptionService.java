@@ -101,7 +101,7 @@ public class UpdateMemberSubscriptionService implements
 			throw new CustomException(ErrorCode.MEMBER_SUBSCRIPTION_FORBIDDEN);
 		}
 
-		memberSubscription.updateReminderDaysBeforeEnd(request.reminderDaysBefore());
+		memberSubscription.updateReminderDaysBefore(request.reminderDaysBefore());
 
 		updateMemberSubscriptionPort.update(memberSubscription);
 	}

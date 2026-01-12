@@ -37,7 +37,7 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 
 		MemberSubscription memberSubscription = MemberSubscription.withoutId(
 			request.startDate(),
-			request.reminderDaysBeforeEnd(),
+			request.reminderDaysBefore(),
 			request.memo(),
 			dutchPay,
 			dutchPayAmount,
