@@ -17,6 +17,8 @@ import subport.application.membersubscription.port.in.RegisterMemberSubscription
 import subport.application.membersubscription.port.in.RegisterMemberSubscriptionUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionDutchPayRequest;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionDutchPayUseCase;
+import subport.application.membersubscription.port.in.UpdateMemberSubscriptionMemoRequest;
+import subport.application.membersubscription.port.in.UpdateMemberSubscriptionMemoUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionPlanRequest;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionPlanUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionReminderRequest;
@@ -32,6 +34,7 @@ public class MemberSubscriptionController {
 	private final UpdateMemberSubscriptionPlanUseCase updateMemberSubscriptionPlanUseCase;
 	private final UpdateMemberSubscriptionDutchPayUseCase updateMemberSubscriptionDutchPayUseCase;
 	private final UpdateMemberSubscriptionReminderUseCase updateMemberSubscriptionReminderUseCase;
+	private final UpdateMemberSubscriptionMemoUseCase updateMemberSubscriptionMemoUseCase;
 	private final DeleteMemberSubscriptionUseCase deleteMemberSubscriptionUseCase;
 
 	@PostMapping
@@ -83,6 +86,22 @@ public class MemberSubscriptionController {
 		@PathVariable("id") Long memberSubscriptionId
 	) {
 		updateMemberSubscriptionReminderUseCase.updateReminder(
+			oAuth2User.getMemberId(),
+			request,
+			memberSubscriptionId
+		);
+
+		return ResponseEntity.noContent()
+			.build();
+	}
+
+	@PutMapping("/{id}/memo")
+	public ResponseEntity<Void> updateMemberSubscriptionMemo(
+		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
+		@RequestBody UpdateMemberSubscriptionMemoRequest request,
+		@PathVariable("id") Long memberSubscriptionId
+	) {
+		updateMemberSubscriptionMemoUseCase.updateMemo(
 			oAuth2User.getMemberId(),
 			request,
 			memberSubscriptionId

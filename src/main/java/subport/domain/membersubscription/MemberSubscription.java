@@ -14,7 +14,7 @@ public class MemberSubscription {
 
 	private Integer reminderDaysBeforeEnd;
 
-	private final String memo;
+	private String memo;
 
 	private boolean dutchPay;
 
@@ -129,5 +129,9 @@ public class MemberSubscription {
 
 	public void updateReminderDaysBeforeEnd(Integer reminderDaysBeforeEnd) {
 		this.reminderDaysBeforeEnd = reminderDaysBeforeEnd;
+	}
+
+	public void updateMemo(String memo) {
+		this.memo = memo;
 	}
 }

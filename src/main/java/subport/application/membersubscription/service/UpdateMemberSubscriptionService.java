@@ -10,6 +10,8 @@ import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionDutchPayRequest;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionDutchPayUseCase;
+import subport.application.membersubscription.port.in.UpdateMemberSubscriptionMemoRequest;
+import subport.application.membersubscription.port.in.UpdateMemberSubscriptionMemoUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionPlanRequest;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionPlanUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionReminderRequest;
@@ -26,7 +28,8 @@ import subport.domain.subscription.Plan;
 public class UpdateMemberSubscriptionService implements
 	UpdateMemberSubscriptionPlanUseCase,
 	UpdateMemberSubscriptionDutchPayUseCase,
-	UpdateMemberSubscriptionReminderUseCase {
+	UpdateMemberSubscriptionReminderUseCase,
+	UpdateMemberSubscriptionMemoUseCase {
 
 	private final LoadMemberSubscriptionPort loadMemberSubscriptionPort;
 	private final UpdateMemberSubscriptionPort updateMemberSubscriptionPort;
@@ -99,6 +102,23 @@ public class UpdateMemberSubscriptionService implements
 		}
 
 		memberSubscription.updateReminderDaysBeforeEnd(request.reminderDaysBefore());
+
+		updateMemberSubscriptionPort.update(memberSubscription);
+	}
+
+	@Override
+	public void updateMemo(
+		Long memberId,
+		UpdateMemberSubscriptionMemoRequest request,
+		Long memberSubscriptionId
+	) {
+		MemberSubscription memberSubscription = loadMemberSubscriptionPort.load(memberSubscriptionId);
+
+		if (!memberSubscription.getMemberId().equals(memberId)) {
+			throw new CustomException(ErrorCode.MEMBER_SUBSCRIPTION_FORBIDDEN);
+		}
+
+		memberSubscription.updateMemo(request.memo());
 
 		updateMemberSubscriptionPort.update(memberSubscription);
 	}
