@@ -48,7 +48,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 		String url = String.format(
 			"%s?access=%s",
-			"http://localhost:5173" + "/login-success",
+			"https://localhost:5173" + "/login-success",
 			URLEncoder.encode(accessToken, StandardCharsets.UTF_8)
 		);
 
