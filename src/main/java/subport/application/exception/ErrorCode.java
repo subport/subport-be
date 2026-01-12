@@ -32,6 +32,7 @@ public enum ErrorCode {
 	// 구독 정보 관련
 	MEMBER_SUBSCRIPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 구독 정보입니다."),
 	MEMBER_SUBSCRIPTION_FORBIDDEN(HttpStatus.FORBIDDEN, "본인의 구독 정보만 조회, 수정, 삭제가 가능합니다."),
+	INVALID_MEMBER_SUBSCRIPTION_PLAN(HttpStatus.BAD_REQUEST, "해당 구독 서비스에 속하지 않은 플랜으로는 변경이 불가능합니다."),
 	DUTCH_PAY_AMOUNT_MISSING(HttpStatus.BAD_REQUEST, "더치페이를 선택했으면 더치페이 금액을 반드시 입력해야 합니다."),
 	DUTCH_PAY_AMOUNT_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "더치페이를 선택하지 않았으면 금액을 입력할 수 없습니다."),
 
@@ -40,7 +41,8 @@ public enum ErrorCode {
 	INVALID_AMOUNT_UNIT(HttpStatus.BAD_REQUEST, "유효하지 않은 통화 단위입니다."),
 	SYSTEM_PLAN_WRITE_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공 플랜은 수정 및 삭제가 불가능합니다."),
 	PLAN_WRITE_FORBIDDEN(HttpStatus.FORBIDDEN, "본인이 등록한 플랜이 아니면 수정 및 삭제가 불가능합니다."),
-	PLAN_READ_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공이 아니면 본인이 등록한 플랜만 조회가 가능합니다.");
+	PLAN_READ_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공이 아니면 본인이 등록한 플랜만 조회가 가능합니다."),
+	PLAN_USE_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공 플랜이거나 본인이 등록한 플랜만 사용이 가능합니다.");
 
 	private final HttpStatus httpStatus;
 	private final String message;

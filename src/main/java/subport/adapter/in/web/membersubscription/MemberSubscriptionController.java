@@ -5,6 +5,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,8 @@ import subport.adapter.in.security.oauth2.CustomOAuth2User;
 import subport.application.membersubscription.port.in.DeleteMemberSubscriptionUseCase;
 import subport.application.membersubscription.port.in.RegisterMemberSubscriptionRequest;
 import subport.application.membersubscription.port.in.RegisterMemberSubscriptionUseCase;
+import subport.application.membersubscription.port.in.UpdateMemberSubscriptionPlanRequest;
+import subport.application.membersubscription.port.in.UpdateMemberSubscriptionPlanUseCase;
 import subport.application.membersubscription.port.out.RegisterMemberSubscriptionResponse;
 
 @RestController
@@ -22,6 +25,7 @@ import subport.application.membersubscription.port.out.RegisterMemberSubscriptio
 public class MemberSubscriptionController {
 
 	private final RegisterMemberSubscriptionUseCase registerMemberSubscriptionUseCase;
+	private final UpdateMemberSubscriptionPlanUseCase updateMemberSubscriptionPlanUseCase;
 	private final DeleteMemberSubscriptionUseCase deleteMemberSubscriptionUseCase;
 
 	@PostMapping
@@ -32,6 +36,22 @@ public class MemberSubscriptionController {
 		return ResponseEntity.ok(registerMemberSubscriptionUseCase.register(
 			oAuth2User.getMemberId(),
 			request));
+	}
+
+	@PutMapping("/{id}/plan")
+	public ResponseEntity<Void> updateMemberSubscriptionPlan(
+		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
+		@RequestBody UpdateMemberSubscriptionPlanRequest request,
+		@PathVariable("id") Long memberSubscriptionId
+	) {
+		updateMemberSubscriptionPlanUseCase.updatePlan(
+			oAuth2User.getMemberId(),
+			request,
+			memberSubscriptionId
+		);
+
+		return ResponseEntity.noContent()
+			.build();
 	}
 
 	@DeleteMapping("/{id}")

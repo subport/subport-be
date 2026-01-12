@@ -14,6 +14,7 @@ import subport.application.exception.ErrorCode;
 import subport.application.membersubscription.port.out.DeleteMemberSubscriptionPort;
 import subport.application.membersubscription.port.out.LoadMemberSubscriptionPort;
 import subport.application.membersubscription.port.out.SaveMemberSubscriptionPort;
+import subport.application.membersubscription.port.out.UpdateMemberSubscriptionPort;
 import subport.domain.membersubscription.MemberSubscription;
 
 @Component
@@ -21,6 +22,7 @@ import subport.domain.membersubscription.MemberSubscription;
 public class MemberSubscriptionPersistenceAdapter implements
 	SaveMemberSubscriptionPort,
 	LoadMemberSubscriptionPort,
+	UpdateMemberSubscriptionPort,
 	DeleteMemberSubscriptionPort {
 
 	private final SpringDataMemberSubscriptionRepository memberSubscriptionRepository;
@@ -54,6 +56,27 @@ public class MemberSubscriptionPersistenceAdapter implements
 			.orElseThrow(() -> new CustomException(ErrorCode.MEMBER_SUBSCRIPTION_NOT_FOUND));
 
 		return memberSubscriptionMapper.toDomain(memberSubscriptionEntity);
+	}
+
+	@Override
+	public void update(MemberSubscription memberSubscription) {
+		MemberSubscriptionJpaEntity memberSubscriptionEntity = memberSubscriptionRepository
+			.findById(memberSubscription.getId())
+			.orElseThrow(() -> new CustomException(ErrorCode.MEMBER_SUBSCRIPTION_NOT_FOUND));
+
+		memberSubscriptionEntity.changeReminderDaysBeforeEnd(memberSubscription.getReminderDaysBeforeEnd());
+		memberSubscriptionEntity.changeMemo(memberSubscription.getMemo());
+		memberSubscriptionEntity.changeDutchPay(
+			memberSubscription.isDutchPay(),
+			memberSubscription.getDutchPayAmount()
+		);
+		memberSubscriptionEntity.changeActive(memberSubscription.isActive());
+
+		Long newPlanId = memberSubscription.getPlanId();
+		if (!memberSubscriptionEntity.getPlan().getId().equals(newPlanId)) {
+			PlanJpaEntity planEntity = planRepository.getReferenceById(newPlanId);
+			memberSubscriptionEntity.changePlan(planEntity);
+		}
 	}
 
 	@Override

@@ -54,7 +54,7 @@ public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private SubscriptionJpaEntity subscription;
 
-	@JoinColumn(name = "subscription_plan_id", nullable = false)
+	@JoinColumn(name = "plan_id", nullable = false)
 	@OneToOne(fetch = FetchType.LAZY)
 	private PlanJpaEntity plan;
 
@@ -81,6 +81,27 @@ public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 		this.nextPaymentDate = nextPaymentDate;
 		this.member = member;
 		this.subscription = subscription;
+		this.plan = plan;
+	}
+
+	public void changeReminderDaysBeforeEnd(Integer reminderDaysBeforeEnd) {
+		this.reminderDaysBeforeEnd = reminderDaysBeforeEnd;
+	}
+
+	public void changeMemo(String memo) {
+		this.memo = memo;
+	}
+
+	public void changeDutchPay(boolean dutchPay, BigDecimal dutchPayAmount) {
+		this.dutchPay = dutchPay;
+		this.dutchPayAmount = dutchPayAmount;
+	}
+
+	public void changeActive(boolean active) {
+		this.active = active;
+	}
+
+	public void changePlan(PlanJpaEntity plan) {
 		this.plan = plan;
 	}
 }

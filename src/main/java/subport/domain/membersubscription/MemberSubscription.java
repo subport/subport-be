@@ -30,7 +30,7 @@ public class MemberSubscription {
 
 	private final Long subscriptionId;
 
-	private final Long planId;
+	private Long planId;
 
 	private MemberSubscription(
 		Long id,
@@ -116,5 +116,9 @@ public class MemberSubscription {
 			subscriptionId,
 			planId
 		);
+	}
+
+	public void updatePlan(Long planId) {
+		this.planId = planId;
 	}
 }
