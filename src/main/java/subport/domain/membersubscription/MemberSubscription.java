@@ -12,7 +12,7 @@ public class MemberSubscription {
 
 	private final LocalDate startDate;
 
-	private final Integer reminderDaysBeforeEnd;
+	private Integer reminderDaysBeforeEnd;
 
 	private final String memo;
 
@@ -125,5 +125,9 @@ public class MemberSubscription {
 	public void updateDutchPay(boolean dutchPay, BigDecimal dutchPayAmount) {
 		this.dutchPay = dutchPay;
 		this.dutchPayAmount = dutchPayAmount;
+	}
+
+	public void updateReminderDaysBeforeEnd(Integer reminderDaysBeforeEnd) {
+		this.reminderDaysBeforeEnd = reminderDaysBeforeEnd;
 	}
 }

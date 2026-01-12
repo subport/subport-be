@@ -19,6 +19,8 @@ import subport.application.membersubscription.port.in.UpdateMemberSubscriptionDu
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionDutchPayUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionPlanRequest;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionPlanUseCase;
+import subport.application.membersubscription.port.in.UpdateMemberSubscriptionReminderRequest;
+import subport.application.membersubscription.port.in.UpdateMemberSubscriptionReminderUseCase;
 import subport.application.membersubscription.port.out.RegisterMemberSubscriptionResponse;
 
 @RestController
@@ -29,6 +31,7 @@ public class MemberSubscriptionController {
 	private final RegisterMemberSubscriptionUseCase registerMemberSubscriptionUseCase;
 	private final UpdateMemberSubscriptionPlanUseCase updateMemberSubscriptionPlanUseCase;
 	private final UpdateMemberSubscriptionDutchPayUseCase updateMemberSubscriptionDutchPayUseCase;
+	private final UpdateMemberSubscriptionReminderUseCase updateMemberSubscriptionReminderUseCase;
 	private final DeleteMemberSubscriptionUseCase deleteMemberSubscriptionUseCase;
 
 	@PostMapping
@@ -64,6 +67,22 @@ public class MemberSubscriptionController {
 		@PathVariable("id") Long memberSubscriptionId
 	) {
 		updateMemberSubscriptionDutchPayUseCase.updateDutchPay(
+			oAuth2User.getMemberId(),
+			request,
+			memberSubscriptionId
+		);
+
+		return ResponseEntity.noContent()
+			.build();
+	}
+
+	@PutMapping("/{id}/reminder")
+	public ResponseEntity<Void> updateMemberSubscriptionReminder(
+		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
+		@RequestBody UpdateMemberSubscriptionReminderRequest request,
+		@PathVariable("id") Long memberSubscriptionId
+	) {
+		updateMemberSubscriptionReminderUseCase.updateReminder(
 			oAuth2User.getMemberId(),
 			request,
 			memberSubscriptionId

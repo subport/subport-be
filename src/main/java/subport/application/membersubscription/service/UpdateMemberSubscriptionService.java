@@ -12,6 +12,8 @@ import subport.application.membersubscription.port.in.UpdateMemberSubscriptionDu
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionDutchPayUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionPlanRequest;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionPlanUseCase;
+import subport.application.membersubscription.port.in.UpdateMemberSubscriptionReminderRequest;
+import subport.application.membersubscription.port.in.UpdateMemberSubscriptionReminderUseCase;
 import subport.application.membersubscription.port.out.LoadMemberSubscriptionPort;
 import subport.application.membersubscription.port.out.UpdateMemberSubscriptionPort;
 import subport.application.subscription.port.out.LoadPlanPort;
@@ -23,7 +25,8 @@ import subport.domain.subscription.Plan;
 @RequiredArgsConstructor
 public class UpdateMemberSubscriptionService implements
 	UpdateMemberSubscriptionPlanUseCase,
-	UpdateMemberSubscriptionDutchPayUseCase {
+	UpdateMemberSubscriptionDutchPayUseCase,
+	UpdateMemberSubscriptionReminderUseCase {
 
 	private final LoadMemberSubscriptionPort loadMemberSubscriptionPort;
 	private final UpdateMemberSubscriptionPort updateMemberSubscriptionPort;
@@ -79,6 +82,23 @@ public class UpdateMemberSubscriptionService implements
 		}
 
 		memberSubscription.updateDutchPay(dutchPay, dutchPayAmount);
+
+		updateMemberSubscriptionPort.update(memberSubscription);
+	}
+
+	@Override
+	public void updateReminder(
+		Long memberId,
+		UpdateMemberSubscriptionReminderRequest request,
+		Long memberSubscriptionId
+	) {
+		MemberSubscription memberSubscription = loadMemberSubscriptionPort.load(memberSubscriptionId);
+
+		if (!memberSubscription.getMemberId().equals(memberId)) {
+			throw new CustomException(ErrorCode.MEMBER_SUBSCRIPTION_FORBIDDEN);
+		}
+
+		memberSubscription.updateReminderDaysBeforeEnd(request.reminderDaysBefore());
 
 		updateMemberSubscriptionPort.update(memberSubscription);
 	}
