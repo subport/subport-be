@@ -3,18 +3,20 @@ package subport.adapter.in.security.oauth2;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.time.Instant;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import subport.adapter.in.security.JwtManager;
+import subport.adapter.common.JwtManager;
 import subport.application.token.port.in.SaveRefreshTokenUseCase;
 import subport.domain.token.RefreshToken;
 
@@ -52,16 +54,17 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 			URLEncoder.encode(accessToken, StandardCharsets.UTF_8)
 		);
 
-		response.addCookie(createRefreshTokenCookie(refreshToken));
+		response.addHeader(HttpHeaders.SET_COOKIE, createRefreshTokenCookie(refreshToken).toString());
 		response.sendRedirect(url);
 	}
 
-	private Cookie createRefreshTokenCookie(String refreshToken) {
-		Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
-		refreshTokenCookie.setHttpOnly(true);
-		refreshTokenCookie.setSecure(true);
-		refreshTokenCookie.setPath("/");
-		refreshTokenCookie.setMaxAge(24 * 60 * 60);
-		return refreshTokenCookie;
+	private ResponseCookie createRefreshTokenCookie(String refreshToken) {
+		return ResponseCookie.from("refreshToken", refreshToken)
+			.path("/")
+			.httpOnly(true)
+			.secure(true)
+			.sameSite("None")
+			.maxAge(Duration.ofDays(30))
+			.build();
 	}
 }
