@@ -1,4 +1,4 @@
-package subport.adapter.in.security;
+package subport.adapter.common;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -15,9 +15,13 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
+import subport.application.token.port.out.CreateAccessTokenPort;
+import subport.application.token.port.out.VerifyTokenExpirationPort;
 
 @Component
-public class JwtManager {
+public class JwtManager implements
+	CreateAccessTokenPort,
+	VerifyTokenExpirationPort {
 
 	private static final Duration ACCESS_TOKEN_EXPIRATION_TIME = Duration.ofHours(1);
 	private static final Duration REFRESH_TOKEN_EXPIRATION_TIME = Duration.ofDays(30);
@@ -33,6 +37,7 @@ public class JwtManager {
 		);
 	}
 
+	@Override
 	public String createAccessToken(Long memberId, Instant now) {
 		return createToken(
 			memberId,
@@ -71,10 +76,9 @@ public class JwtManager {
 	}
 
 	// 토큰 만료 검증
+	@Override
 	public void verifyTokenExpiration(String token, Instant now) {
-		if (getExpiration(token).isBefore(now)) {
-			throw new CustomException(ErrorCode.TOKEN_EXPIRED);
-		}
+		getExpiration(token).isBefore(now);
 	}
 
 	private String createToken(

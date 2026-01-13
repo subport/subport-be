@@ -9,10 +9,19 @@ public class RefreshTokenMapper {
 
 	public RefreshTokenJpaEntity toJpaEntity(RefreshToken refreshToken) {
 		return new RefreshTokenJpaEntity(
-			refreshToken.getValue(),
+			refreshToken.getTokenValue(),
 			refreshToken.getMemberId(),
 			refreshToken.getIssuedAt(),
 			refreshToken.getExpiration()
+		);
+	}
+
+	public RefreshToken toDomain(RefreshTokenJpaEntity refreshTokenEntity) {
+		return new RefreshToken(
+			refreshTokenEntity.getTokenValue(),
+			refreshTokenEntity.getMemberId(),
+			refreshTokenEntity.getIssuedAt(),
+			refreshTokenEntity.getExpiration()
 		);
 	}
 }

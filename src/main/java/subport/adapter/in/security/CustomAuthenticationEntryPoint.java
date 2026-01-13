@@ -32,7 +32,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 		Object exception = request.getAttribute("exception");
 
 		if (exception instanceof ExpiredJwtException) {
-			setErrorResponse(response, ErrorCode.TOKEN_EXPIRED);
+			setErrorResponse(response, ErrorCode.ACCESS_TOKEN_EXPIRED);
 			return;
 		}
 

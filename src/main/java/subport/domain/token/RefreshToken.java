@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class RefreshToken {
 
-	private String value;
+	private String tokenValue;
 
 	private Long memberId;
 
@@ -16,12 +16,12 @@ public class RefreshToken {
 	private Instant expiration;
 
 	public RefreshToken(
-		String value,
+		String tokenValue,
 		Long memberId,
 		Instant issuedAt,
 		Instant expiration
 	) {
-		this.value = value;
+		this.tokenValue = tokenValue;
 		this.memberId = memberId;
 		this.issuedAt = issuedAt;
 		this.expiration = expiration;
