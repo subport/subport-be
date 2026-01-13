@@ -4,5 +4,5 @@ import subport.domain.token.RefreshToken;
 
 public interface SaveRefreshTokenUseCase {
 
-	void saveRefreshToken(RefreshToken refreshToken);
+	void save(RefreshToken refreshToken);
 }

@@ -1,8 +1,8 @@
 package subport.adapter.in.security;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,7 +37,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 			jwtManager.verifyAuthorizationHeader(authorizationHeader);
 
 			accessToken = authorizationHeader.split(" ")[1];
-			jwtManager.verifyTokenExpiration(accessToken, new Date());
+			jwtManager.verifyTokenExpiration(accessToken, Instant.now());
 		} catch (JwtException | CustomException e) {
 			request.setAttribute("exception", e);
 			filterChain.doFilter(request, response);

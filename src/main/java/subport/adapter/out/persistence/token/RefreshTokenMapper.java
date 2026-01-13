@@ -9,7 +9,7 @@ public class RefreshTokenMapper {
 
 	public RefreshTokenJpaEntity toJpaEntity(RefreshToken refreshToken) {
 		return new RefreshTokenJpaEntity(
-			refreshToken.getToken(),
+			refreshToken.getValue(),
 			refreshToken.getMemberId(),
 			refreshToken.getIssuedAt(),
 			refreshToken.getExpiration()

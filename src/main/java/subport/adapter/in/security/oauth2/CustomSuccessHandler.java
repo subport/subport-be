@@ -3,7 +3,7 @@ package subport.adapter.in.security.oauth2;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
+import java.time.Instant;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import subport.adapter.in.security.JwtManager;
-import subport.application.token.service.RefreshTokenCrudService;
+import subport.application.token.port.in.SaveRefreshTokenUseCase;
 import subport.domain.token.RefreshToken;
 
 @Component
@@ -23,7 +23,7 @@ import subport.domain.token.RefreshToken;
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
 	private final JwtManager jwtManager;
-	private final RefreshTokenCrudService tokenCrudService;
+	private final SaveRefreshTokenUseCase saveRefreshTokenUseCase;
 
 	@Override
 	public void onAuthenticationSuccess(
@@ -34,10 +34,10 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		OAuth2User oAuth2User = (CustomOAuth2User)authentication.getPrincipal();
 		Long memberId = Long.valueOf(oAuth2User.getName());
 
-		String accessToken = jwtManager.createAccessToken(memberId, new Date());
+		String accessToken = jwtManager.createAccessToken(memberId, Instant.now());
 
-		String refreshToken = jwtManager.createRefreshToken(memberId, new Date());
-		tokenCrudService.saveRefreshToken(
+		String refreshToken = jwtManager.createRefreshToken(memberId, Instant.now());
+		saveRefreshTokenUseCase.save(
 			new RefreshToken(
 				refreshToken,
 				jwtManager.getMemberId(refreshToken),

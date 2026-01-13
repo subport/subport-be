@@ -1,6 +1,8 @@
 package subport.adapter.in.security;
 
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Date;
 
 import javax.crypto.SecretKey;
@@ -17,8 +19,8 @@ import subport.application.exception.ErrorCode;
 @Component
 public class JwtManager {
 
-	private static final Long ACCESS_TOKEN_EXPIRATION_TIME = 60 * 60 * 1000L; // 1 hour
-	private static final Long REFRESH_TOKEN_EXPIRATION_TIME = 24 * 60 * 60 * 1000L; // 1 day
+	private static final Duration ACCESS_TOKEN_EXPIRATION_TIME = Duration.ofHours(1);
+	private static final Duration REFRESH_TOKEN_EXPIRATION_TIME = Duration.ofDays(30);
 
 	private static final String BEARER_PREFIX = "Bearer ";
 
@@ -31,7 +33,7 @@ public class JwtManager {
 		);
 	}
 
-	public String createAccessToken(Long memberId, Date now) {
+	public String createAccessToken(Long memberId, Instant now) {
 		return createToken(
 			memberId,
 			now,
@@ -39,7 +41,7 @@ public class JwtManager {
 		);
 	}
 
-	public String createRefreshToken(Long memberId, Date now) {
+	public String createRefreshToken(Long memberId, Instant now) {
 		return createToken(
 			memberId,
 			now,
@@ -51,12 +53,14 @@ public class JwtManager {
 		return Long.valueOf(getAllClaims(token).getSubject());
 	}
 
-	public Date getIssuedAt(String token) {
-		return getAllClaims(token).getIssuedAt();
+	public Instant getIssuedAt(String token) {
+		return getAllClaims(token).getIssuedAt()
+			.toInstant();
 	}
 
-	public Date getExpiration(String token) {
-		return getAllClaims(token).getExpiration();
+	public Instant getExpiration(String token) {
+		return getAllClaims(token).getExpiration()
+			.toInstant();
 	}
 
 	// 인증 헤더 검증
@@ -67,21 +71,21 @@ public class JwtManager {
 	}
 
 	// 토큰 만료 검증
-	public void verifyTokenExpiration(String token, Date now) {
-		if (getExpiration(token).before(now)) {
+	public void verifyTokenExpiration(String token, Instant now) {
+		if (getExpiration(token).isBefore(now)) {
 			throw new CustomException(ErrorCode.TOKEN_EXPIRED);
 		}
 	}
 
 	private String createToken(
 		Long memberId,
-		Date now,
-		Long tokenExpirationTime
+		Instant now,
+		Duration ttl
 	) {
 		return Jwts.builder()
 			.subject(memberId.toString())
-			.issuedAt(now)
-			.expiration(new Date(now.getTime() + tokenExpirationTime))
+			.issuedAt(Date.from(now))
+			.expiration(Date.from(now.plus(ttl)))
 			.signWith(secretKey)
 			.compact();
 	}

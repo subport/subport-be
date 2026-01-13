@@ -10,13 +10,13 @@ import subport.domain.token.RefreshToken;
 
 @Service
 @RequiredArgsConstructor
-public class RefreshTokenCrudService implements SaveRefreshTokenUseCase {
+public class SaveRefreshTokenService implements SaveRefreshTokenUseCase {
 
 	private final SaveRefreshTokenPort saveRefreshTokenPort;
 
 	@Transactional
 	@Override
-	public void saveRefreshToken(RefreshToken refreshToken) {
-		saveRefreshTokenPort.saveRefreshToken(refreshToken);
+	public void save(RefreshToken refreshToken) {
+		saveRefreshTokenPort.save(refreshToken);
 	}
 }

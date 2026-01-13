@@ -15,7 +15,7 @@ public class RefreshTokenPersistenceAdapter implements
 	private final RefreshTokenMapper refreshTokenMapper;
 
 	@Override
-	public void saveRefreshToken(RefreshToken refreshToken) {
+	public void save(RefreshToken refreshToken) {
 		RefreshTokenJpaEntity refreshTokenEntity = refreshTokenMapper.toJpaEntity(refreshToken);
 		refreshTokenRepository.save(refreshTokenEntity);
 	}

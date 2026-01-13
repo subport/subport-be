@@ -1,6 +1,6 @@
 package subport.adapter.out.persistence.token;
 
-import java.util.Date;
+import java.time.Instant;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,32 +9,31 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import subport.adapter.out.persistence.BaseTimeEntity;
 
 @Entity
 @Table(name = "refresh_token")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RefreshTokenJpaEntity extends BaseTimeEntity {
+public class RefreshTokenJpaEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String token;
+	private String value;
 
 	private Long memberId;
 
-	private Date issuedAt;
+	private Instant issuedAt;
 
-	private Date expiration;
+	private Instant expiration;
 
 	public RefreshTokenJpaEntity(
-		String token,
+		String value,
 		Long memberId,
-		Date issuedAt,
-		Date expiration
+		Instant issuedAt,
+		Instant expiration
 	) {
-		this.token = token;
+		this.value = value;
 		this.memberId = memberId;
 		this.issuedAt = issuedAt;
 		this.expiration = expiration;

@@ -1,27 +1,27 @@
 package subport.domain.token;
 
-import java.util.Date;
+import java.time.Instant;
 
 import lombok.Getter;
 
 @Getter
 public class RefreshToken {
 
-	private String token;
+	private String value;
 
 	private Long memberId;
 
-	private Date issuedAt;
+	private Instant issuedAt;
 
-	private Date expiration;
+	private Instant expiration;
 
 	public RefreshToken(
-		String token,
+		String value,
 		Long memberId,
-		Date issuedAt,
-		Date expiration
+		Instant issuedAt,
+		Instant expiration
 	) {
-		this.token = token;
+		this.value = value;
 		this.memberId = memberId;
 		this.issuedAt = issuedAt;
 		this.expiration = expiration;
