@@ -24,19 +24,15 @@ public class MemberJpaEntity extends BaseTimeEntity {
 
 	private String nickname;
 
-	private String profileImageUrl;
-
 	private String email;
 
 	public MemberJpaEntity(
 		String providerId,
 		String nickname,
-		String profileImageUrl,
 		String email
 	) {
 		this.providerId = providerId;
 		this.nickname = nickname;
-		this.profileImageUrl = profileImageUrl;
 		this.email = email;
 	}
 

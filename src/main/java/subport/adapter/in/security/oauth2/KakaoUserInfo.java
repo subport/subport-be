@@ -29,10 +29,6 @@ public record KakaoUserInfo(
 		return profile.get("nickname");
 	}
 
-	public String getProfileImageUrl() {
-		return profile.get("profile_image_url");
-	}
-
 	public String getEmail() {
 		return account.get("email").toString();
 	}
@@ -41,7 +37,6 @@ public record KakaoUserInfo(
 		return new OAuth2UserInfo(
 			getProviderId(),
 			getNickname(),
-			getProfileImageUrl(),
 			getEmail()
 		);
 	}
