@@ -22,8 +22,6 @@ public class MemberSubscription {
 
 	private final boolean active;
 
-	private final LocalDate terminationDate;
-
 	private final LocalDate nextPaymentDate;
 
 	private final Long memberId;
@@ -39,7 +37,6 @@ public class MemberSubscription {
 		String memo,
 		boolean dutchPay,
 		BigDecimal dutchPayAmount,
-		LocalDate terminationDate,
 		LocalDate nextPaymentDate,
 		Long memberId,
 		Long subscriptionId,
@@ -56,7 +53,6 @@ public class MemberSubscription {
 			this.dutchPayAmount = null;
 		}
 		this.active = true;
-		this.terminationDate = terminationDate;
 		this.nextPaymentDate = nextPaymentDate;
 		this.memberId = memberId;
 		this.subscriptionId = subscriptionId;
@@ -70,7 +66,6 @@ public class MemberSubscription {
 		String memo,
 		boolean dutchPay,
 		BigDecimal dutchPayAmount,
-		LocalDate terminationDate,
 		LocalDate nextPaymentDate,
 		Long memberId,
 		Long subscriptionId,
@@ -83,7 +78,6 @@ public class MemberSubscription {
 			memo,
 			dutchPay,
 			dutchPayAmount,
-			terminationDate,
 			nextPaymentDate,
 			memberId,
 			subscriptionId,
@@ -97,7 +91,6 @@ public class MemberSubscription {
 		String memo,
 		boolean dutchPay,
 		BigDecimal dutchPayAmount,
-		LocalDate terminationDate,
 		LocalDate nextPaymentDate,
 		Long memberId,
 		Long subscriptionId,
@@ -110,7 +103,6 @@ public class MemberSubscription {
 			memo,
 			dutchPay,
 			dutchPayAmount,
-			terminationDate,
 			nextPaymentDate,
 			memberId,
 			subscriptionId,

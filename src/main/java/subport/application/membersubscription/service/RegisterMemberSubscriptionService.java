@@ -41,7 +41,6 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 			request.memo(),
 			dutchPay,
 			dutchPayAmount,
-			null,
 			nextPaymentDate,
 			memberId,
 			request.subscriptionId(),
