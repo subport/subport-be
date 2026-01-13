@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
+import subport.application.exception.CustomException;
+import subport.application.exception.ErrorCode;
 import subport.application.exception.RefreshTokenExpiredException;
 import subport.application.token.port.in.ReissueTokenUseCase;
 import subport.application.token.port.out.CreateAccessTokenPort;
@@ -28,6 +30,10 @@ public class ReissueTokenService implements ReissueTokenUseCase {
 	@Transactional
 	@Override
 	public ReissueTokenResponse reissue(String refreshTokenValue) {
+		if (refreshTokenValue == null) {
+			throw new CustomException(ErrorCode.REFRESH_TOKEN_NOT_NULL);
+		}
+
 		RefreshToken refreshToken = loadRefreshTokenPort.load(refreshTokenValue);
 
 		refreshTokenValue = refreshToken.getTokenValue();
