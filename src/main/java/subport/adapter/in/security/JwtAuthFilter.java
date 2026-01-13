@@ -3,6 +3,7 @@ package subport.adapter.in.security;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,12 +17,15 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import subport.adapter.common.JwtManager;
 import subport.adapter.in.security.oauth2.CustomOAuth2User;
 import subport.application.exception.CustomException;
 
 @Component
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
+
+	private static final List<String> EXCLUDE_URLS = List.of("/api/auth/refresh");
 
 	private final JwtManager jwtManager;
 
@@ -57,5 +61,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 		);
 
 		filterChain.doFilter(request, response);
+	}
+
+	@Override
+	protected boolean shouldNotFilter(HttpServletRequest request) {
+		return EXCLUDE_URLS.contains(request.getServletPath());
 	}
 }

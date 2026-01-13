@@ -42,7 +42,8 @@ public class SecurityConfig {
 			.exceptionHandling(ex -> ex
 				.authenticationEntryPoint(authenticationEntryPoint))
 			.authorizeHttpRequests(auth -> auth
-				.anyRequest().permitAll())
+				.requestMatchers("/api/auth/refresh").permitAll()
+				.anyRequest().authenticated())
 			.addFilterAt(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 			.sessionManagement(s -> s
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
