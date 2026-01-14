@@ -6,11 +6,15 @@ public record ErrorResponse(
 	String message
 ) {
 
-	public ErrorResponse(ErrorCode errorCode) {
+	private ErrorResponse(ErrorCode errorCode) {
 		this(
 			errorCode.getHttpStatus().value(),
 			errorCode.getHttpStatus().name(),
 			errorCode.getMessage()
 		);
+	}
+
+	public static ErrorResponse from(ErrorCode errorCode) {
+		return new ErrorResponse(errorCode);
 	}
 }
