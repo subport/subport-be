@@ -39,6 +39,10 @@ public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 
 	private BigDecimal dutchPayAmount;
 
+	private BigDecimal exchangeRate;
+
+	private LocalDate exchangeRateDate;
+
 	private boolean active;
 
 	private LocalDate nextPaymentDate;
@@ -61,6 +65,8 @@ public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 		String memo,
 		boolean dutchPay,
 		BigDecimal dutchPayAmount,
+		BigDecimal exchangeRate,
+		LocalDate exchangeRateDate,
 		boolean active,
 		LocalDate nextPaymentDate,
 		MemberJpaEntity member,
@@ -72,6 +78,8 @@ public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 		this.memo = memo;
 		this.dutchPay = dutchPay;
 		this.dutchPayAmount = dutchPayAmount;
+		this.exchangeRate = exchangeRate;
+		this.exchangeRateDate = exchangeRateDate;
 		this.active = active;
 		this.nextPaymentDate = nextPaymentDate;
 		this.member = member;

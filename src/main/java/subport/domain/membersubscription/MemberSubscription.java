@@ -20,6 +20,10 @@ public class MemberSubscription {
 
 	private BigDecimal dutchPayAmount;
 
+	private BigDecimal exchangeRate;
+
+	private LocalDate exchangeRateDate;
+
 	private final boolean active;
 
 	private LocalDate nextPaymentDate;
@@ -37,6 +41,9 @@ public class MemberSubscription {
 		String memo,
 		boolean dutchPay,
 		BigDecimal dutchPayAmount,
+		BigDecimal exchangeRate,
+		LocalDate exchangeRateDate,
+		boolean active,
 		LocalDate nextPaymentDate,
 		Long memberId,
 		Long subscriptionId,
@@ -47,12 +54,10 @@ public class MemberSubscription {
 		this.reminderDaysBefore = reminderDaysBefore;
 		this.memo = memo;
 		this.dutchPay = dutchPay;
-		if (dutchPay) {
-			this.dutchPayAmount = dutchPayAmount;
-		} else {
-			this.dutchPayAmount = null;
-		}
-		this.active = true;
+		this.dutchPayAmount = dutchPayAmount;
+		this.exchangeRate = exchangeRate;
+		this.exchangeRateDate = exchangeRateDate;
+		this.active = active;
 		this.nextPaymentDate = nextPaymentDate;
 		this.memberId = memberId;
 		this.subscriptionId = subscriptionId;
@@ -66,6 +71,9 @@ public class MemberSubscription {
 		String memo,
 		boolean dutchPay,
 		BigDecimal dutchPayAmount,
+		BigDecimal exchangeRate,
+		LocalDate exchangeRateDate,
+		boolean active,
 		LocalDate nextPaymentDate,
 		Long memberId,
 		Long subscriptionId,
@@ -78,6 +86,9 @@ public class MemberSubscription {
 			memo,
 			dutchPay,
 			dutchPayAmount,
+			exchangeRate,
+			exchangeRateDate,
+			active,
 			nextPaymentDate,
 			memberId,
 			subscriptionId,
@@ -91,6 +102,9 @@ public class MemberSubscription {
 		String memo,
 		boolean dutchPay,
 		BigDecimal dutchPayAmount,
+		BigDecimal exchangeRate,
+		LocalDate exchangeRateDate,
+		boolean active,
 		LocalDate nextPaymentDate,
 		Long memberId,
 		Long subscriptionId,
@@ -103,6 +117,9 @@ public class MemberSubscription {
 			memo,
 			dutchPay,
 			dutchPayAmount,
+			exchangeRate,
+			exchangeRateDate,
+			active,
 			nextPaymentDate,
 			memberId,
 			subscriptionId,
