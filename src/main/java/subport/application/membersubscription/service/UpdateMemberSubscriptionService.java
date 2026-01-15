@@ -54,7 +54,6 @@ public class UpdateMemberSubscriptionService implements
 
 		Long newPlanId = request.planId();
 		Plan plan = loadPlanPort.load(newPlanId);
-
 		if (!plan.getSubscriptionId().equals(memberSubscription.getSubscriptionId())) {
 			throw new CustomException(ErrorCode.INVALID_MEMBER_SUBSCRIPTION_PLAN);
 		}
@@ -63,18 +62,20 @@ public class UpdateMemberSubscriptionService implements
 			throw new CustomException(ErrorCode.PLAN_USE_FORBIDDEN);
 		}
 
-		if (plan.getAmountUnit().name().equals(SubscriptionAmountUnit.USD.name())
+		BigDecimal exchangeRate = null;
+		LocalDate exchangeRateDate = null;
+		String amountUnitName = plan.getAmountUnit().name();
+		if (amountUnitName.equals(SubscriptionAmountUnit.USD.name())
 			&& memberSubscription.getExchangeRate() == null
 			&& memberSubscription.getExchangeRateDate() == null) {
-			LocalDate exchangeRateDate = memberSubscription.getNextPaymentDate()
+			exchangeRateDate = memberSubscription.getNextPaymentDate()
 				.minusMonths(plan.getDurationMonths());
 
-			BigDecimal exchangeRate = loadExchangeRatePort.load(
+			exchangeRate = loadExchangeRatePort.load(
 				exchangeRateDate.format(DateTimeFormatter.BASIC_ISO_DATE)
 			);
-
-			memberSubscription.updateExchangeRate(exchangeRate, exchangeRateDate);
 		}
+		memberSubscription.updateExchangeRate(exchangeRate, exchangeRateDate);
 
 		memberSubscription.updatePlan(newPlanId);
 
