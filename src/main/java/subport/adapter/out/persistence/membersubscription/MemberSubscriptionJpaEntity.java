@@ -18,6 +18,7 @@ import subport.adapter.out.persistence.BaseTimeEntity;
 import subport.adapter.out.persistence.member.MemberJpaEntity;
 import subport.adapter.out.persistence.subscription.PlanJpaEntity;
 import subport.adapter.out.persistence.subscription.SubscriptionJpaEntity;
+import subport.domain.membersubscription.MemberSubscription;
 
 @Entity
 @Table(name = "member_subscription")
@@ -87,28 +88,22 @@ public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 		this.plan = plan;
 	}
 
-	public void updateReminderDaysBefore(Integer reminderDaysBefore) {
-		this.reminderDaysBefore = reminderDaysBefore;
+	public void apply(MemberSubscription memberSubscription) {
+		this.reminderDaysBefore = memberSubscription.getReminderDaysBefore();
+		this.memo = memberSubscription.getMemo();
+		this.dutchPay = memberSubscription.isDutchPay();
+		this.dutchPayAmount = memberSubscription.getDutchPayAmount();
+		this.exchangeRate = memberSubscription.getExchangeRate();
+		this.exchangeRateDate = memberSubscription.getExchangeRateDate();
+		this.active = memberSubscription.isActive();
 	}
 
-	public void updateMemo(String memo) {
-		this.memo = memo;
-	}
-
-	public void updateDutchPay(boolean dutchPay, BigDecimal dutchPayAmount) {
-		this.dutchPay = dutchPay;
-		this.dutchPayAmount = dutchPayAmount;
-	}
-
-	public void updateActive(boolean active) {
-		this.active = active;
+	public void updatePlan(PlanJpaEntity plan) {
+		this.plan = plan;
 	}
 
 	public void updateNextPaymentDate(LocalDate nextPaymentDate) {
 		this.nextPaymentDate = nextPaymentDate;
 	}
 
-	public void updatePlan(PlanJpaEntity plan) {
-		this.plan = plan;
-	}
 }

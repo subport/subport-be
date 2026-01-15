@@ -99,13 +99,7 @@ public class MemberSubscriptionPersistenceAdapter implements
 			.findById(memberSubscription.getId())
 			.orElseThrow(() -> new CustomException(ErrorCode.MEMBER_SUBSCRIPTION_NOT_FOUND));
 
-		memberSubscriptionEntity.updateReminderDaysBefore(memberSubscription.getReminderDaysBefore());
-		memberSubscriptionEntity.updateMemo(memberSubscription.getMemo());
-		memberSubscriptionEntity.updateDutchPay(
-			memberSubscription.isDutchPay(),
-			memberSubscription.getDutchPayAmount()
-		);
-		memberSubscriptionEntity.updateActive(memberSubscription.isActive());
+		memberSubscriptionEntity.apply(memberSubscription);
 
 		Long newPlanId = memberSubscription.getPlanId();
 		if (!memberSubscriptionEntity.getPlan().getId().equals(newPlanId)) {

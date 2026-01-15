@@ -144,6 +144,11 @@ public class MemberSubscription {
 		this.dutchPayAmount = dutchPayAmount;
 	}
 
+	public void updateExchangeRate(BigDecimal exchangeRate, LocalDate exchangeRateDate) {
+		this.exchangeRate = exchangeRate;
+		this.exchangeRateDate = exchangeRateDate;
+	}
+
 	public void increaseNextPaymentDateByMonths(int months) {
 		this.nextPaymentDate = this.nextPaymentDate.plusMonths(months);
 	}
