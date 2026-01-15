@@ -10,7 +10,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -53,7 +52,7 @@ public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 	private SubscriptionJpaEntity subscription;
 
 	@JoinColumn(name = "plan_id", nullable = false)
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	private PlanJpaEntity plan;
 
 	public MemberSubscriptionJpaEntity(
