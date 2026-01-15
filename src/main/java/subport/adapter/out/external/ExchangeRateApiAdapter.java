@@ -38,7 +38,7 @@ public class ExchangeRateApiAdapter implements LoadExchangeRatePort {
 			});
 
 		return responses.stream()
-			.filter(r -> r.exchangeRate().equals("USD"))
+			.filter(r -> r.currencyUnit().equals("USD"))
 			.findFirst()
 			.map(ExchangeRateResponse::exchangeRateToDecimal)
 			.orElseThrow(() -> new CustomException(ErrorCode.USD_EXCHANGE_RATE_NOT_FOUND));
