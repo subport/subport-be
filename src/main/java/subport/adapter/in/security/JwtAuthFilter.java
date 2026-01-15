@@ -9,6 +9,7 @@ import java.util.Optional;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import io.jsonwebtoken.JwtException;
@@ -25,7 +26,8 @@ import subport.application.exception.CustomException;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-	private static final List<String> EXCLUDE_URLS = List.of("/api/auth/refresh");
+	private static final List<String> EXCLUDE_PATTERNS = List.of("/api/auth/refresh");
+	private static final AntPathMatcher pathMatcher = new AntPathMatcher();
 
 	private final JwtManager jwtManager;
 
@@ -65,6 +67,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
 	@Override
 	protected boolean shouldNotFilter(HttpServletRequest request) {
-		return EXCLUDE_URLS.contains(request.getServletPath());
+		return EXCLUDE_PATTERNS.stream()
+			.anyMatch(pattern -> pathMatcher.match(pattern, request.getServletPath()));
 	}
 }
