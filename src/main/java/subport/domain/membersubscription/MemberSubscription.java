@@ -22,7 +22,7 @@ public class MemberSubscription {
 
 	private final boolean active;
 
-	private final LocalDate nextPaymentDate;
+	private LocalDate nextPaymentDate;
 
 	private final Long memberId;
 
@@ -125,5 +125,9 @@ public class MemberSubscription {
 	public void updateDutchPay(boolean dutchPay, BigDecimal dutchPayAmount) {
 		this.dutchPay = dutchPay;
 		this.dutchPayAmount = dutchPayAmount;
+	}
+
+	public void increaseNextPaymentDateByMonth() {
+		this.nextPaymentDate = this.nextPaymentDate.plusMonths(1);
 	}
 }

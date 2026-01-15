@@ -1,5 +1,11 @@
 package subport.adapter.out.persistence.membersubscription;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -13,6 +19,7 @@ import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.membersubscription.port.out.DeleteMemberSubscriptionPort;
 import subport.application.membersubscription.port.out.LoadMemberSubscriptionPort;
+import subport.application.membersubscription.port.out.MemberSubscriptionDetail;
 import subport.application.membersubscription.port.out.SaveMemberSubscriptionPort;
 import subport.application.membersubscription.port.out.UpdateMemberSubscriptionPort;
 import subport.domain.membersubscription.MemberSubscription;
@@ -59,6 +66,31 @@ public class MemberSubscriptionPersistenceAdapter implements
 	}
 
 	@Override
+	public List<MemberSubscriptionDetail> loadDetailsByNextPaymentDate(LocalDate currentDate) {
+		return memberSubscriptionRepository.findByNextPaymentDateAndActiveTrueWithFetch(currentDate).stream()
+			.map(ms -> {
+				PlanJpaEntity plan = ms.getPlan();
+				SubscriptionJpaEntity subscription = ms.getSubscription();
+				return new MemberSubscriptionDetail(
+					ms.getId(),
+					ms.getStartDate(),
+					ms.getReminderDaysBefore(),
+					ms.getMemo(),
+					ms.isDutchPay(),
+					ms.getDutchPayAmount(),
+					ms.getNextPaymentDate(),
+					ms.getMember().getId(),
+					subscription.getId(),
+					plan.getId(),
+					plan.getAmount(),
+					plan.getDurationMonths(),
+					subscription.getName(),
+					subscription.getLogoImageUrl());
+			})
+			.toList();
+	}
+
+	@Override
 	public void update(MemberSubscription memberSubscription) {
 		MemberSubscriptionJpaEntity memberSubscriptionEntity = memberSubscriptionRepository
 			.findById(memberSubscription.getId())
@@ -76,6 +108,26 @@ public class MemberSubscriptionPersistenceAdapter implements
 		if (!memberSubscriptionEntity.getPlan().getId().equals(newPlanId)) {
 			PlanJpaEntity planEntity = planRepository.getReferenceById(newPlanId);
 			memberSubscriptionEntity.updatePlan(planEntity);
+		}
+	}
+
+	@Override
+	public void updateNextPaymentDate(List<MemberSubscription> memberSubscriptions) {
+		List<Long> ids = memberSubscriptions.stream()
+			.map(MemberSubscription::getId)
+			.toList();
+
+		Map<Long, MemberSubscription> domainMap = memberSubscriptions.stream()
+			.collect(Collectors.toMap(
+				MemberSubscription::getId,
+				Function.identity()
+			));
+
+		List<MemberSubscriptionJpaEntity> memberSubscriptionEntities = memberSubscriptionRepository.findAllById(ids);
+		for (MemberSubscriptionJpaEntity entity : memberSubscriptionEntities) {
+			entity.updateNextPaymentDate(
+				domainMap.get(entity.getId()).getNextPaymentDate()
+			);
 		}
 	}
 

@@ -97,6 +97,10 @@ public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 		this.active = active;
 	}
 
+	public void updateNextPaymentDate(LocalDate nextPaymentDate) {
+		this.nextPaymentDate = nextPaymentDate;
+	}
+
 	public void updatePlan(PlanJpaEntity plan) {
 		this.plan = plan;
 	}
