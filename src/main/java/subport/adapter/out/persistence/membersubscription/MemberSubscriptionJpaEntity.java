@@ -96,14 +96,10 @@ public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 		this.exchangeRate = memberSubscription.getExchangeRate();
 		this.exchangeRateDate = memberSubscription.getExchangeRateDate();
 		this.active = memberSubscription.isActive();
+		this.nextPaymentDate = memberSubscription.getNextPaymentDate();
 	}
 
 	public void updatePlan(PlanJpaEntity plan) {
 		this.plan = plan;
 	}
-
-	public void updateNextPaymentDate(LocalDate nextPaymentDate) {
-		this.nextPaymentDate = nextPaymentDate;
-	}
-
 }

@@ -109,7 +109,7 @@ public class MemberSubscriptionPersistenceAdapter implements
 	}
 
 	@Override
-	public void updateNextPaymentDate(List<MemberSubscription> memberSubscriptions) {
+	public void update(List<MemberSubscription> memberSubscriptions) {
 		List<Long> ids = memberSubscriptions.stream()
 			.map(MemberSubscription::getId)
 			.toList();
@@ -122,8 +122,8 @@ public class MemberSubscriptionPersistenceAdapter implements
 
 		List<MemberSubscriptionJpaEntity> memberSubscriptionEntities = memberSubscriptionRepository.findAllById(ids);
 		for (MemberSubscriptionJpaEntity entity : memberSubscriptionEntities) {
-			entity.updateNextPaymentDate(
-				domainMap.get(entity.getId()).getNextPaymentDate()
+			entity.apply(
+				domainMap.get(entity.getId())
 			);
 		}
 	}

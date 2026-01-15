@@ -8,5 +8,5 @@ public interface UpdateMemberSubscriptionPort {
 
 	void update(MemberSubscription memberSubscription);
 
-	void updateNextPaymentDate(List<MemberSubscription> memberSubscriptions);
+	void update(List<MemberSubscription> memberSubscriptions);
 }
