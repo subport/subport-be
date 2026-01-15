@@ -2,7 +2,6 @@ package subport.application.membersubscription.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,9 +70,7 @@ public class UpdateMemberSubscriptionService implements
 			exchangeRateDate = memberSubscription.getNextPaymentDate()
 				.minusMonths(plan.getDurationMonths());
 
-			exchangeRate = loadExchangeRatePort.load(
-				exchangeRateDate.format(DateTimeFormatter.BASIC_ISO_DATE)
-			);
+			exchangeRate = loadExchangeRatePort.load(exchangeRateDate.toString());
 		}
 		memberSubscription.updateExchangeRate(exchangeRate, exchangeRateDate);
 

@@ -2,7 +2,6 @@ package subport.application.membersubscription.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,9 +43,7 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 		BigDecimal exchangerRate = null;
 		Plan plan = loadPlanPort.load(request.planId());
 		if (plan.getAmountUnit().name().equals(SubscriptionAmountUnit.USD.name())) {
-			exchangerRate = loadExchangeRatePort.load(
-				startDate.format(DateTimeFormatter.BASIC_ISO_DATE)
-			);
+			exchangerRate = loadExchangeRatePort.load(startDate.toString());
 		}
 
 		LocalDate nextPaymentDate = startDate.plusMonths(plan.getDurationMonths());
