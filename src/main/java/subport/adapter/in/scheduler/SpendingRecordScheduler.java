@@ -12,7 +12,7 @@ public class SpendingRecordScheduler {
 
 	private final CreateSpendingRecordUseCase createSpendingRecordUseCase;
 
-	@Scheduled(cron = "0 0 1 * * *")
+	@Scheduled(cron = "0 0 12 * * *")
 	public void run() {
 		createSpendingRecordUseCase.create();
 	}
