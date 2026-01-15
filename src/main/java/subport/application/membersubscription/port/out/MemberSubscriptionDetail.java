@@ -45,18 +45,25 @@ public record MemberSubscriptionDetail(
 	}
 
 	public SpendingRecord toSpendingRecord() {
-		BigDecimal amount = planAmount;
-		if (dutchPay && dutchPayAmount != null) {
-			amount = dutchPayAmount;
-		}
-
 		return SpendingRecord.withoutId(
 			nextPaymentDate,
-			amount,
+			resolveAmount(),
 			planDurationMonths,
 			subscriptionName,
 			subscriptionLogoImageUrl,
 			memberId
 		);
+	}
+
+	private BigDecimal resolveAmount() {
+		if (dutchPay && dutchPayAmount != null) {
+			return dutchPayAmount;
+		}
+
+		if (exchangeRate != null) {
+			return planAmount.multiply(exchangeRate);
+		}
+
+		return planAmount;
 	}
 }
