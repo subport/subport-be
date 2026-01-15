@@ -49,7 +49,7 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 			);
 		}
 
-		LocalDate nextPaymentDate = startDate.plusMonths(1);
+		LocalDate nextPaymentDate = startDate.plusMonths(plan.getDurationMonths());
 		MemberSubscription memberSubscription = MemberSubscription.withoutId(
 			startDate,
 			request.reminderDaysBefore(),
