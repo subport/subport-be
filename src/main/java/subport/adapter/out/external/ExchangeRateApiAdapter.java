@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.membersubscription.port.out.LoadExchangeRatePort;
+import subport.domain.subscription.SubscriptionAmountUnit;
 
 @Component
 @RequiredArgsConstructor
@@ -38,7 +39,7 @@ public class ExchangeRateApiAdapter implements LoadExchangeRatePort {
 			});
 
 		return responses.stream()
-			.filter(r -> r.currencyUnit().equals("USD"))
+			.filter(r -> r.currencyUnit().equals(SubscriptionAmountUnit.USD.name()))
 			.findFirst()
 			.map(ExchangeRateResponse::exchangeRateToDecimal)
 			.orElseThrow(() -> new CustomException(ErrorCode.USD_EXCHANGE_RATE_NOT_FOUND));
