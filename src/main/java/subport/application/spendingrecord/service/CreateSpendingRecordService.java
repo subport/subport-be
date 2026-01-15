@@ -36,8 +36,11 @@ public class CreateSpendingRecordService implements CreateSpendingRecordUseCase 
 		saveSpendingRecordPort.save(spendingRecords);
 
 		List<MemberSubscription> memberSubscriptions = memberSubscriptionDetails.stream()
-			.map(MemberSubscriptionDetail::toMemberSubscription)
-			.peek(MemberSubscription::increaseNextPaymentDateByMonth)
+			.map(detail -> {
+				MemberSubscription memberSubscription = detail.toMemberSubscription();
+				memberSubscription.increaseNextPaymentDateByMonths(detail.planDurationMonths());
+				return memberSubscription;
+			})
 			.toList();
 
 		updateMemberSubscriptionPort.updateNextPaymentDate(memberSubscriptions);

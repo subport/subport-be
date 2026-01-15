@@ -127,7 +127,7 @@ public class MemberSubscription {
 		this.dutchPayAmount = dutchPayAmount;
 	}
 
-	public void increaseNextPaymentDateByMonth() {
-		this.nextPaymentDate = this.nextPaymentDate.plusMonths(1);
+	public void increaseNextPaymentDateByMonths(int months) {
+		this.nextPaymentDate = this.nextPaymentDate.plusMonths(months);
 	}
 }
