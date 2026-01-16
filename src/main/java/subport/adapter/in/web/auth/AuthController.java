@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import subport.adapter.in.web.AuthCookieProvider;
 import subport.application.token.port.in.LogoutUseCase;
 import subport.application.token.port.in.ReissueTokenUseCase;
+import subport.application.token.port.in.TokenPair;
 import subport.application.token.port.out.ReissueTokenResponse;
 
 @Slf4j
@@ -25,7 +26,16 @@ public class AuthController {
 
 	@PostMapping("/refresh")
 	public ResponseEntity<ReissueTokenResponse> refresh(@CookieValue(required = false) String refreshToken) {
-		return ResponseEntity.ok(reissueTokenUseCase.reissue(refreshToken));
+		TokenPair tokenPair = reissueTokenUseCase.reissue(refreshToken);
+
+		return ResponseEntity.ok()
+			.header(
+				HttpHeaders.SET_COOKIE,
+				AuthCookieProvider.createRefreshTokenCookie(tokenPair.RefreshToken()).toString()
+			)
+			.body(
+				new ReissueTokenResponse(tokenPair.AccessToken())
+			);
 	}
 
 	@PostMapping("/logout")
