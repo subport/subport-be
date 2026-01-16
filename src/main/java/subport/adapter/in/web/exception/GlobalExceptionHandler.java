@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import jakarta.servlet.http.HttpServletResponse;
 import subport.adapter.common.AuthCookieProvider;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
@@ -24,18 +23,14 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler
-	public ResponseEntity<ErrorResponse> handleRefreshTokenExpiredException(
-		RefreshTokenExpiredException e,
-		HttpServletResponse response
-	) {
-		response.addHeader(
-			HttpHeaders.SET_COOKIE,
-			AuthCookieProvider.deleteRefreshTokenCookie().toString()
-		);
-
+	public ResponseEntity<ErrorResponse> handleRefreshTokenExpiredException(RefreshTokenExpiredException e) {
 		ErrorCode errorCode = e.getErrorCode();
 
 		return ResponseEntity.status(errorCode.getHttpStatus())
+			.header(
+				HttpHeaders.SET_COOKIE,
+				AuthCookieProvider.deleteRefreshTokenCookie().toString()
+			)
 			.body(ErrorResponse.from(errorCode));
 	}
 }
