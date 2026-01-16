@@ -3,7 +3,6 @@ package subport.adapter.in.web.member;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,17 +23,12 @@ public class MemberController {
 	private final UpdateMemberUseCase updateMemberUseCase;
 	private final ReadMemberUseCase readMemberUseCase;
 
-	@PutMapping("/{id}")
+	@PutMapping("/me")
 	public ResponseEntity<Void> updateMember(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
-		@RequestBody UpdateMemberRequest request,
-		@PathVariable("id") Long targetMemberId
+		@RequestBody UpdateMemberRequest request
 	) {
-		updateMemberUseCase.update(
-			oAuth2User.getMemberId(),
-			request,
-			targetMemberId
-		);
+		updateMemberUseCase.update(oAuth2User.getMemberId(), request);
 
 		return ResponseEntity.noContent()
 			.build();

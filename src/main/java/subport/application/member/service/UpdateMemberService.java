@@ -4,8 +4,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import subport.application.exception.CustomException;
-import subport.application.exception.ErrorCode;
 import subport.application.member.port.in.UpdateMemberRequest;
 import subport.application.member.port.in.UpdateMemberUseCase;
 import subport.application.member.port.out.LoadMemberPort;
@@ -21,16 +19,8 @@ public class UpdateMemberService implements UpdateMemberUseCase {
 
 	@Transactional
 	@Override
-	public void update(
-		Long memberId,
-		UpdateMemberRequest request,
-		Long targetMemberId
-	) {
-		if (!memberId.equals(targetMemberId)) {
-			throw new CustomException(ErrorCode.MEMBER_FORBIDDEN);
-		}
-
-		Member member = loadMemberPort.load(targetMemberId);
+	public void update(Long memberId, UpdateMemberRequest request) {
+		Member member = loadMemberPort.load(memberId);
 
 		member.update(
 			request.nickname(),
