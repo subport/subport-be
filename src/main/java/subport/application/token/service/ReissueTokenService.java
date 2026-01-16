@@ -15,6 +15,7 @@ import subport.application.token.port.out.CreateAccessTokenPort;
 import subport.application.token.port.out.CreateRefreshTokenPort;
 import subport.application.token.port.out.DeleteRefreshTokenPort;
 import subport.application.token.port.out.LoadRefreshTokenPort;
+import subport.application.token.port.out.SaveRefreshTokenPort;
 import subport.domain.token.RefreshToken;
 
 @Service
@@ -25,6 +26,7 @@ public class ReissueTokenService implements ReissueTokenUseCase {
 	private final DeleteRefreshTokenPort deleteRefreshTokenPort;
 	private final CreateAccessTokenPort createAccessTokenPort;
 	private final CreateRefreshTokenPort createRefreshTokenPort;
+	private final SaveRefreshTokenPort saveRefreshTokenPort;
 
 	@Transactional
 	@Override
@@ -42,7 +44,10 @@ public class ReissueTokenService implements ReissueTokenUseCase {
 
 		Long memberId = refreshToken.getMemberId();
 		String accessToken = createAccessTokenPort.createAccessToken(memberId, now);
+
+		deleteRefreshTokenPort.delete(refreshToken.getId());
 		refreshToken = createRefreshTokenPort.createRefreshToken(memberId, now);
+		saveRefreshTokenPort.save(refreshToken);
 
 		return new TokenPair(accessToken, refreshToken.getTokenValue());
 	}
