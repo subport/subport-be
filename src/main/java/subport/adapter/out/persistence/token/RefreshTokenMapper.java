@@ -17,7 +17,8 @@ public class RefreshTokenMapper {
 	}
 
 	public RefreshToken toDomain(RefreshTokenJpaEntity refreshTokenEntity) {
-		return new RefreshToken(
+		return RefreshToken.withId(
+			refreshTokenEntity.getId(),
 			refreshTokenEntity.getTokenValue(),
 			refreshTokenEntity.getMemberId(),
 			refreshTokenEntity.getIssuedAt(),

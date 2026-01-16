@@ -35,7 +35,7 @@ public class RefreshTokenPersistenceAdapter implements
 	}
 
 	@Override
-	public void delete(String tokenValue) {
-		refreshTokenRepository.deleteByTokenValue(tokenValue);
+	public void delete(Long refreshTokenId) {
+		refreshTokenRepository.deleteById(refreshTokenId);
 	}
 }

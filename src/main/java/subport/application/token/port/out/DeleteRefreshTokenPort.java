@@ -2,5 +2,5 @@ package subport.application.token.port.out;
 
 public interface DeleteRefreshTokenPort {
 
-	void delete(String tokenValue);
+	void delete(Long refreshTokenId);
 }
