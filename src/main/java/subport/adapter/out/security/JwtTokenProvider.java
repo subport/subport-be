@@ -14,12 +14,15 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import subport.application.token.port.out.CreateAccessTokenPort;
+import subport.application.token.port.out.CreateRefreshTokenPort;
 import subport.application.token.port.out.ExtractMemberIdPort;
 import subport.application.token.port.out.ValidateTokenPort;
+import subport.domain.token.RefreshToken;
 
 @Component
 public class JwtTokenProvider implements
 	CreateAccessTokenPort,
+	CreateRefreshTokenPort,
 	ValidateTokenPort,
 	ExtractMemberIdPort {
 
@@ -45,6 +48,23 @@ public class JwtTokenProvider implements
 	}
 
 	@Override
+	public RefreshToken createRefreshToken(Long memberId, Instant now) {
+		String refreshToken = createToken(
+			memberId,
+			now,
+			REFRESH_TOKEN_EXPIRATION_TIME
+		);
+		Claims claims = parseClaims(refreshToken);
+
+		return RefreshToken.withoutId(
+			refreshToken,
+			memberId,
+			claims.getIssuedAt().toInstant(),
+			claims.getExpiration().toInstant()
+		);
+	}
+
+	@Override
 	public void validate(String token) {
 		Jwts.parser()
 			.verifyWith(secretKey)
@@ -55,26 +75,8 @@ public class JwtTokenProvider implements
 	@Override
 	public Long extractMemberId(String token) {
 		return Long.valueOf(
-			getAllClaims(token).getSubject()
+			parseClaims(token).getSubject()
 		);
-	}
-
-	public String createRefreshToken(Long memberId, Instant now) {
-		return createToken(
-			memberId,
-			now,
-			REFRESH_TOKEN_EXPIRATION_TIME
-		);
-	}
-
-	public Instant getIssuedAt(String token) {
-		return getAllClaims(token).getIssuedAt()
-			.toInstant();
-	}
-
-	public Instant getExpiration(String token) {
-		return getAllClaims(token).getExpiration()
-			.toInstant();
 	}
 
 	private String createToken(
@@ -90,7 +92,7 @@ public class JwtTokenProvider implements
 			.compact();
 	}
 
-	private Claims getAllClaims(String token) {
+	private Claims parseClaims(String token) {
 		return Jwts.parser()
 			.verifyWith(secretKey)
 			.build()

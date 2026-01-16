@@ -3,7 +3,6 @@ package subport.adapter.in.security.oauth2;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.time.Instant;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
@@ -14,17 +13,15 @@ import org.springframework.stereotype.Component;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import subport.adapter.common.JwtManager;
 import subport.adapter.in.web.AuthCookieProvider;
-import subport.application.token.port.in.SaveRefreshTokenUseCase;
-import subport.domain.token.RefreshToken;
+import subport.application.token.port.in.IssueTokenUseCase;
+import subport.application.token.port.in.TokenPair;
 
 @Component
 @RequiredArgsConstructor
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-	private final JwtManager jwtManager;
-	private final SaveRefreshTokenUseCase saveRefreshTokenUseCase;
+	private final IssueTokenUseCase issueTokenUseCase;
 
 	@Override
 	public void onAuthenticationSuccess(
@@ -35,27 +32,17 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		OAuth2User oAuth2User = (CustomOAuth2User)authentication.getPrincipal();
 		Long memberId = Long.valueOf(oAuth2User.getName());
 
-		String accessToken = jwtManager.createAccessToken(memberId, Instant.now());
-
-		String refreshToken = jwtManager.createRefreshToken(memberId, Instant.now());
-		saveRefreshTokenUseCase.save(
-			RefreshToken.withoutId(
-				refreshToken,
-				jwtManager.getMemberId(refreshToken),
-				jwtManager.getIssuedAt(refreshToken),
-				jwtManager.getExpiration(refreshToken)
-			)
-		);
+		TokenPair tokenPair = issueTokenUseCase.issue(memberId);
 
 		String url = String.format(
 			"%s?access=%s",
 			"https://localhost:5173" + "/login-success",
-			URLEncoder.encode(accessToken, StandardCharsets.UTF_8)
+			URLEncoder.encode(tokenPair.AccessToken(), StandardCharsets.UTF_8)
 		);
 
 		response.addHeader(
 			HttpHeaders.SET_COOKIE,
-			AuthCookieProvider.createRefreshTokenCookie(refreshToken).toString()
+			AuthCookieProvider.createRefreshTokenCookie(tokenPair.RefreshToken()).toString()
 		);
 		response.sendRedirect(url);
 	}
