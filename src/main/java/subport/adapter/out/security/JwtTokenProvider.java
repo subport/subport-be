@@ -1,4 +1,4 @@
-package subport.adapter.common;
+package subport.adapter.out.security;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -13,21 +13,22 @@ import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import subport.application.exception.CustomException;
-import subport.application.exception.ErrorCode;
 import subport.application.token.port.out.CreateAccessTokenPort;
+import subport.application.token.port.out.ExtractMemberIdPort;
+import subport.application.token.port.out.ValidateTokenPort;
 
 @Component
-public class JwtManager implements CreateAccessTokenPort {
+public class JwtTokenProvider implements
+	CreateAccessTokenPort,
+	ValidateTokenPort,
+	ExtractMemberIdPort {
 
 	private static final Duration ACCESS_TOKEN_EXPIRATION_TIME = Duration.ofHours(1);
 	private static final Duration REFRESH_TOKEN_EXPIRATION_TIME = Duration.ofDays(30);
 
-	private static final String BEARER_PREFIX = "Bearer ";
-
 	private final SecretKey secretKey;
 
-	public JwtManager(@Value("${jwt.secret}") String secret) {
+	public JwtTokenProvider(@Value("${jwt.secret}") String secret) {
 		this.secretKey = new SecretKeySpec(
 			secret.getBytes(StandardCharsets.UTF_8),
 			Jwts.SIG.HS256.key().build().getAlgorithm()
@@ -43,16 +44,27 @@ public class JwtManager implements CreateAccessTokenPort {
 		);
 	}
 
+	@Override
+	public void validate(String token) {
+		Jwts.parser()
+			.verifyWith(secretKey)
+			.build()
+			.parseSignedClaims(token);
+	}
+
+	@Override
+	public Long extractMemberId(String token) {
+		return Long.valueOf(
+			getAllClaims(token).getSubject()
+		);
+	}
+
 	public String createRefreshToken(Long memberId, Instant now) {
 		return createToken(
 			memberId,
 			now,
 			REFRESH_TOKEN_EXPIRATION_TIME
 		);
-	}
-
-	public Long getMemberId(String token) {
-		return Long.valueOf(getAllClaims(token).getSubject());
 	}
 
 	public Instant getIssuedAt(String token) {
@@ -63,18 +75,6 @@ public class JwtManager implements CreateAccessTokenPort {
 	public Instant getExpiration(String token) {
 		return getAllClaims(token).getExpiration()
 			.toInstant();
-	}
-
-	// 인증 헤더 검증
-	public void verifyAuthorizationHeader(String authorizationHeader) {
-		if (authorizationHeader == null || !authorizationHeader.startsWith(BEARER_PREFIX)) {
-			throw new CustomException(ErrorCode.INVALID_AUTHORIZATION_HEADER);
-		}
-	}
-
-	// 토큰 만료 검증
-	public void verifyTokenExpiration(String token, Instant now) {
-		getExpiration(token).isBefore(now);
 	}
 
 	private String createToken(

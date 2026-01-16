@@ -1,7 +1,6 @@
 package subport.adapter.in.security;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -18,9 +17,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import subport.adapter.common.JwtManager;
 import subport.adapter.in.security.oauth2.CustomOAuth2User;
 import subport.application.exception.CustomException;
+import subport.application.token.port.in.ValidateAccessTokenUseCase;
 
 @Component
 @RequiredArgsConstructor
@@ -29,7 +28,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	private static final List<String> EXCLUDE_PATTERNS = List.of("/api/auth/refresh");
 	private static final AntPathMatcher pathMatcher = new AntPathMatcher();
 
-	private final JwtManager jwtManager;
+	private final ValidateAccessTokenUseCase validateAccessTokenUseCase;
 
 	@Override
 	protected void doFilterInternal(
@@ -37,23 +36,18 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 		HttpServletResponse response,
 		FilterChain filterChain
 	) throws ServletException, IOException {
-		String accessToken;
+		Long memberId;
 		try {
-			String authorizationHeader = request.getHeader("Authorization");
-			jwtManager.verifyAuthorizationHeader(authorizationHeader);
-
-			accessToken = authorizationHeader.split(" ")[1];
-			jwtManager.verifyTokenExpiration(accessToken, Instant.now());
+			memberId = validateAccessTokenUseCase.validate(
+				request.getHeader("Authorization")
+			);
 		} catch (JwtException | CustomException e) {
 			request.setAttribute("exception", e);
 			filterChain.doFilter(request, response);
 			return;
 		}
 
-		CustomOAuth2User oAuth2User = new CustomOAuth2User(
-			jwtManager.getMemberId(accessToken)
-		);
-
+		CustomOAuth2User oAuth2User = new CustomOAuth2User(memberId);
 		SecurityContextHolder.getContext().setAuthentication(
 			new UsernamePasswordAuthenticationToken(
 				oAuth2User,
