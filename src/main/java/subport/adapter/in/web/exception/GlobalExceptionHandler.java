@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import subport.adapter.common.AuthCookieProvider;
+import subport.adapter.in.web.AuthCookieProvider;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.exception.ErrorResponse;

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import subport.adapter.common.AuthCookieProvider;
+import subport.adapter.in.web.AuthCookieProvider;
 import subport.application.token.port.in.LogoutUseCase;
 import subport.application.token.port.in.ReissueTokenUseCase;
 import subport.application.token.port.out.ReissueTokenResponse;

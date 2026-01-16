@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import subport.adapter.common.AuthCookieProvider;
 import subport.adapter.common.JwtManager;
+import subport.adapter.in.web.AuthCookieProvider;
 import subport.application.token.port.in.SaveRefreshTokenUseCase;
 import subport.domain.token.RefreshToken;
 

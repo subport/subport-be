@@ -1,4 +1,4 @@
-package subport.adapter.common;
+package subport.adapter.in.web;
 
 import java.time.Duration;
 
