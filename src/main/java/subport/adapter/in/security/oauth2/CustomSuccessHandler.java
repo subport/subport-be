@@ -39,7 +39,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 		String refreshToken = jwtManager.createRefreshToken(memberId, Instant.now());
 		saveRefreshTokenUseCase.save(
-			new RefreshToken(
+			RefreshToken.withoutId(
 				refreshToken,
 				jwtManager.getMemberId(refreshToken),
 				jwtManager.getIssuedAt(refreshToken),

@@ -16,12 +16,9 @@ import io.jsonwebtoken.Jwts;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.token.port.out.CreateAccessTokenPort;
-import subport.application.token.port.out.VerifyTokenExpirationPort;
 
 @Component
-public class JwtManager implements
-	CreateAccessTokenPort,
-	VerifyTokenExpirationPort {
+public class JwtManager implements CreateAccessTokenPort {
 
 	private static final Duration ACCESS_TOKEN_EXPIRATION_TIME = Duration.ofHours(1);
 	private static final Duration REFRESH_TOKEN_EXPIRATION_TIME = Duration.ofDays(30);
@@ -76,7 +73,6 @@ public class JwtManager implements
 	}
 
 	// 토큰 만료 검증
-	@Override
 	public void verifyTokenExpiration(String token, Instant now) {
 		getExpiration(token).isBefore(now);
 	}
