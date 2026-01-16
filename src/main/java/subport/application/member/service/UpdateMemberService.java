@@ -27,6 +27,6 @@ public class UpdateMemberService implements UpdateMemberUseCase {
 			request.email()
 		);
 
-		updateMemberPort.updateMember(member);
+		updateMemberPort.update(member);
 	}
 }

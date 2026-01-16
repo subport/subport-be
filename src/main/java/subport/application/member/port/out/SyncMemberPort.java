@@ -4,5 +4,5 @@ import subport.domain.member.Member;
 
 public interface SyncMemberPort {
 
-	Long syncMember(Member member);
+	Long sync(Member member);
 }

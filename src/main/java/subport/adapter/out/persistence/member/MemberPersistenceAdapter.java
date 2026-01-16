@@ -29,7 +29,7 @@ public class MemberPersistenceAdapter implements
 	}
 
 	@Override
-	public Long syncMember(Member member) {
+	public Long sync(Member member) {
 		return memberRepository.findByProviderId(member.getProviderId())
 			.map(MemberJpaEntity::getId)
 			.orElseGet(() -> {
@@ -39,7 +39,7 @@ public class MemberPersistenceAdapter implements
 	}
 
 	@Override
-	public void updateMember(Member member) {
+	public void update(Member member) {
 		MemberJpaEntity memberEntity = memberRepository.findById(member.getId())
 			.orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
