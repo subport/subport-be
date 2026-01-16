@@ -3,6 +3,7 @@ package subport.application.token.service;
 import java.time.Instant;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import subport.application.token.port.in.IssueTokenUseCase;
@@ -20,6 +21,7 @@ public class IssueTokenService implements IssueTokenUseCase {
 	private final CreateRefreshTokenPort createRefreshTokenPort;
 	private final SaveRefreshTokenPort saveRefreshTokenPort;
 
+	@Transactional
 	@Override
 	public TokenPair issue(Long memberId) {
 		Instant now = Instant.now();
