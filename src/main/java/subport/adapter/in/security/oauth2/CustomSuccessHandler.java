@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import subport.adapter.in.web.AuthCookieProvider;
 import subport.application.token.port.in.IssueTokenUseCase;
-import subport.application.token.port.in.TokenPair;
+import subport.application.token.port.in.dto.TokenPair;
 
 @Component
 @RequiredArgsConstructor

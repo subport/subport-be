@@ -5,9 +5,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
-import subport.application.subscription.port.in.RegisterCustomSubscriptionRequest;
+import subport.application.subscription.port.in.dto.RegisterCustomSubscriptionRequest;
 import subport.application.subscription.port.in.RegisterCustomSubscriptionUseCase;
-import subport.application.subscription.port.out.RegisterCustomSubscriptionResponse;
+import subport.application.subscription.port.in.dto.RegisterCustomSubscriptionResponse;
 import subport.application.subscription.port.out.SaveSubscriptionPort;
 import subport.application.subscription.port.out.UploadSubscriptionImagePort;
 import subport.domain.subscription.Subscription;

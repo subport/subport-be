@@ -7,7 +7,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import subport.application.member.port.in.OAuth2UserInfo;
+import subport.application.member.port.in.dto.OAuth2UserInfo;
 import subport.application.member.port.in.OAuth2UserSyncUseCase;
 
 @Component

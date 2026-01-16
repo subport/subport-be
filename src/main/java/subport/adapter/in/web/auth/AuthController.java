@@ -12,8 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import subport.adapter.in.web.AuthCookieProvider;
 import subport.application.token.port.in.LogoutUseCase;
 import subport.application.token.port.in.ReissueTokenUseCase;
-import subport.application.token.port.in.TokenPair;
-import subport.application.token.port.out.ReissueTokenResponse;
+import subport.application.token.port.in.dto.TokenPair;
+import subport.application.token.port.in.dto.ReissueTokenResponse;
 
 @Slf4j
 @RestController

@@ -1,6 +1,7 @@
 package subport.application.subscription.port.in;
 
-import subport.application.subscription.port.out.RegisterCustomPlanResponse;
+import subport.application.subscription.port.in.dto.RegisterCustomPlanRequest;
+import subport.application.subscription.port.in.dto.RegisterCustomPlanResponse;
 
 public interface RegisterCustomPlanUseCase {
 

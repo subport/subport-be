@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import subport.application.membersubscription.port.out.LoadExchangeRatePort;
 import subport.application.membersubscription.port.out.LoadMemberSubscriptionPort;
-import subport.application.membersubscription.port.out.MemberSubscriptionDetail;
+import subport.application.membersubscription.port.out.dto.MemberSubscriptionDetail;
 import subport.application.membersubscription.port.out.UpdateMemberSubscriptionPort;
 import subport.application.spendingrecord.port.in.CreateSpendingRecordUseCase;
 import subport.application.spendingrecord.port.out.SaveSpendingRecordPort;

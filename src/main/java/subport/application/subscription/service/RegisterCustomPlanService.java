@@ -4,9 +4,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import subport.application.subscription.port.in.RegisterCustomPlanRequest;
+import subport.application.subscription.port.in.dto.RegisterCustomPlanRequest;
 import subport.application.subscription.port.in.RegisterCustomPlanUseCase;
-import subport.application.subscription.port.out.RegisterCustomPlanResponse;
+import subport.application.subscription.port.in.dto.RegisterCustomPlanResponse;
 import subport.application.subscription.port.out.SavePlanPort;
 import subport.domain.subscription.SubscriptionAmountUnit;
 import subport.domain.subscription.Plan;

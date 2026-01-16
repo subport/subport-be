@@ -1,4 +1,4 @@
-package subport.application.membersubscription.port.out;
+package subport.application.membersubscription.port.out.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

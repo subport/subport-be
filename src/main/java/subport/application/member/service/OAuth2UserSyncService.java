@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import subport.application.member.port.in.OAuth2UserInfo;
+import subport.application.member.port.in.dto.OAuth2UserInfo;
 import subport.application.member.port.in.OAuth2UserSyncUseCase;
 import subport.application.member.port.out.SyncMemberPort;
 import subport.domain.member.Member;

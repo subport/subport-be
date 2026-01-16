@@ -1,6 +1,6 @@
 package subport.application.member.port.in;
 
-import subport.application.member.port.out.ReadMemberResponse;
+import subport.application.member.port.in.dto.ReadMemberResponse;
 
 public interface ReadMemberUseCase {
 

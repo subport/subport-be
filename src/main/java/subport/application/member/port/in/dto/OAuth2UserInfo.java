@@ -1,4 +1,4 @@
-package subport.application.member.port.in;
+package subport.application.member.port.in.dto;
 
 import subport.domain.member.Member;
 

@@ -4,8 +4,8 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import subport.application.member.port.in.ReadMemberUseCase;
+import subport.application.member.port.in.dto.ReadMemberResponse;
 import subport.application.member.port.out.LoadMemberPort;
-import subport.application.member.port.out.ReadMemberResponse;
 import subport.domain.member.Member;
 
 @Service

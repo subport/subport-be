@@ -14,9 +14,9 @@ import lombok.RequiredArgsConstructor;
 import subport.adapter.in.security.oauth2.CustomOAuth2User;
 import subport.application.subscription.port.in.DeleteCustomPlanUseCase;
 import subport.application.subscription.port.in.ReadPlanUseCase;
-import subport.application.subscription.port.in.UpdateCustomPlanRequest;
+import subport.application.subscription.port.in.dto.UpdateCustomPlanRequest;
 import subport.application.subscription.port.in.UpdateCustomPlanUseCase;
-import subport.application.subscription.port.out.ReadPlanResponse;
+import subport.application.subscription.port.in.dto.ReadPlanResponse;
 
 @RestController
 @RequestMapping("/api/plans")

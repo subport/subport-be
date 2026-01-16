@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import subport.adapter.in.security.oauth2.CustomOAuth2User;
 import subport.application.member.port.in.ReadMemberUseCase;
-import subport.application.member.port.in.UpdateMemberRequest;
 import subport.application.member.port.in.UpdateMemberUseCase;
-import subport.application.member.port.out.ReadMemberResponse;
+import subport.application.member.port.in.dto.ReadMemberResponse;
+import subport.application.member.port.in.dto.UpdateMemberRequest;
 
 @RestController
 @RequestMapping("/api/members")

@@ -21,17 +21,17 @@ import subport.application.subscription.port.in.DeleteCustomSubscriptionUseCase;
 import subport.application.subscription.port.in.ListSubscriptionTypesUseCase;
 import subport.application.subscription.port.in.ReadPlanUseCase;
 import subport.application.subscription.port.in.ReadSubscriptionUseCase;
-import subport.application.subscription.port.in.RegisterCustomPlanRequest;
+import subport.application.subscription.port.in.dto.RegisterCustomPlanRequest;
 import subport.application.subscription.port.in.RegisterCustomPlanUseCase;
-import subport.application.subscription.port.in.RegisterCustomSubscriptionRequest;
+import subport.application.subscription.port.in.dto.RegisterCustomSubscriptionRequest;
 import subport.application.subscription.port.in.RegisterCustomSubscriptionUseCase;
-import subport.application.subscription.port.in.UpdateCustomSubscriptionRequest;
+import subport.application.subscription.port.in.dto.UpdateCustomSubscriptionRequest;
 import subport.application.subscription.port.in.UpdateCustomSubscriptionUseCase;
-import subport.application.subscription.port.out.ListPlansResponse;
-import subport.application.subscription.port.out.ListSubscriptionsResponse;
-import subport.application.subscription.port.out.ReadSubscriptionResponse;
-import subport.application.subscription.port.out.RegisterCustomPlanResponse;
-import subport.application.subscription.port.out.RegisterCustomSubscriptionResponse;
+import subport.application.subscription.port.in.dto.ListPlansResponse;
+import subport.application.subscription.port.in.dto.ListSubscriptionsResponse;
+import subport.application.subscription.port.in.dto.ReadSubscriptionResponse;
+import subport.application.subscription.port.in.dto.RegisterCustomPlanResponse;
+import subport.application.subscription.port.in.dto.RegisterCustomSubscriptionResponse;
 
 @RestController
 @RequestMapping("/api/subscriptions")

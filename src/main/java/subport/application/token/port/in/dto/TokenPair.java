@@ -1,4 +1,4 @@
-package subport.application.token.port.in;
+package subport.application.token.port.in.dto;
 
 public record TokenPair(
 	String AccessToken,

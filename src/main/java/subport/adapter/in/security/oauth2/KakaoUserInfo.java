@@ -2,7 +2,7 @@ package subport.adapter.in.security.oauth2;
 
 import java.util.Map;
 
-import subport.application.member.port.in.OAuth2UserInfo;
+import subport.application.member.port.in.dto.OAuth2UserInfo;
 
 public record KakaoUserInfo(
 	Map<String, Object> attributes,

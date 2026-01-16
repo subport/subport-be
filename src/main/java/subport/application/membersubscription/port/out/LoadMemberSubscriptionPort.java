@@ -3,6 +3,7 @@ package subport.application.membersubscription.port.out;
 import java.time.LocalDate;
 import java.util.List;
 
+import subport.application.membersubscription.port.out.dto.MemberSubscriptionDetail;
 import subport.domain.membersubscription.MemberSubscription;
 
 public interface LoadMemberSubscriptionPort {

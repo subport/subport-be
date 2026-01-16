@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.subscription.port.in.ReadSubscriptionUseCase;
-import subport.application.subscription.port.out.ListSubscriptionsResponse;
+import subport.application.subscription.port.in.dto.ListSubscriptionsResponse;
 import subport.application.subscription.port.out.LoadSubscriptionPort;
-import subport.application.subscription.port.out.ReadSubscriptionResponse;
+import subport.application.subscription.port.in.dto.ReadSubscriptionResponse;
 import subport.domain.subscription.Subscription;
 
 @Service

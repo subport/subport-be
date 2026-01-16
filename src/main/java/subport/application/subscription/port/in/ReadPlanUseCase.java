@@ -1,7 +1,7 @@
 package subport.application.subscription.port.in;
 
-import subport.application.subscription.port.out.ListPlansResponse;
-import subport.application.subscription.port.out.ReadPlanResponse;
+import subport.application.subscription.port.in.dto.ListPlansResponse;
+import subport.application.subscription.port.in.dto.ReadPlanResponse;
 
 public interface ReadPlanUseCase {
 

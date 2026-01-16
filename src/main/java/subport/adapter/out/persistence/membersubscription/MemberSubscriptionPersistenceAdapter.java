@@ -19,7 +19,7 @@ import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.membersubscription.port.out.DeleteMemberSubscriptionPort;
 import subport.application.membersubscription.port.out.LoadMemberSubscriptionPort;
-import subport.application.membersubscription.port.out.MemberSubscriptionDetail;
+import subport.application.membersubscription.port.out.dto.MemberSubscriptionDetail;
 import subport.application.membersubscription.port.out.SaveMemberSubscriptionPort;
 import subport.application.membersubscription.port.out.UpdateMemberSubscriptionPort;
 import subport.domain.membersubscription.MemberSubscription;

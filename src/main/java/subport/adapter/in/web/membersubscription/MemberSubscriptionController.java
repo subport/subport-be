@@ -13,17 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import subport.adapter.in.security.oauth2.CustomOAuth2User;
 import subport.application.membersubscription.port.in.DeleteMemberSubscriptionUseCase;
-import subport.application.membersubscription.port.in.RegisterMemberSubscriptionRequest;
+import subport.application.membersubscription.port.in.dto.RegisterMemberSubscriptionRequest;
 import subport.application.membersubscription.port.in.RegisterMemberSubscriptionUseCase;
-import subport.application.membersubscription.port.in.UpdateMemberSubscriptionDutchPayRequest;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionDutchPayUseCase;
-import subport.application.membersubscription.port.in.UpdateMemberSubscriptionMemoRequest;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionMemoUseCase;
-import subport.application.membersubscription.port.in.UpdateMemberSubscriptionPlanRequest;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionPlanUseCase;
-import subport.application.membersubscription.port.in.UpdateMemberSubscriptionReminderRequest;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionReminderUseCase;
-import subport.application.membersubscription.port.out.RegisterMemberSubscriptionResponse;
+import subport.application.membersubscription.port.in.dto.RegisterMemberSubscriptionResponse;
+import subport.application.membersubscription.port.in.dto.UpdateMemberSubscriptionDutchPayRequest;
+import subport.application.membersubscription.port.in.dto.UpdateMemberSubscriptionMemoRequest;
+import subport.application.membersubscription.port.in.dto.UpdateMemberSubscriptionPlanRequest;
+import subport.application.membersubscription.port.in.dto.UpdateMemberSubscriptionReminderRequest;
 
 @RestController
 @RequestMapping("/api/member-subscriptions")

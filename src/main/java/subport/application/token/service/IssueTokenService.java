@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import subport.application.token.port.in.IssueTokenUseCase;
-import subport.application.token.port.in.TokenPair;
+import subport.application.token.port.in.dto.TokenPair;
 import subport.application.token.port.out.CreateAccessTokenPort;
 import subport.application.token.port.out.CreateRefreshTokenPort;
 import subport.application.token.port.out.SaveRefreshTokenPort;

@@ -1,4 +1,4 @@
-package subport.application.subscription.port.in;
+package subport.application.subscription.port.in.dto;
 
 public record UpdateCustomSubscriptionRequest(
 	String name,

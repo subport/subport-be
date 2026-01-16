@@ -1,4 +1,4 @@
-package subport.application.subscription.port.out;
+package subport.application.subscription.port.in.dto;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
