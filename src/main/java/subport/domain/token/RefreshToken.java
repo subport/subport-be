@@ -3,8 +3,6 @@ package subport.domain.token;
 import java.time.Instant;
 
 import lombok.Getter;
-import subport.application.exception.CustomException;
-import subport.application.exception.ErrorCode;
 
 @Getter
 public class RefreshToken {
@@ -64,9 +62,7 @@ public class RefreshToken {
 		);
 	}
 
-	public void verifyExpiration(Instant now) {
-		if (!expiration.isAfter(now)) {
-			throw new CustomException(ErrorCode.REFRESH_TOKEN_EXPIRED);
-		}
+	public boolean isExpired(Instant now) {
+		return !expiration.isAfter(now);
 	}
 }

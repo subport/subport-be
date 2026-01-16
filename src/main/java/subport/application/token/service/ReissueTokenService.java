@@ -5,7 +5,6 @@ import java.time.Instant;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
@@ -15,7 +14,6 @@ import subport.application.token.port.out.CreateAccessTokenPort;
 import subport.application.token.port.out.DeleteRefreshTokenPort;
 import subport.application.token.port.out.LoadRefreshTokenPort;
 import subport.application.token.port.out.ReissueTokenResponse;
-import subport.application.token.port.out.VerifyTokenExpirationPort;
 import subport.domain.token.RefreshToken;
 
 @Service
@@ -23,7 +21,6 @@ import subport.domain.token.RefreshToken;
 public class ReissueTokenService implements ReissueTokenUseCase {
 
 	private final LoadRefreshTokenPort loadRefreshTokenPort;
-	private final VerifyTokenExpirationPort verifyTokenExpirationPort;
 	private final DeleteRefreshTokenPort deleteRefreshTokenPort;
 	private final CreateAccessTokenPort createAccessTokenPort;
 
@@ -35,15 +32,9 @@ public class ReissueTokenService implements ReissueTokenUseCase {
 		}
 
 		RefreshToken refreshToken = loadRefreshTokenPort.load(refreshTokenValue);
-
-		refreshTokenValue = refreshToken.getTokenValue();
-		try {
-			verifyTokenExpirationPort.verifyTokenExpiration(
-				refreshTokenValue,
-				Instant.now());
-		} catch (ExpiredJwtException e) {
-			deleteRefreshTokenPort.delete(refreshTokenValue);
-			throw new RefreshTokenExpiredException(e);
+		if (refreshToken.isExpired(Instant.now())) {
+			deleteRefreshTokenPort.delete(refreshToken.getId());
+			throw new RefreshTokenExpiredException();
 		}
 
 		return new ReissueTokenResponse(
