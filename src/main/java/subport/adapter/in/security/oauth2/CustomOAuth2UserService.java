@@ -7,23 +7,23 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import subport.application.member.port.in.dto.OAuth2UserInfo;
-import subport.application.member.port.in.OAuth2UserSyncUseCase;
+import subport.application.member.port.in.SyncMemberUseCase;
+import subport.application.member.port.in.dto.LoginMemberInfo;
 
 @Component
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
-	private final OAuth2UserSyncUseCase oAuth2UserSyncUseCase;
+	private final SyncMemberUseCase syncMemberUseCase;
 
 	@Override
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 		OAuth2User oAuth2User = super.loadUser(userRequest);
 
-		KakaoUserInfo kakaoUserInfo = KakaoUserInfo.from(oAuth2User.getAttributes());
-		OAuth2UserInfo oAuth2UserInfo = kakaoUserInfo.toOAuth2UserInfo();
+		KakaoMemberInfo kakaoMemberInfo = KakaoMemberInfo.from(oAuth2User.getAttributes());
+		LoginMemberInfo loginMemberInfo = kakaoMemberInfo.toLoginMemberInfo();
 
-		Long memberId = oAuth2UserSyncUseCase.syncOAuth2User(oAuth2UserInfo);
+		Long memberId = syncMemberUseCase.sync(loginMemberInfo);
 
 		return new CustomOAuth2User(memberId);
 	}
