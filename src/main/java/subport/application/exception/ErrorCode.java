@@ -19,6 +19,7 @@ public enum ErrorCode {
 
 	// 회원 관련
 	MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
+	MEMBER_FORBIDDEN(HttpStatus.FORBIDDEN, "본인의 정보만 조회, 수정이 가능합니다."),
 
 	// 이미지 파일 관련
 	INVALID_IMAGE_FILE_TYPE(HttpStatus.BAD_REQUEST, "이미지 파일만 업로드 가능합니다."),

@@ -51,4 +51,9 @@ public class Member {
 			email
 		);
 	}
+
+	public void update(String nickname, String email) {
+		this.nickname = nickname;
+		this.email = email;
+	}
 }

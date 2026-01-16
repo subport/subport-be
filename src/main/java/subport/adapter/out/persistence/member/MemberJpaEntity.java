@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import subport.adapter.out.persistence.BaseTimeEntity;
+import subport.domain.member.Member;
 
 @Entity
 @Table(name = "member")
@@ -36,11 +37,8 @@ public class MemberJpaEntity extends BaseTimeEntity {
 		this.email = email;
 	}
 
-	public void update(
-		String nickname,
-		String email
-	) {
-		this.nickname = nickname;
-		this.email = email;
+	public void apply(Member member) {
+		this.nickname = member.getNickname();
+		this.email = member.getEmail();
 	}
 }

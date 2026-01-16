@@ -14,4 +14,13 @@ public class MemberMapper {
 			member.getEmail()
 		);
 	}
+
+	public Member toDomain(MemberJpaEntity memberEntity) {
+		return Member.withId(
+			memberEntity.getId(),
+			memberEntity.getProviderId(),
+			memberEntity.getNickname(),
+			memberEntity.getEmail()
+		);
+	}
 }

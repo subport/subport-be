@@ -2,5 +2,9 @@ package subport.application.member.port.in;
 
 public interface UpdateMemberUseCase {
 
-	void updateMember(Long memberId, UpdateMemberRequest request);
+	void update(
+		Long memberId,
+		UpdateMemberRequest request,
+		Long targetMemberId
+	);
 }
