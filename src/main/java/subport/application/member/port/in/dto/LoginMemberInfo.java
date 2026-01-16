@@ -2,13 +2,13 @@ package subport.application.member.port.in.dto;
 
 import subport.domain.member.Member;
 
-public record OAuth2UserInfo(
+public record LoginMemberInfo(
 	String providerId,
 	String nickname,
 	String email
 ) {
 
-	public Member toMember() {
+	public Member toDomain() {
 		return Member.withoutId(
 			providerId,
 			nickname,

@@ -2,19 +2,19 @@ package subport.adapter.in.security.oauth2;
 
 import java.util.Map;
 
-import subport.application.member.port.in.dto.OAuth2UserInfo;
+import subport.application.member.port.in.dto.LoginMemberInfo;
 
-public record KakaoUserInfo(
+public record KakaoMemberInfo(
 	Map<String, Object> attributes,
 	Map<String, Object> account,
 	Map<String, String> profile
 ) {
 
-	public static KakaoUserInfo from(Map<String, Object> attributes) {
+	public static KakaoMemberInfo from(Map<String, Object> attributes) {
 		Map<String, Object> account = (Map<String, Object>)attributes.get("kakao_account");
 		Map<String, String> profile = (Map<String, String>)account.get("profile");
 
-		return new KakaoUserInfo(
+		return new KakaoMemberInfo(
 			attributes,
 			account,
 			profile
@@ -33,8 +33,8 @@ public record KakaoUserInfo(
 		return account.get("email").toString();
 	}
 
-	public OAuth2UserInfo toOAuth2UserInfo() {
-		return new OAuth2UserInfo(
+	public LoginMemberInfo toLoginMemberInfo() {
+		return new LoginMemberInfo(
 			getProviderId(),
 			getNickname(),
 			getEmail()
