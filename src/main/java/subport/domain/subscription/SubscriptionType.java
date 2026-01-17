@@ -17,6 +17,7 @@ public enum SubscriptionType {
 	MESSENGER("메신저"),
 	VPN("VPN"),
 	CREATIVE_TOOL("크리에이티브 툴"),
+	CLOUD("클라우드"),
 	ETC("기타");
 
 	private final String displayName;
