@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
-import subport.application.membersubscription.port.in.dto.RegisterMemberSubscriptionRequest;
 import subport.application.membersubscription.port.in.RegisterMemberSubscriptionUseCase;
+import subport.application.membersubscription.port.in.dto.RegisterMemberSubscriptionRequest;
 import subport.application.membersubscription.port.in.dto.RegisterMemberSubscriptionResponse;
 import subport.application.membersubscription.port.out.LoadExchangeRatePort;
 import subport.application.membersubscription.port.out.SaveMemberSubscriptionPort;
@@ -41,9 +41,11 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 
 		LocalDate startDate = request.startDate();
 		BigDecimal exchangerRate = null;
+		LocalDate exchangeRateDate = null;
 		Plan plan = loadPlanPort.load(request.planId());
 		if (plan.getAmountUnit().name().equals(SubscriptionAmountUnit.USD.name())) {
 			exchangerRate = loadExchangeRatePort.load(startDate.toString());
+			exchangeRateDate = startDate;
 		}
 
 		LocalDate nextPaymentDate = startDate.plusMonths(plan.getDurationMonths());
@@ -54,7 +56,7 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 			dutchPay,
 			dutchPayAmount,
 			exchangerRate,
-			startDate,
+			exchangeRateDate,
 			true,
 			nextPaymentDate,
 			memberId,
