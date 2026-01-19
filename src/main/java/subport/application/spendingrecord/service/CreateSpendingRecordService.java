@@ -10,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import subport.application.membersubscription.port.out.LoadExchangeRatePort;
 import subport.application.membersubscription.port.out.LoadMemberSubscriptionPort;
-import subport.application.membersubscription.port.out.dto.MemberSubscriptionDetail;
 import subport.application.membersubscription.port.out.UpdateMemberSubscriptionPort;
+import subport.application.membersubscription.port.out.dto.MemberSubscriptionForSpendingRecord;
 import subport.application.spendingrecord.port.in.CreateSpendingRecordUseCase;
 import subport.application.spendingrecord.port.out.SaveSpendingRecordPort;
 import subport.domain.membersubscription.MemberSubscription;
@@ -29,16 +29,16 @@ public class CreateSpendingRecordService implements CreateSpendingRecordUseCase 
 	@Transactional
 	@Override
 	public void create() {
-		List<MemberSubscriptionDetail> memberSubscriptionDetails =
-			loadMemberSubscriptionPort.loadDetailsByNextPaymentDate(LocalDate.now());
+		List<MemberSubscriptionForSpendingRecord> memberSubscriptionsForSpendingRecord =
+			loadMemberSubscriptionPort.loadForSpendingRecordByNextPaymentDate(LocalDate.now());
 
-		List<SpendingRecord> spendingRecords = memberSubscriptionDetails.stream()
-			.map(MemberSubscriptionDetail::toSpendingRecord)
+		List<SpendingRecord> spendingRecords = memberSubscriptionsForSpendingRecord.stream()
+			.map(MemberSubscriptionForSpendingRecord::toSpendingRecord)
 			.toList();
 
 		saveSpendingRecordPort.save(spendingRecords);
 
-		List<MemberSubscription> memberSubscriptions = memberSubscriptionDetails.stream()
+		List<MemberSubscription> memberSubscriptions = memberSubscriptionsForSpendingRecord.stream()
 			.map(detail -> {
 				MemberSubscription memberSubscription = detail.toMemberSubscription();
 

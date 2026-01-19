@@ -19,9 +19,9 @@ import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.membersubscription.port.out.DeleteMemberSubscriptionPort;
 import subport.application.membersubscription.port.out.LoadMemberSubscriptionPort;
-import subport.application.membersubscription.port.out.dto.MemberSubscriptionDetail;
 import subport.application.membersubscription.port.out.SaveMemberSubscriptionPort;
 import subport.application.membersubscription.port.out.UpdateMemberSubscriptionPort;
+import subport.application.membersubscription.port.out.dto.MemberSubscriptionForSpendingRecord;
 import subport.domain.membersubscription.MemberSubscription;
 
 @Component
@@ -66,12 +66,12 @@ public class MemberSubscriptionPersistenceAdapter implements
 	}
 
 	@Override
-	public List<MemberSubscriptionDetail> loadDetailsByNextPaymentDate(LocalDate currentDate) {
+	public List<MemberSubscriptionForSpendingRecord> loadForSpendingRecordByNextPaymentDate(LocalDate currentDate) {
 		return memberSubscriptionRepository.findByNextPaymentDateAndActiveTrueWithFetch(currentDate).stream()
 			.map(ms -> {
 				PlanJpaEntity plan = ms.getPlan();
 				SubscriptionJpaEntity subscription = ms.getSubscription();
-				return new MemberSubscriptionDetail(
+				return new MemberSubscriptionForSpendingRecord(
 					ms.getId(),
 					ms.getStartDate(),
 					ms.getReminderDaysBefore(),

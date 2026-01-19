@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import subport.domain.membersubscription.MemberSubscription;
 import subport.domain.spendingrecord.SpendingRecord;
 
-public record MemberSubscriptionDetail(
+public record MemberSubscriptionForSpendingRecord(
 	Long id,
 	LocalDate startDate,
 	Integer reminderDaysBefore,
