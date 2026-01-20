@@ -13,7 +13,7 @@ public class Plan {
 
 	private BigDecimal amount;
 
-	private SubscriptionAmountUnit amountUnit;
+	private AmountUnit amountUnit;
 
 	private int durationMonths;
 
@@ -27,7 +27,7 @@ public class Plan {
 		Long id,
 		String name,
 		BigDecimal amount,
-		SubscriptionAmountUnit amountUnit,
+		AmountUnit amountUnit,
 		int durationMonths,
 		boolean systemProvided,
 		Long memberId,
@@ -47,7 +47,7 @@ public class Plan {
 		Long id,
 		String name,
 		BigDecimal amount,
-		SubscriptionAmountUnit amountUnit,
+		AmountUnit amountUnit,
 		int durationMonths,
 		boolean systemProvided,
 		Long memberId,
@@ -68,7 +68,7 @@ public class Plan {
 	public static Plan withoutId(
 		String name,
 		BigDecimal amount,
-		SubscriptionAmountUnit amountUnit,
+		AmountUnit amountUnit,
 		int durationMonths,
 		boolean systemProvided,
 		Long memberId,
@@ -89,7 +89,7 @@ public class Plan {
 	public void update(
 		String name,
 		BigDecimal amount,
-		SubscriptionAmountUnit amountUnit,
+		AmountUnit amountUnit,
 		int durationMonths
 	) {
 		this.name = name;

@@ -23,7 +23,7 @@ import subport.application.membersubscription.port.in.dto.SpendingRecordSummary;
 import subport.application.membersubscription.port.out.LoadMemberSubscriptionPort;
 import subport.application.membersubscription.port.out.dto.MemberSubscriptionDetail;
 import subport.application.spendingrecord.port.out.LoadSpendingRecordPort;
-import subport.domain.subscription.SubscriptionAmountUnit;
+import subport.domain.subscription.AmountUnit;
 
 @Service
 @Transactional(readOnly = true)
@@ -110,13 +110,13 @@ public class ReadMemberSubscriptionService implements ReadMemberSubscriptionUseC
 
 	private BigDecimal calculateActualPaymentAmount(MemberSubscriptionDetail detail) {
 		boolean dutchPay = detail.dutchPay();
-		SubscriptionAmountUnit amountUnit = detail.planAmountUnit();
+		AmountUnit amountUnit = detail.planAmountUnit();
 		BigDecimal planAmount = detail.planAmount();
 
 		if (dutchPay) {
 			return detail.dutchPayAmount();
 		}
-		if (amountUnit.equals(SubscriptionAmountUnit.USD)) {
+		if (amountUnit.equals(AmountUnit.USD)) {
 			return planAmount.multiply(detail.exchangeRate())
 				.setScale(0, RoundingMode.HALF_UP);
 		}

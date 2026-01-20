@@ -17,7 +17,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import subport.adapter.out.persistence.BaseTimeEntity;
 import subport.adapter.out.persistence.member.MemberJpaEntity;
-import subport.domain.subscription.SubscriptionAmountUnit;
+import subport.domain.subscription.AmountUnit;
 import subport.domain.subscription.Plan;
 
 @Entity
@@ -35,7 +35,7 @@ public class PlanJpaEntity extends BaseTimeEntity {
 	private BigDecimal amount;
 
 	@Enumerated(value = EnumType.STRING)
-	private SubscriptionAmountUnit amountUnit;
+	private AmountUnit amountUnit;
 
 	private int durationMonths;
 
@@ -52,7 +52,7 @@ public class PlanJpaEntity extends BaseTimeEntity {
 	public PlanJpaEntity(
 		String name,
 		BigDecimal amount,
-		SubscriptionAmountUnit amountUnit,
+		AmountUnit amountUnit,
 		int durationMonths,
 		boolean systemProvided,
 		MemberJpaEntity member,

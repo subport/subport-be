@@ -3,7 +3,7 @@ package subport.application.membersubscription.port.out.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import subport.domain.subscription.SubscriptionAmountUnit;
+import subport.domain.subscription.AmountUnit;
 import subport.domain.subscription.SubscriptionType;
 
 public record MemberSubscriptionDetail(
@@ -23,7 +23,7 @@ public record MemberSubscriptionDetail(
 	Long planId,
 	String planName,
 	BigDecimal planAmount,
-	SubscriptionAmountUnit planAmountUnit,
+	AmountUnit planAmountUnit,
 	int durationMonths,
 	Long memberId
 ) {

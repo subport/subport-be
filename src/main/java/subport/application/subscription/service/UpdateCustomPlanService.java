@@ -6,12 +6,12 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
-import subport.application.subscription.port.in.dto.UpdateCustomPlanRequest;
 import subport.application.subscription.port.in.UpdateCustomPlanUseCase;
+import subport.application.subscription.port.in.dto.UpdateCustomPlanRequest;
 import subport.application.subscription.port.out.LoadPlanPort;
 import subport.application.subscription.port.out.UpdatePlanPort;
+import subport.domain.subscription.AmountUnit;
 import subport.domain.subscription.Plan;
-import subport.domain.subscription.SubscriptionAmountUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +40,7 @@ public class UpdateCustomPlanService implements UpdateCustomPlanUseCase {
 		plan.update(
 			request.name(),
 			request.amount(),
-			SubscriptionAmountUnit.fromString(request.amountUnit()),
+			AmountUnit.fromString(request.amountUnit()),
 			request.durationMonths()
 		);
 

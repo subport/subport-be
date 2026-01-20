@@ -4,11 +4,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import subport.application.subscription.port.in.dto.RegisterCustomPlanRequest;
 import subport.application.subscription.port.in.RegisterCustomPlanUseCase;
+import subport.application.subscription.port.in.dto.RegisterCustomPlanRequest;
 import subport.application.subscription.port.in.dto.RegisterCustomPlanResponse;
 import subport.application.subscription.port.out.SavePlanPort;
-import subport.domain.subscription.SubscriptionAmountUnit;
+import subport.domain.subscription.AmountUnit;
 import subport.domain.subscription.Plan;
 
 @Service
@@ -28,7 +28,7 @@ public class RegisterCustomPlanService implements RegisterCustomPlanUseCase {
 		Plan plan = Plan.withoutId(
 			request.name(),
 			request.amount(),
-			SubscriptionAmountUnit.fromString(request.amountUnit()),
+			AmountUnit.fromString(request.amountUnit()),
 			request.durationMonths(),
 			false,
 			memberId,

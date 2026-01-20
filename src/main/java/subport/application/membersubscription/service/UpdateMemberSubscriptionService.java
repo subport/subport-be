@@ -22,8 +22,8 @@ import subport.application.membersubscription.port.out.LoadMemberSubscriptionPor
 import subport.application.membersubscription.port.out.UpdateMemberSubscriptionPort;
 import subport.application.subscription.port.out.LoadPlanPort;
 import subport.domain.membersubscription.MemberSubscription;
+import subport.domain.subscription.AmountUnit;
 import subport.domain.subscription.Plan;
-import subport.domain.subscription.SubscriptionAmountUnit;
 
 @Service
 @Transactional
@@ -64,7 +64,7 @@ public class UpdateMemberSubscriptionService implements
 		BigDecimal exchangeRate = null;
 		LocalDate exchangeRateDate = null;
 		String amountUnitName = plan.getAmountUnit().name();
-		if (amountUnitName.equals(SubscriptionAmountUnit.USD.name())
+		if (amountUnitName.equals(AmountUnit.USD.name())
 			&& memberSubscription.getExchangeRate() == null
 			&& memberSubscription.getExchangeRateDate() == null) {
 			exchangeRateDate = memberSubscription.getNextPaymentDate()

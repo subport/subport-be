@@ -16,8 +16,8 @@ import subport.application.membersubscription.port.out.LoadExchangeRatePort;
 import subport.application.membersubscription.port.out.SaveMemberSubscriptionPort;
 import subport.application.subscription.port.out.LoadPlanPort;
 import subport.domain.membersubscription.MemberSubscription;
+import subport.domain.subscription.AmountUnit;
 import subport.domain.subscription.Plan;
-import subport.domain.subscription.SubscriptionAmountUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +43,7 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 		BigDecimal exchangerRate = null;
 		LocalDate exchangeRateDate = null;
 		Plan plan = loadPlanPort.load(request.planId());
-		if (plan.getAmountUnit().name().equals(SubscriptionAmountUnit.USD.name())) {
+		if (plan.getAmountUnit().name().equals(AmountUnit.USD.name())) {
 			exchangerRate = loadExchangeRatePort.load(startDate.toString());
 			exchangeRateDate = startDate;
 		}
