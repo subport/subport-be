@@ -21,6 +21,7 @@ import subport.application.membersubscription.port.out.DeleteMemberSubscriptionP
 import subport.application.membersubscription.port.out.LoadMemberSubscriptionPort;
 import subport.application.membersubscription.port.out.SaveMemberSubscriptionPort;
 import subport.application.membersubscription.port.out.UpdateMemberSubscriptionPort;
+import subport.application.membersubscription.port.out.dto.MemberSubscriptionDetail;
 import subport.application.membersubscription.port.out.dto.MemberSubscriptionForSpendingRecord;
 import subport.domain.membersubscription.MemberSubscription;
 
@@ -63,6 +64,37 @@ public class MemberSubscriptionPersistenceAdapter implements
 			.orElseThrow(() -> new CustomException(ErrorCode.MEMBER_SUBSCRIPTION_NOT_FOUND));
 
 		return memberSubscriptionMapper.toDomain(memberSubscriptionEntity);
+	}
+
+	@Override
+	public MemberSubscriptionDetail loadDetail(Long memberSubscriptionId) {
+		MemberSubscriptionJpaEntity memberSubscriptionEntity = memberSubscriptionRepository
+			.findByIdWithFetch(memberSubscriptionId)
+			.orElseThrow(() -> new CustomException(ErrorCode.MEMBER_SUBSCRIPTION_NOT_FOUND));
+
+		SubscriptionJpaEntity subscriptionEntity = memberSubscriptionEntity.getSubscription();
+		PlanJpaEntity planEntity = memberSubscriptionEntity.getPlan();
+
+		return new MemberSubscriptionDetail(
+			memberSubscriptionEntity.getId(),
+			subscriptionEntity.getId(),
+			subscriptionEntity.getName(),
+			subscriptionEntity.getLogoImageUrl(),
+			memberSubscriptionEntity.getStartDate(),
+			memberSubscriptionEntity.getNextPaymentDate(),
+			memberSubscriptionEntity.getReminderDaysBefore(),
+			memberSubscriptionEntity.isActive(),
+			memberSubscriptionEntity.isDutchPay(),
+			memberSubscriptionEntity.getDutchPayAmount(),
+			memberSubscriptionEntity.getMemo(),
+			memberSubscriptionEntity.getExchangeRate(),
+			planEntity.getId(),
+			planEntity.getName(),
+			planEntity.getAmount(),
+			planEntity.getAmountUnit(),
+			planEntity.getDurationMonths(),
+			memberSubscriptionEntity.getMember().getId()
+		);
 	}
 
 	@Override

@@ -17,4 +17,16 @@ public class SpendingRecordMapper {
 			spendingRecord.getMemberId()
 		);
 	}
+
+	public SpendingRecord toDomain(SpendingRecordJpaEntity spendingRecordJpaEntity) {
+		return new SpendingRecord(
+			spendingRecordJpaEntity.getId(),
+			spendingRecordJpaEntity.getPaymentDate(),
+			spendingRecordJpaEntity.getAmount(),
+			spendingRecordJpaEntity.getDurationMonths(),
+			spendingRecordJpaEntity.getSubscriptionName(),
+			spendingRecordJpaEntity.getSubscriptionLogoImageUrl(),
+			spendingRecordJpaEntity.getMemberId()
+		);
+	}
 }

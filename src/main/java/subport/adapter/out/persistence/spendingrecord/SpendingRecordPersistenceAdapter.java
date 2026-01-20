@@ -5,12 +5,15 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
+import subport.application.spendingrecord.port.out.LoadSpendingRecordPort;
 import subport.application.spendingrecord.port.out.SaveSpendingRecordPort;
 import subport.domain.spendingrecord.SpendingRecord;
 
 @Component
 @RequiredArgsConstructor
-public class SpendingRecordPersistenceAdapter implements SaveSpendingRecordPort {
+public class SpendingRecordPersistenceAdapter implements
+	SaveSpendingRecordPort,
+	LoadSpendingRecordPort {
 
 	private final SpringDataSpendingRecordRepository spendingRecordRepository;
 	private final SpendingRecordMapper spendingRecordMapper;
@@ -22,5 +25,13 @@ public class SpendingRecordPersistenceAdapter implements SaveSpendingRecordPort 
 			.toList();
 
 		spendingRecordRepository.saveAll(spendingRecordEntities);
+	}
+
+	@Override
+	public List<SpendingRecord> loadRecent3ByMemberIdAndSubscriptionName(Long memberId, String subscriptionName) {
+		return spendingRecordRepository
+			.findTop3ByMemberIdAndSubscriptionNameOrderByPaymentDateDesc(memberId, subscriptionName).stream()
+			.map(spendingRecordMapper::toDomain)
+			.toList();
 	}
 }
