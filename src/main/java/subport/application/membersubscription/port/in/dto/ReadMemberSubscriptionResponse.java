@@ -1,6 +1,7 @@
 package subport.application.membersubscription.port.in.dto;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -53,7 +54,7 @@ public record ReadMemberSubscriptionResponse(
 			detail.reminderDaysBefore(),
 			detail.active(),
 			detail.dutchPay(),
-			actualPayment,
+			actualPayment.setScale(0, RoundingMode.HALF_UP),
 			spendingRecords,
 			detail.memo()
 		);
