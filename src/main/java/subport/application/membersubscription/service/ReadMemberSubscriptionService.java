@@ -5,6 +5,8 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +15,9 @@ import lombok.RequiredArgsConstructor;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.membersubscription.port.in.ReadMemberSubscriptionUseCase;
+import subport.application.membersubscription.port.in.dto.ListMemberSubscriptionsRequest;
+import subport.application.membersubscription.port.in.dto.ListMemberSubscriptionsResponse;
+import subport.application.membersubscription.port.in.dto.MemberSubscriptionSummary;
 import subport.application.membersubscription.port.in.dto.ReadMemberSubscriptionResponse;
 import subport.application.membersubscription.port.in.dto.SpendingRecordSummary;
 import subport.application.membersubscription.port.out.LoadMemberSubscriptionPort;
@@ -44,16 +49,7 @@ public class ReadMemberSubscriptionService implements ReadMemberSubscriptionUseC
 		long totalDays = ChronoUnit.DAYS.between(currentPaymentDate, nextPaymentDate);
 		int paymentProgressPercent = (int)((double)elapsedDays / totalDays * 100);
 
-		boolean dutchPay = memberSubscriptionDetail.dutchPay();
-		SubscriptionAmountUnit amountUnit = memberSubscriptionDetail.planAmountUnit();
-		BigDecimal actualPayment = memberSubscriptionDetail.planAmount();
-		if (dutchPay) {
-			actualPayment = memberSubscriptionDetail.dutchPayAmount();
-		}
-		if (!dutchPay && amountUnit.equals(SubscriptionAmountUnit.USD)) {
-			actualPayment = actualPayment.multiply(memberSubscriptionDetail.exchangeRate())
-				.setScale(0, RoundingMode.HALF_UP);
-		}
+		BigDecimal actualPaymentAmount = calculateActualPaymentAmount(memberSubscriptionDetail);
 
 		List<SpendingRecordSummary> spendingRecords = loadSpendingRecordPort.loadRecent3ByMemberIdAndSubscriptionName(
 				memberId,
@@ -66,8 +62,65 @@ public class ReadMemberSubscriptionService implements ReadMemberSubscriptionUseC
 			memberSubscriptionDetail,
 			now,
 			paymentProgressPercent,
-			actualPayment,
+			actualPaymentAmount,
 			spendingRecords
 		);
+	}
+
+	@Override
+	public ListMemberSubscriptionsResponse list(Long memberId, ListMemberSubscriptionsRequest request) {
+		boolean active = request.active();
+		String sortBy = request.sortBy();
+
+		List<MemberSubscriptionDetail> memberSubscriptionDetails = loadMemberSubscriptionPort.loadDetails(
+			memberId,
+			active,
+			sortBy
+		);
+
+		LocalDate now = LocalDate.now();
+
+		if (active & sortBy.equals("type")) {
+			return new ListMemberSubscriptionsResponse(
+				memberSubscriptionDetails.stream()
+					.collect(Collectors.groupingBy(
+						ms -> ms.subscriptionType().getDisplayName(),
+						TreeMap::new,
+						Collectors.mapping(ms -> MemberSubscriptionSummary.from(
+								ms,
+								calculateActualPaymentAmount(ms),
+								ChronoUnit.DAYS.between(now, ms.nextPaymentDate())
+							),
+							Collectors.toList()
+						)
+					))
+			);
+		}
+
+		return new ListMemberSubscriptionsResponse(
+			memberSubscriptionDetails.stream()
+				.map(ms -> MemberSubscriptionSummary.from(
+					ms,
+					calculateActualPaymentAmount(ms),
+					ChronoUnit.DAYS.between(now, ms.nextPaymentDate())
+				))
+				.toList()
+		);
+	}
+
+	private BigDecimal calculateActualPaymentAmount(MemberSubscriptionDetail detail) {
+		boolean dutchPay = detail.dutchPay();
+		SubscriptionAmountUnit amountUnit = detail.planAmountUnit();
+		BigDecimal planAmount = detail.planAmount();
+
+		if (dutchPay) {
+			return detail.dutchPayAmount();
+		}
+		if (amountUnit.equals(SubscriptionAmountUnit.USD)) {
+			return planAmount.multiply(detail.exchangeRate())
+				.setScale(0, RoundingMode.HALF_UP);
+		}
+
+		return planAmount;
 	}
 }

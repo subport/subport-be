@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -80,6 +81,7 @@ public class MemberSubscriptionPersistenceAdapter implements
 			subscriptionEntity.getId(),
 			subscriptionEntity.getName(),
 			subscriptionEntity.getLogoImageUrl(),
+			subscriptionEntity.getType(),
 			memberSubscriptionEntity.getStartDate(),
 			memberSubscriptionEntity.getNextPaymentDate(),
 			memberSubscriptionEntity.getReminderDaysBefore(),
@@ -95,6 +97,43 @@ public class MemberSubscriptionPersistenceAdapter implements
 			planEntity.getDurationMonths(),
 			memberSubscriptionEntity.getMember().getId()
 		);
+	}
+
+	@Override
+	public List<MemberSubscriptionDetail> loadDetails(
+		Long memberId,
+		boolean active,
+		String sortBy
+	) {
+		Sort sort = createSort(sortBy);
+
+		return memberSubscriptionRepository.findByMemberIdAndActive(memberId, active, sort).stream()
+			.map(ms -> {
+				SubscriptionJpaEntity subscription = ms.getSubscription();
+				PlanJpaEntity plan = ms.getPlan();
+
+				return new MemberSubscriptionDetail(
+					ms.getId(),
+					subscription.getId(),
+					subscription.getName(),
+					subscription.getLogoImageUrl(),
+					subscription.getType(),
+					ms.getStartDate(),
+					ms.getNextPaymentDate(),
+					ms.getReminderDaysBefore(),
+					ms.isActive(),
+					ms.isDutchPay(),
+					ms.getDutchPayAmount(),
+					ms.getMemo(),
+					ms.getExchangeRate(),
+					plan.getId(),
+					plan.getName(),
+					plan.getAmount(),
+					plan.getAmountUnit(),
+					plan.getDurationMonths(),
+					ms.getMember().getId()
+				);
+			}).toList();
 	}
 
 	@Override
@@ -163,5 +202,13 @@ public class MemberSubscriptionPersistenceAdapter implements
 	@Override
 	public void delete(Long memberSubscriptionId) {
 		memberSubscriptionRepository.deleteById(memberSubscriptionId);
+	}
+
+	private Sort createSort(String sortBy) {
+		return switch (sortBy) {
+			case "type" -> Sort.by(Sort.Direction.ASC, "subscription.type", "subscription.name");
+			case "nextPaymentDate" -> Sort.by(Sort.Direction.ASC, "nextPaymentDate", "subscription.name");
+			default -> Sort.by(Sort.Direction.ASC, "subscription.name");
+		};
 	}
 }

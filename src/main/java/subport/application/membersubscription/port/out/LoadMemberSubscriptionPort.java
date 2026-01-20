@@ -13,5 +13,11 @@ public interface LoadMemberSubscriptionPort {
 
 	MemberSubscriptionDetail loadDetail(Long memberSubscriptionId);
 
+	List<MemberSubscriptionDetail> loadDetails(
+		Long memberId,
+		boolean active,
+		String sortBy
+	);
+
 	List<MemberSubscriptionForSpendingRecord> loadForSpendingRecordByNextPaymentDate(LocalDate currentDate);
 }

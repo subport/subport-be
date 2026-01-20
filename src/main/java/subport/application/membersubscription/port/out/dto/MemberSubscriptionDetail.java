@@ -4,12 +4,14 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import subport.domain.subscription.SubscriptionAmountUnit;
+import subport.domain.subscription.SubscriptionType;
 
 public record MemberSubscriptionDetail(
 	Long id,
 	Long subscriptionId,
 	String subscriptionName,
 	String subscriptionLogoImageUrl,
+	SubscriptionType subscriptionType,
 	LocalDate startDate,
 	LocalDate nextPaymentDate,
 	Integer reminderDaysBefore,

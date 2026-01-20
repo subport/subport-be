@@ -20,6 +20,8 @@ import subport.application.membersubscription.port.in.UpdateMemberSubscriptionDu
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionMemoUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionPlanUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionReminderUseCase;
+import subport.application.membersubscription.port.in.dto.ListMemberSubscriptionsRequest;
+import subport.application.membersubscription.port.in.dto.ListMemberSubscriptionsResponse;
 import subport.application.membersubscription.port.in.dto.ReadMemberSubscriptionResponse;
 import subport.application.membersubscription.port.in.dto.RegisterMemberSubscriptionRequest;
 import subport.application.membersubscription.port.in.dto.RegisterMemberSubscriptionResponse;
@@ -133,5 +135,14 @@ public class MemberSubscriptionController {
 	) {
 		return ResponseEntity.ok(readMemberSubscriptionUseCase.read(
 			oAuth2User.getMemberId(), memberSubscriptionId));
+	}
+
+	@GetMapping
+	public ResponseEntity<ListMemberSubscriptionsResponse> listMemberSubscriptions(
+		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
+		ListMemberSubscriptionsRequest request
+	) {
+		return ResponseEntity.ok(readMemberSubscriptionUseCase.list(
+			oAuth2User.getMemberId(), request));
 	}
 }
