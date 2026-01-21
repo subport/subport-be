@@ -17,6 +17,7 @@ public class ListSubscriptionTypesService implements ListSubscriptionTypesUseCas
 
 		return Arrays.stream(subscriptionTypes)
 			.map(SubscriptionType::getDisplayName)
+			.sorted()
 			.toList();
 	}
 }
