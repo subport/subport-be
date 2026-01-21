@@ -24,7 +24,7 @@ public class MemberSubscription {
 
 	private LocalDate exchangeRateDate;
 
-	private final boolean active;
+	private boolean active;
 
 	private LocalDate nextPaymentDate;
 
@@ -151,5 +151,9 @@ public class MemberSubscription {
 
 	public void increaseNextPaymentDateByMonths(int months) {
 		this.nextPaymentDate = this.nextPaymentDate.plusMonths(months);
+	}
+
+	public void deactivate() {
+		this.active = false;
 	}
 }
