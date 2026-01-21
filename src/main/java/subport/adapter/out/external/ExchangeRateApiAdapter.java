@@ -9,8 +9,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
 import lombok.RequiredArgsConstructor;
-import subport.application.exception.CustomException;
-import subport.application.exception.ErrorCode;
 import subport.application.membersubscription.port.out.LoadExchangeRatePort;
 import subport.domain.subscription.AmountUnit;
 
@@ -42,6 +40,6 @@ public class ExchangeRateApiAdapter implements LoadExchangeRatePort {
 			.filter(r -> r.currencyUnit().equals(AmountUnit.USD.name()))
 			.findFirst()
 			.map(ExchangeRateResponse::exchangeRateToDecimal)
-			.orElseThrow(() -> new CustomException(ErrorCode.USD_EXCHANGE_RATE_NOT_FOUND));
+			.orElse(null);
 	}
 }

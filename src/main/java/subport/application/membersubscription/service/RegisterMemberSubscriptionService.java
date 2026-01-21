@@ -40,12 +40,26 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 		}
 
 		LocalDate startDate = request.startDate();
+		LocalDate startBusinessDate = getLastBusinessDate(startDate);
+
 		BigDecimal exchangerRate = null;
 		LocalDate exchangeRateDate = null;
 		Plan plan = loadPlanPort.load(request.planId());
 		if (plan.getAmountUnit().name().equals(AmountUnit.USD.name())) {
-			exchangerRate = loadExchangeRatePort.load(startDate.toString());
-			exchangeRateDate = startDate;
+			exchangeRateDate = startBusinessDate;
+
+			if (!startBusinessDate.isAfter(getLastBusinessDate(LocalDate.now()))) {
+				LocalDate targetDate = startBusinessDate;
+
+				while (exchangerRate == null) {
+					exchangerRate = loadExchangeRatePort.load(targetDate.toString());
+					if (exchangerRate == null) {
+						targetDate = targetDate.minusDays(1);
+					}
+				}
+				
+				exchangeRateDate = targetDate;
+			}
 		}
 
 		LocalDate nextPaymentDate = startDate.plusMonths(plan.getDurationMonths());
@@ -65,5 +79,13 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 		);
 
 		return new RegisterMemberSubscriptionResponse(saveMemberSubscriptionPort.save(memberSubscription));
+	}
+
+	private LocalDate getLastBusinessDate(LocalDate date) {
+		return switch (date.getDayOfWeek()) {
+			case SATURDAY -> date.minusDays(1);
+			case SUNDAY -> date.minusDays(2);
+			default -> date;
+		};
 	}
 }
