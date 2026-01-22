@@ -1,7 +1,5 @@
 package subport.application.membersubscription.service;
 
-import static java.time.temporal.ChronoUnit.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -83,10 +81,9 @@ public class UpdateMemberSubscriptionService implements
 		memberSubscription.updateExchangeRate(rate, exchangeRateDate);
 
 		memberSubscription.updatePlan(newPlanId);
-
-		long additionalMonths =
-			newPlan.getDurationMonths() - MONTHS.between(lastPaymentDate, memberSubscription.getNextPaymentDate());
-		memberSubscription.increaseNextPaymentDateByMonths(additionalMonths);
+		memberSubscription.updateNextPaymentDate(
+			lastPaymentDate.plusMonths(newPlan.getDurationMonths())
+		);
 
 		updateMemberSubscriptionPort.update(memberSubscription);
 	}

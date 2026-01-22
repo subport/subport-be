@@ -157,8 +157,12 @@ public class MemberSubscription {
 		this.exchangeRateDate = exchangeRateDate;
 	}
 
-	public void increaseLastPaymentDateByMonths(long months) {
-		this.lastPaymentDate = this.lastPaymentDate.plusMonths(months);
+	public void updateLastPaymentDate(LocalDate lastPaymentDate) {
+		this.lastPaymentDate = lastPaymentDate;
+	}
+	
+	public void updateNextPaymentDate(LocalDate nextPaymentDate) {
+		this.nextPaymentDate = nextPaymentDate;
 	}
 
 	public void increaseNextPaymentDateByMonths(long months) {
