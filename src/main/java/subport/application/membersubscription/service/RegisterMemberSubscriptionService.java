@@ -9,12 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
+import subport.application.exchangeRate.service.ExchangeRateService;
 import subport.application.membersubscription.port.in.RegisterMemberSubscriptionUseCase;
 import subport.application.membersubscription.port.in.dto.RegisterMemberSubscriptionRequest;
 import subport.application.membersubscription.port.in.dto.RegisterMemberSubscriptionResponse;
-import subport.application.membersubscription.port.out.LoadExchangeRatePort;
 import subport.application.membersubscription.port.out.SaveMemberSubscriptionPort;
 import subport.application.subscription.port.out.LoadPlanPort;
+import subport.domain.exchangeRate.ExchangeRate;
 import subport.domain.membersubscription.MemberSubscription;
 import subport.domain.subscription.AmountUnit;
 import subport.domain.subscription.Plan;
@@ -25,7 +26,7 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 
 	private final SaveMemberSubscriptionPort saveMemberSubscriptionPort;
 	private final LoadPlanPort loadPlanPort;
-	private final LoadExchangeRatePort loadExchangeRatePort;
+	private final ExchangeRateService exchangeRateService;
 
 	@Transactional
 	@Override
@@ -40,26 +41,15 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 		}
 
 		LocalDate startDate = request.startDate();
-		LocalDate startBusinessDate = getLastBusinessDate(startDate);
 
-		BigDecimal exchangerRate = null;
+		BigDecimal rate = null;
 		LocalDate exchangeRateDate = null;
 		Plan plan = loadPlanPort.load(request.planId());
 		if (plan.getAmountUnit().name().equals(AmountUnit.USD.name())) {
-			exchangeRateDate = startBusinessDate;
+			ExchangeRate exchangeRate = exchangeRateService.getExchangeRate(startDate);
 
-			if (!startBusinessDate.isAfter(getLastBusinessDate(LocalDate.now()))) {
-				LocalDate targetDate = startBusinessDate;
-
-				while (exchangerRate == null) {
-					exchangerRate = loadExchangeRatePort.load(targetDate.toString());
-					if (exchangerRate == null) {
-						targetDate = targetDate.minusDays(1);
-					}
-				}
-				
-				exchangeRateDate = targetDate;
-			}
+			rate = exchangeRate.getRate();
+			exchangeRateDate = exchangeRate.getApplyDate();
 		}
 
 		LocalDate nextPaymentDate = startDate.plusMonths(plan.getDurationMonths());
@@ -69,7 +59,7 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 			request.memo(),
 			dutchPay,
 			dutchPayAmount,
-			exchangerRate,
+			rate,
 			exchangeRateDate,
 			true,
 			nextPaymentDate,
@@ -79,13 +69,5 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 		);
 
 		return new RegisterMemberSubscriptionResponse(saveMemberSubscriptionPort.save(memberSubscription));
-	}
-
-	private LocalDate getLastBusinessDate(LocalDate date) {
-		return switch (date.getDayOfWeek()) {
-			case SATURDAY -> date.minusDays(1);
-			case SUNDAY -> date.minusDays(2);
-			default -> date;
-		};
 	}
 }
