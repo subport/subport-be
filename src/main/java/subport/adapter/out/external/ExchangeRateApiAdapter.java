@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
 import lombok.RequiredArgsConstructor;
-import subport.application.membersubscription.port.out.LoadExchangeRatePort;
+import subport.application.exchangeRate.port.out.FetchExchangeRatePort;
 import subport.domain.subscription.AmountUnit;
 
 @Component
 @RequiredArgsConstructor
-public class ExchangeRateApiAdapter implements LoadExchangeRatePort {
+public class ExchangeRateApiAdapter implements FetchExchangeRatePort {
 
 	private final RestClient exchangeRateClient;
 
@@ -25,7 +25,7 @@ public class ExchangeRateApiAdapter implements LoadExchangeRatePort {
 	private String data;
 
 	@Override
-	public BigDecimal load(String searchDate) {
+	public BigDecimal fetch(String searchDate) {
 		List<ExchangeRateResponse> responses = exchangeRateClient.get()
 			.uri(uriBuilder -> uriBuilder
 				.queryParam("authkey", authKey)
