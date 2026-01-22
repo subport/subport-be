@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import subport.adapter.out.persistence.BaseTimeEntity;
+import subport.domain.exchangeRate.ExchangeRate;
 
 @Entity
 @Table(name = "exchange_rate")
@@ -34,5 +35,10 @@ public class ExchangeRateJpaEntity extends BaseTimeEntity {
 		this.requestDate = requestDate;
 		this.applyDate = applyDate;
 		this.rate = rate;
+	}
+
+	public void apply(ExchangeRate exchangeRate) {
+		this.applyDate = exchangeRate.getApplyDate();
+		this.rate = exchangeRate.getRate();
 	}
 }
