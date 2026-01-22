@@ -1,5 +1,7 @@
 package subport.application.membersubscription.service;
 
+import static java.time.temporal.ChronoUnit.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -9,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
+import subport.application.exchangeRate.service.ExchangeRateService;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionDutchPayUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionMemoUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionPlanUseCase;
@@ -17,10 +20,10 @@ import subport.application.membersubscription.port.in.dto.UpdateMemberSubscripti
 import subport.application.membersubscription.port.in.dto.UpdateMemberSubscriptionMemoRequest;
 import subport.application.membersubscription.port.in.dto.UpdateMemberSubscriptionPlanRequest;
 import subport.application.membersubscription.port.in.dto.UpdateMemberSubscriptionReminderRequest;
-import subport.application.membersubscription.port.out.LoadExchangeRatePort;
 import subport.application.membersubscription.port.out.LoadMemberSubscriptionPort;
 import subport.application.membersubscription.port.out.UpdateMemberSubscriptionPort;
 import subport.application.subscription.port.out.LoadPlanPort;
+import subport.domain.exchangeRate.ExchangeRate;
 import subport.domain.membersubscription.MemberSubscription;
 import subport.domain.subscription.AmountUnit;
 import subport.domain.subscription.Plan;
@@ -37,7 +40,7 @@ public class UpdateMemberSubscriptionService implements
 	private final LoadMemberSubscriptionPort loadMemberSubscriptionPort;
 	private final UpdateMemberSubscriptionPort updateMemberSubscriptionPort;
 	private final LoadPlanPort loadPlanPort;
-	private final LoadExchangeRatePort loadExchangeRatePort;
+	private final ExchangeRateService exchangeRateService;
 
 	@Override
 	public void updatePlan(
@@ -47,34 +50,43 @@ public class UpdateMemberSubscriptionService implements
 	) {
 		MemberSubscription memberSubscription = loadMemberSubscriptionPort.load(memberSubscriptionId);
 
+		Long newPlanId = request.planId();
+		if (newPlanId.equals(memberSubscription.getPlanId())) {
+			return;
+		}
+
 		if (!memberSubscription.getMemberId().equals(memberId)) {
 			throw new CustomException(ErrorCode.MEMBER_SUBSCRIPTION_FORBIDDEN);
 		}
 
-		Long newPlanId = request.planId();
-		Plan plan = loadPlanPort.load(newPlanId);
-		if (!plan.getSubscriptionId().equals(memberSubscription.getSubscriptionId())) {
+		Plan newPlan = loadPlanPort.load(newPlanId);
+		if (!newPlan.getSubscriptionId().equals(memberSubscription.getSubscriptionId())) {
 			throw new CustomException(ErrorCode.INVALID_MEMBER_SUBSCRIPTION_PLAN);
 		}
 
-		if (!plan.isSystemProvided() && !plan.getMemberId().equals(memberId)) {
+		if (!newPlan.isSystemProvided() && !newPlan.getMemberId().equals(memberId)) {
 			throw new CustomException(ErrorCode.PLAN_USE_FORBIDDEN);
 		}
 
-		BigDecimal exchangeRate = null;
+		String amountUnitName = newPlan.getAmountUnit().name();
+		LocalDate lastPaymentDate = memberSubscription.getLastPaymentDate();
+		BigDecimal rate = null;
 		LocalDate exchangeRateDate = null;
-		String amountUnitName = plan.getAmountUnit().name();
 		if (amountUnitName.equals(AmountUnit.USD.name())
 			&& memberSubscription.getExchangeRate() == null
 			&& memberSubscription.getExchangeRateDate() == null) {
-			exchangeRateDate = memberSubscription.getNextPaymentDate()
-				.minusMonths(plan.getDurationMonths());
+			ExchangeRate exchangeRate = exchangeRateService.getExchangeRate(lastPaymentDate);
 
-			exchangeRate = loadExchangeRatePort.load(exchangeRateDate.toString());
+			rate = exchangeRate.getRate();
+			exchangeRateDate = exchangeRate.getApplyDate();
 		}
-		memberSubscription.updateExchangeRate(exchangeRate, exchangeRateDate);
+		memberSubscription.updateExchangeRate(rate, exchangeRateDate);
 
 		memberSubscription.updatePlan(newPlanId);
+
+		long additionalMonths =
+			newPlan.getDurationMonths() - MONTHS.between(lastPaymentDate, memberSubscription.getNextPaymentDate());
+		memberSubscription.increaseNextPaymentDateByMonths(additionalMonths);
 
 		updateMemberSubscriptionPort.update(memberSubscription);
 	}
