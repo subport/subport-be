@@ -19,7 +19,8 @@ public class ExchangeRateMapper {
 		return new ExchangeRate(
 			exchangeRateEntity.getRequestDate(),
 			exchangeRateEntity.getApplyDate(),
-			exchangeRateEntity.getRate()
+			exchangeRateEntity.getRate(),
+			exchangeRateEntity.getLastModifiedAt()
 		);
 	}
 }
