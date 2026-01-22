@@ -52,7 +52,7 @@ public class SubscriptionPersistenceAdapter implements
 
 	@Override
 	public List<Subscription> loadByMemberId(Long memberId) {
-		return subscriptionRepository.findByMemberIdOrSystemProvided(memberId, true).stream()
+		return subscriptionRepository.findByMemberIdOrSystemProvidedOrderByNameAsc(memberId, true).stream()
 			.map(subscriptionMapper::toDomain)
 			.toList();
 	}
