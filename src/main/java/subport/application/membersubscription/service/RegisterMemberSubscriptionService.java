@@ -62,6 +62,7 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 			rate,
 			exchangeRateDate,
 			true,
+			startDate,
 			nextPaymentDate,
 			memberId,
 			request.subscriptionId(),

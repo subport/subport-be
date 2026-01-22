@@ -13,6 +13,7 @@ public record MemberSubscriptionDetail(
 	String subscriptionLogoImageUrl,
 	SubscriptionType subscriptionType,
 	LocalDate startDate,
+	LocalDate lastPaymentDate,
 	LocalDate nextPaymentDate,
 	Integer reminderDaysBefore,
 	boolean active,

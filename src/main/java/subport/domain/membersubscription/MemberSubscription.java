@@ -26,6 +26,8 @@ public class MemberSubscription {
 
 	private boolean active;
 
+	private LocalDate lastPaymentDate;
+
 	private LocalDate nextPaymentDate;
 
 	private final Long memberId;
@@ -44,6 +46,7 @@ public class MemberSubscription {
 		BigDecimal exchangeRate,
 		LocalDate exchangeRateDate,
 		boolean active,
+		LocalDate lastPaymentDate,
 		LocalDate nextPaymentDate,
 		Long memberId,
 		Long subscriptionId,
@@ -58,6 +61,7 @@ public class MemberSubscription {
 		this.exchangeRate = exchangeRate;
 		this.exchangeRateDate = exchangeRateDate;
 		this.active = active;
+		this.lastPaymentDate = lastPaymentDate;
 		this.nextPaymentDate = nextPaymentDate;
 		this.memberId = memberId;
 		this.subscriptionId = subscriptionId;
@@ -74,6 +78,7 @@ public class MemberSubscription {
 		BigDecimal exchangeRate,
 		LocalDate exchangeRateDate,
 		boolean active,
+		LocalDate lastPaymentDate,
 		LocalDate nextPaymentDate,
 		Long memberId,
 		Long subscriptionId,
@@ -89,6 +94,7 @@ public class MemberSubscription {
 			exchangeRate,
 			exchangeRateDate,
 			active,
+			lastPaymentDate,
 			nextPaymentDate,
 			memberId,
 			subscriptionId,
@@ -105,6 +111,7 @@ public class MemberSubscription {
 		BigDecimal exchangeRate,
 		LocalDate exchangeRateDate,
 		boolean active,
+		LocalDate lastPaymentDate,
 		LocalDate nextPaymentDate,
 		Long memberId,
 		Long subscriptionId,
@@ -120,6 +127,7 @@ public class MemberSubscription {
 			exchangeRate,
 			exchangeRateDate,
 			active,
+			lastPaymentDate,
 			nextPaymentDate,
 			memberId,
 			subscriptionId,
@@ -147,6 +155,10 @@ public class MemberSubscription {
 	public void updateExchangeRate(BigDecimal exchangeRate, LocalDate exchangeRateDate) {
 		this.exchangeRate = exchangeRate;
 		this.exchangeRateDate = exchangeRateDate;
+	}
+
+	public void increaseLastPaymentDateByMonths(int months) {
+		this.lastPaymentDate = this.lastPaymentDate.plusMonths(months);
 	}
 
 	public void increaseNextPaymentDateByMonths(int months) {

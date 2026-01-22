@@ -46,6 +46,8 @@ public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 
 	private boolean active;
 
+	private LocalDate lastPaymentDate;
+
 	private LocalDate nextPaymentDate;
 
 	@JoinColumn(name = "member_id", nullable = false)
@@ -69,6 +71,7 @@ public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 		BigDecimal exchangeRate,
 		LocalDate exchangeRateDate,
 		boolean active,
+		LocalDate lastPaymentDate,
 		LocalDate nextPaymentDate,
 		MemberJpaEntity member,
 		SubscriptionJpaEntity subscription,
@@ -82,6 +85,7 @@ public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 		this.exchangeRate = exchangeRate;
 		this.exchangeRateDate = exchangeRateDate;
 		this.active = active;
+		this.lastPaymentDate = lastPaymentDate;
 		this.nextPaymentDate = nextPaymentDate;
 		this.member = member;
 		this.subscription = subscription;
@@ -96,6 +100,7 @@ public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 		this.exchangeRate = memberSubscription.getExchangeRate();
 		this.exchangeRateDate = memberSubscription.getExchangeRateDate();
 		this.active = memberSubscription.isActive();
+		this.lastPaymentDate = memberSubscription.getLastPaymentDate();
 		this.nextPaymentDate = memberSubscription.getNextPaymentDate();
 	}
 
