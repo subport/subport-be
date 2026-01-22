@@ -42,11 +42,11 @@ public class ReadMemberSubscriptionService implements ReadMemberSubscriptionUseC
 		}
 
 		LocalDate nextPaymentDate = memberSubscriptionDetail.nextPaymentDate();
-		LocalDate currentPaymentDate = nextPaymentDate.minusMonths(memberSubscriptionDetail.durationMonths());
+		LocalDate lastPaymentDate = memberSubscriptionDetail.lastPaymentDate();
 
 		LocalDate now = LocalDate.now();
-		long elapsedDays = ChronoUnit.DAYS.between(currentPaymentDate, now);
-		long totalDays = ChronoUnit.DAYS.between(currentPaymentDate, nextPaymentDate);
+		long elapsedDays = ChronoUnit.DAYS.between(lastPaymentDate, now);
+		long totalDays = ChronoUnit.DAYS.between(lastPaymentDate, nextPaymentDate);
 		int paymentProgressPercent = (int)((double)elapsedDays / totalDays * 100);
 
 		BigDecimal actualPaymentAmount = calculateActualPaymentAmount(memberSubscriptionDetail);
