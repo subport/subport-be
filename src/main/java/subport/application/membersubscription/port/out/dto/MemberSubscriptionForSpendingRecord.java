@@ -48,7 +48,7 @@ public record MemberSubscriptionForSpendingRecord(
 
 	public SpendingRecord toSpendingRecord() {
 		return SpendingRecord.withoutId(
-			nextPaymentDate,
+			lastPaymentDate,
 			resolveAmount(),
 			planDurationMonths,
 			subscriptionName,
