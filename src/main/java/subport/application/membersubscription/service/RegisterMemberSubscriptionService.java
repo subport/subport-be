@@ -15,16 +15,19 @@ import subport.application.membersubscription.port.in.dto.RegisterMemberSubscrip
 import subport.application.membersubscription.port.in.dto.RegisterMemberSubscriptionResponse;
 import subport.application.membersubscription.port.out.SaveMemberSubscriptionPort;
 import subport.application.subscription.port.out.LoadPlanPort;
+import subport.application.subscription.port.out.LoadSubscriptionPort;
 import subport.domain.exchangeRate.ExchangeRate;
 import subport.domain.membersubscription.MemberSubscription;
 import subport.domain.subscription.AmountUnit;
 import subport.domain.subscription.Plan;
+import subport.domain.subscription.Subscription;
 
 @Service
 @RequiredArgsConstructor
 public class RegisterMemberSubscriptionService implements RegisterMemberSubscriptionUseCase {
 
 	private final SaveMemberSubscriptionPort saveMemberSubscriptionPort;
+	private final LoadSubscriptionPort loadSubscriptionPort;
 	private final LoadPlanPort loadPlanPort;
 	private final ExchangeRateService exchangeRateService;
 
@@ -40,11 +43,25 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 			throw new CustomException(ErrorCode.DUTCH_PAY_AMOUNT_NOT_ALLOWED);
 		}
 
-		LocalDate startDate = request.startDate();
+		Long subscriptionId = request.subscriptionId();
+		Subscription subscription = loadSubscriptionPort.load(subscriptionId);
+		if (!subscription.isSystemProvided() && !subscription.getMemberId().equals(memberId)) {
+			throw new CustomException(ErrorCode.SUBSCRIPTION_USE_FORBIDDEN);
+		}
 
 		BigDecimal rate = null;
 		LocalDate exchangeRateDate = null;
 		Plan plan = loadPlanPort.load(request.planId());
+
+		if (!plan.getSubscriptionId().equals(subscriptionId)) {
+			throw new CustomException(ErrorCode.INVALID_MEMBER_SUBSCRIPTION_PLAN);
+		}
+
+		if (!plan.isSystemProvided() && !plan.getMemberId().equals(memberId)) {
+			throw new CustomException(ErrorCode.PLAN_USE_FORBIDDEN);
+		}
+
+		LocalDate startDate = request.startDate();
 		if (plan.getAmountUnit().name().equals(AmountUnit.USD.name())) {
 			ExchangeRate exchangeRate = exchangeRateService.getExchangeRate(startDate);
 
@@ -65,7 +82,7 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 			startDate,
 			nextPaymentDate,
 			memberId,
-			request.subscriptionId(),
+			subscriptionId,
 			request.planId()
 		);
 
