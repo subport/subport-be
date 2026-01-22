@@ -10,12 +10,13 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import subport.adapter.out.persistence.BaseTimeEntity;
 
 @Entity
 @Table(name = "exchange_rate")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class ExchangeRateJpaEntity {
+public class ExchangeRateJpaEntity extends BaseTimeEntity {
 
 	@Id
 	@Column(updatable = false)
