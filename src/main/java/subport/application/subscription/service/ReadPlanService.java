@@ -8,9 +8,9 @@ import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.subscription.port.in.ReadPlanUseCase;
 import subport.application.subscription.port.in.dto.ListPlansResponse;
+import subport.application.subscription.port.in.dto.ReadPlanResponse;
 import subport.application.subscription.port.out.LoadPlanPort;
 import subport.application.subscription.port.out.LoadSubscriptionPort;
-import subport.application.subscription.port.in.dto.ReadPlanResponse;
 import subport.domain.subscription.Plan;
 
 @Service
@@ -34,7 +34,7 @@ public class ReadPlanService implements ReadPlanUseCase {
 
 	@Override
 	public ListPlansResponse list(Long memberId, Long subscriptionId) {
-		loadSubscriptionPort.load(subscriptionId);
+		loadSubscriptionPort.loadSubscription(subscriptionId);
 
 		return ListPlansResponse.fromDomains(
 			loadPlanPort.loadByMemberIdAndSubscriptionId(memberId, subscriptionId));

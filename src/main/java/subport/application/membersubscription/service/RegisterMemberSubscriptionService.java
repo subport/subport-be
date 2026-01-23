@@ -44,7 +44,7 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 		}
 
 		Long subscriptionId = request.subscriptionId();
-		Subscription subscription = loadSubscriptionPort.load(subscriptionId);
+		Subscription subscription = loadSubscriptionPort.loadSubscription(subscriptionId);
 		if (!subscription.isSystemProvided() && !subscription.getMemberId().equals(memberId)) {
 			throw new CustomException(ErrorCode.SUBSCRIPTION_USE_FORBIDDEN);
 		}

@@ -7,8 +7,8 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.RequiredArgsConstructor;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
-import subport.application.subscription.port.in.dto.UpdateCustomSubscriptionRequest;
 import subport.application.subscription.port.in.UpdateCustomSubscriptionUseCase;
+import subport.application.subscription.port.in.dto.UpdateCustomSubscriptionRequest;
 import subport.application.subscription.port.out.LoadSubscriptionPort;
 import subport.application.subscription.port.out.UpdateSubscriptionPort;
 import subport.application.subscription.port.out.UploadSubscriptionImagePort;
@@ -31,7 +31,7 @@ public class UpdateCustomSubscriptionService implements UpdateCustomSubscription
 		UpdateCustomSubscriptionRequest request,
 		MultipartFile image
 	) {
-		Subscription subscription = loadSubscriptionPort.load(subscriptionId);
+		Subscription subscription = loadSubscriptionPort.loadSubscription(subscriptionId);
 
 		if (subscription.isSystemProvided()) {
 			throw new CustomException(ErrorCode.SYSTEM_SUBSCRIPTION_WRITE_FORBIDDEN);

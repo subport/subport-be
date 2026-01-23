@@ -23,7 +23,7 @@ public class DeleteCustomSubscriptionService implements DeleteCustomSubscription
 	@Transactional
 	@Override
 	public void delete(Long memberId, Long subscriptionId) {
-		Subscription subscription = loadSubscriptionPort.load(subscriptionId);
+		Subscription subscription = loadSubscriptionPort.loadSubscription(subscriptionId);
 
 		if (subscription.isSystemProvided()) {
 			throw new CustomException(ErrorCode.SYSTEM_SUBSCRIPTION_WRITE_FORBIDDEN);
