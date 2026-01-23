@@ -43,7 +43,7 @@ public class SubscriptionPersistenceAdapter implements
 	}
 
 	@Override
-	public Subscription load(Long subscriptionId) {
+	public Subscription loadSubscription(Long subscriptionId) {
 		SubscriptionJpaEntity subscriptionEntity = subscriptionRepository.findById(subscriptionId)
 			.orElseThrow(() -> new CustomException(ErrorCode.SUBSCRIPTION_NOT_FOUND));
 
@@ -51,8 +51,8 @@ public class SubscriptionPersistenceAdapter implements
 	}
 
 	@Override
-	public List<Subscription> loadByMemberId(Long memberId) {
-		return subscriptionRepository.findByMemberIdOrSystemProvidedOrderByNameAsc(memberId, true).stream()
+	public List<Subscription> searchSubscriptions(Long memberId, String name) {
+		return subscriptionRepository.findByMemberIdAndNameContaining(memberId, name).stream()
 			.map(subscriptionMapper::toDomain)
 			.toList();
 	}

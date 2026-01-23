@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,18 +21,18 @@ import subport.adapter.in.security.oauth2.CustomOAuth2User;
 import subport.application.subscription.port.in.DeleteCustomSubscriptionUseCase;
 import subport.application.subscription.port.in.ListSubscriptionTypesUseCase;
 import subport.application.subscription.port.in.ReadPlanUseCase;
-import subport.application.subscription.port.in.ReadSubscriptionUseCase;
-import subport.application.subscription.port.in.dto.RegisterCustomPlanRequest;
 import subport.application.subscription.port.in.RegisterCustomPlanUseCase;
-import subport.application.subscription.port.in.dto.RegisterCustomSubscriptionRequest;
 import subport.application.subscription.port.in.RegisterCustomSubscriptionUseCase;
-import subport.application.subscription.port.in.dto.UpdateCustomSubscriptionRequest;
+import subport.application.subscription.port.in.SubscriptionQueryUseCase;
 import subport.application.subscription.port.in.UpdateCustomSubscriptionUseCase;
 import subport.application.subscription.port.in.dto.ListPlansResponse;
 import subport.application.subscription.port.in.dto.ListSubscriptionsResponse;
 import subport.application.subscription.port.in.dto.ReadSubscriptionResponse;
+import subport.application.subscription.port.in.dto.RegisterCustomPlanRequest;
 import subport.application.subscription.port.in.dto.RegisterCustomPlanResponse;
+import subport.application.subscription.port.in.dto.RegisterCustomSubscriptionRequest;
 import subport.application.subscription.port.in.dto.RegisterCustomSubscriptionResponse;
+import subport.application.subscription.port.in.dto.UpdateCustomSubscriptionRequest;
 
 @RestController
 @RequestMapping("/api/subscriptions")
@@ -41,7 +42,7 @@ public class SubscriptionController {
 	private final RegisterCustomSubscriptionUseCase registerCustomSubscriptionUseCase;
 	private final UpdateCustomSubscriptionUseCase updateCustomSubscriptionUseCase;
 	private final DeleteCustomSubscriptionUseCase deleteCustomSubscriptionUseCase;
-	private final ReadSubscriptionUseCase readSubscriptionUseCase;
+	private final SubscriptionQueryUseCase subscriptionQueryUseCase;
 
 	private final RegisterCustomPlanUseCase registerCustomPlanUseCase;
 	private final ReadPlanUseCase readPlanUseCase;
@@ -93,20 +94,22 @@ public class SubscriptionController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ReadSubscriptionResponse> readSubscription(
+	public ResponseEntity<ReadSubscriptionResponse> getSubscription(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
 		@PathVariable("id") Long subscriptionId
 	) {
-		return ResponseEntity.ok(readSubscriptionUseCase.read(
+		return ResponseEntity.ok(subscriptionQueryUseCase.getSubscription(
 			oAuth2User.getMemberId(),
 			subscriptionId));
 	}
 
 	@GetMapping
-	public ResponseEntity<ListSubscriptionsResponse> listSubscriptions(
-		@AuthenticationPrincipal CustomOAuth2User oAuth2User
+	public ResponseEntity<ListSubscriptionsResponse> searchSubscriptions(
+		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
+		@RequestParam(required = false) String name
 	) {
-		return ResponseEntity.ok(readSubscriptionUseCase.list(oAuth2User.getMemberId()));
+		return ResponseEntity.ok(subscriptionQueryUseCase.searchSubscriptions(
+			oAuth2User.getMemberId(), name));
 	}
 
 	@PostMapping("/{id}/plans")

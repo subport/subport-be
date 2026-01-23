@@ -3,9 +3,9 @@ package subport.application.subscription.port.in;
 import subport.application.subscription.port.in.dto.ListSubscriptionsResponse;
 import subport.application.subscription.port.in.dto.ReadSubscriptionResponse;
 
-public interface ReadSubscriptionUseCase {
+public interface SubscriptionQueryUseCase {
 
-	ReadSubscriptionResponse read(Long memberId, Long subscriptionId);
+	ReadSubscriptionResponse getSubscription(Long memberId, Long subscriptionId);
 
-	ListSubscriptionsResponse list(Long memberId);
+	ListSubscriptionsResponse searchSubscriptions(Long memberId, String name);
 }

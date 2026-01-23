@@ -6,32 +6,32 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
-import subport.application.subscription.port.in.ReadSubscriptionUseCase;
+import subport.application.subscription.port.in.SubscriptionQueryUseCase;
 import subport.application.subscription.port.in.dto.ListSubscriptionsResponse;
-import subport.application.subscription.port.out.LoadSubscriptionPort;
 import subport.application.subscription.port.in.dto.ReadSubscriptionResponse;
+import subport.application.subscription.port.out.LoadSubscriptionPort;
 import subport.domain.subscription.Subscription;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class ReadSubscriptionService implements ReadSubscriptionUseCase {
+public class SubscriptionQueryService implements SubscriptionQueryUseCase {
 
 	private final LoadSubscriptionPort loadSubscriptionPort;
 
 	@Override
-	public ReadSubscriptionResponse read(Long memberId, Long subscriptionId) {
-		Subscription subscription = loadSubscriptionPort.load(subscriptionId);
+	public ReadSubscriptionResponse getSubscription(Long memberId, Long subscriptionId) {
+		Subscription subscription = loadSubscriptionPort.loadSubscription(subscriptionId);
 
 		if (!subscription.isSystemProvided() && !subscription.getMemberId().equals(memberId)) {
-			throw new CustomException(ErrorCode.SUBSCRIPTION_READ_FORBIDDEN); // 시스템 제공이 아닌 구독 서비스는 본인이 생성한 것만 조회 가능
+			throw new CustomException(ErrorCode.SUBSCRIPTION_READ_FORBIDDEN);
 		}
 
 		return ReadSubscriptionResponse.fromDomain(subscription);
 	}
 
 	@Override
-	public ListSubscriptionsResponse list(Long memberId) {
-		return ListSubscriptionsResponse.fromDomains(loadSubscriptionPort.loadByMemberId(memberId));
+	public ListSubscriptionsResponse searchSubscriptions(Long memberId, String name) {
+		return ListSubscriptionsResponse.fromDomains(loadSubscriptionPort.searchSubscriptions(memberId, name));
 	}
 }

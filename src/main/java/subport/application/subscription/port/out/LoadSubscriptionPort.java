@@ -6,7 +6,7 @@ import subport.domain.subscription.Subscription;
 
 public interface LoadSubscriptionPort {
 
-	Subscription load(Long subscriptionId);
+	Subscription loadSubscription(Long subscriptionId);
 
-	List<Subscription> loadByMemberId(Long memberId);
+	List<Subscription> searchSubscriptions(Long memberId, String name);
 }
