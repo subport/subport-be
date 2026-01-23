@@ -1,4 +1,9 @@
 package subport.application.membersubscription.port.in.dto;
 
-public record ListMemberSubscriptionsResponse(Object subscriptions) {
+import java.math.BigDecimal;
+
+public record ListMemberSubscriptionsResponse(
+	BigDecimal totalAmount,
+	Object subscriptions
+) {
 }

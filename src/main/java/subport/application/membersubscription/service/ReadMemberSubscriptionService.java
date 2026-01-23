@@ -1,9 +1,10 @@
 package subport.application.membersubscription.service;
 
+import static java.time.temporal.ChronoUnit.*;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -45,8 +46,8 @@ public class ReadMemberSubscriptionService implements ReadMemberSubscriptionUseC
 		LocalDate lastPaymentDate = memberSubscriptionDetail.lastPaymentDate();
 
 		LocalDate now = LocalDate.now();
-		long elapsedDays = ChronoUnit.DAYS.between(lastPaymentDate, now);
-		long totalDays = ChronoUnit.DAYS.between(lastPaymentDate, nextPaymentDate);
+		long elapsedDays = DAYS.between(lastPaymentDate, now);
+		long totalDays = DAYS.between(lastPaymentDate, nextPaymentDate);
 		int paymentProgressPercent = (int)((double)elapsedDays / totalDays * 100);
 
 		BigDecimal actualPaymentAmount = calculateActualPaymentAmount(memberSubscriptionDetail);
@@ -78,18 +79,33 @@ public class ReadMemberSubscriptionService implements ReadMemberSubscriptionUseC
 			sortBy
 		);
 
-		LocalDate now = LocalDate.now();
+		List<ComputedMemberSubscription> computed = memberSubscriptionDetails.stream()
+			.map(ms -> {
+				BigDecimal actualPaymentAmount = calculateActualPaymentAmount(ms);
+				return new ComputedMemberSubscription(
+					ms,
+					actualPaymentAmount,
+					DAYS.between(LocalDate.now(), ms.nextPaymentDate())
+				);
+			})
+			.toList();
+
+		BigDecimal totalAmount = computed.stream()
+			.map(ComputedMemberSubscription::actualPaymentAmount)
+			.reduce(BigDecimal.ZERO, BigDecimal::add)
+			.setScale(0, RoundingMode.HALF_UP);
 
 		if (active & sortBy.equals("type")) {
 			return new ListMemberSubscriptionsResponse(
-				memberSubscriptionDetails.stream()
+				totalAmount,
+				computed.stream()
 					.collect(Collectors.groupingBy(
-						ms -> ms.subscriptionType().getDisplayName(),
+						c -> c.detail.subscriptionType().getDisplayName(),
 						TreeMap::new,
-						Collectors.mapping(ms -> MemberSubscriptionSummary.from(
-								ms,
-								calculateActualPaymentAmount(ms),
-								ChronoUnit.DAYS.between(now, ms.nextPaymentDate())
+						Collectors.mapping(c -> MemberSubscriptionSummary.from(
+								c.detail,
+								c.actualPaymentAmount,
+								c.daysUntilPayment
 							),
 							Collectors.toList()
 						)
@@ -98,11 +114,12 @@ public class ReadMemberSubscriptionService implements ReadMemberSubscriptionUseC
 		}
 
 		return new ListMemberSubscriptionsResponse(
-			memberSubscriptionDetails.stream()
-				.map(ms -> MemberSubscriptionSummary.from(
-					ms,
-					calculateActualPaymentAmount(ms),
-					ChronoUnit.DAYS.between(now, ms.nextPaymentDate())
+			totalAmount,
+			computed.stream()
+				.map(c -> MemberSubscriptionSummary.from(
+					c.detail,
+					c.actualPaymentAmount,
+					c.daysUntilPayment
 				))
 				.toList()
 		);
@@ -122,5 +139,12 @@ public class ReadMemberSubscriptionService implements ReadMemberSubscriptionUseC
 		}
 
 		return planAmount;
+	}
+
+	private record ComputedMemberSubscription(
+		MemberSubscriptionDetail detail,
+		BigDecimal actualPaymentAmount,
+		long daysUntilPayment
+	) {
 	}
 }
