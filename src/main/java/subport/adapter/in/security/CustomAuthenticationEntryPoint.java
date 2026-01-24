@@ -13,9 +13,9 @@ import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import subport.adapter.in.web.exception.ErrorResponse;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
-import subport.application.exception.ErrorResponse;
 
 @Component
 @RequiredArgsConstructor
@@ -51,7 +51,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 		response.setStatus(errorCode.getHttpStatus().value());
 		response.setContentType("application/json;charset=UTF-8");
 
-		ErrorResponse errorResponse = ErrorResponse.from(errorCode);
+		ErrorResponse errorResponse = ErrorResponse.of(errorCode);
 		response.getWriter().print(objectMapper.writeValueAsString(errorResponse));
 	}
 }

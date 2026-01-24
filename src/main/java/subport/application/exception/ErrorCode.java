@@ -17,6 +17,14 @@ public enum ErrorCode {
 	REFRESH_TOKEN_NOT_NULL(HttpStatus.UNAUTHORIZED, "Refresh 토큰 값은 필수입니다."),
 	INVALID_TOKEN_FORMAT(HttpStatus.UNAUTHORIZED, "토큰 형식이 올바르지 않습니다."),
 
+	// 요청 데이터 검증 관련
+	INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "입력값이 올바르지 않습니다."),
+	INVALID_REQUEST_BODY(HttpStatus.BAD_REQUEST, "요청 본문을 읽을 수 없습니다."),
+	METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "잘못된 HTTP 메서드입니다."),
+
+	// 서버 에러
+	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "예상치 못한 문제가 발생했습니다."),
+
 	// 회원 관련
 	MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
 
@@ -46,10 +54,7 @@ public enum ErrorCode {
 	SYSTEM_PLAN_WRITE_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공 플랜은 수정 및 삭제가 불가능합니다."),
 	PLAN_WRITE_FORBIDDEN(HttpStatus.FORBIDDEN, "본인이 등록한 플랜이 아니면 수정 및 삭제가 불가능합니다."),
 	PLAN_READ_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공이 아니면 본인이 등록한 플랜만 조회가 가능합니다."),
-	PLAN_USE_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공 플랜이거나 본인이 등록한 플랜만 사용이 가능합니다."),
-
-	// 환율 정보 관련
-	USD_EXCHANGE_RATE_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR, "USD 환율 정보가 없습니다.");
+	PLAN_USE_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공 플랜이거나 본인이 등록한 플랜만 사용이 가능합니다.");
 
 	private final HttpStatus httpStatus;
 	private final String message;
