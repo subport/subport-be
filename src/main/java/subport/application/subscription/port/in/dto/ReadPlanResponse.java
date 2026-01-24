@@ -10,7 +10,8 @@ public record ReadPlanResponse(
 	String name,
 	BigDecimal amount,
 	String amountUnit,
-	int durationMonths
+	int durationMonths,
+	boolean defaultProvided
 ) {
 
 	public static ReadPlanResponse fromDomain(Plan plan) {
@@ -19,7 +20,8 @@ public record ReadPlanResponse(
 			plan.getName(),
 			plan.getAmount().setScale(0, RoundingMode.HALF_UP),
 			plan.getAmountUnit().name(),
-			plan.getDurationMonths()
+			plan.getDurationMonths(),
+			plan.isSystemProvided()
 		);
 	}
 }

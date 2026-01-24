@@ -5,14 +5,16 @@ import subport.domain.subscription.Subscription;
 public record SubscriptionSummary(
 	Long id,
 	String name,
-	String logoImageUrl
+	String logoImageUrl,
+	boolean defaultProvided
 ) {
 
 	public static SubscriptionSummary fromDomain(Subscription subscription) {
 		return new SubscriptionSummary(
 			subscription.getId(),
 			subscription.getName(),
-			subscription.getLogoImageUrl()
+			subscription.getLogoImageUrl(),
+			subscription.isSystemProvided()
 		);
 	}
 }
