@@ -10,13 +10,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import subport.adapter.in.security.oauth2.CustomOAuth2User;
 import subport.application.subscription.port.in.DeleteCustomPlanUseCase;
 import subport.application.subscription.port.in.ReadPlanUseCase;
-import subport.application.subscription.port.in.dto.UpdateCustomPlanRequest;
 import subport.application.subscription.port.in.UpdateCustomPlanUseCase;
 import subport.application.subscription.port.in.dto.ReadPlanResponse;
+import subport.application.subscription.port.in.dto.UpdateCustomPlanRequest;
 
 @RestController
 @RequestMapping("/api/plans")
@@ -39,7 +40,7 @@ public class PlanController {
 	@PutMapping("/{id}")
 	public ResponseEntity<Void> updateCustomPlan(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
-		@RequestBody UpdateCustomPlanRequest request,
+		@Valid @RequestBody UpdateCustomPlanRequest request,
 		@PathVariable("id") Long planId
 	) {
 		updateCustomPlanUseCase.update(

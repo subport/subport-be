@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import subport.adapter.in.security.oauth2.CustomOAuth2User;
 import subport.application.subscription.port.in.DeleteCustomSubscriptionUseCase;
@@ -52,7 +53,7 @@ public class SubscriptionController {
 	@PostMapping
 	public ResponseEntity<RegisterCustomSubscriptionResponse> registerCustomSubscription(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
-		@RequestPart RegisterCustomSubscriptionRequest request,
+		@Valid @RequestPart RegisterCustomSubscriptionRequest request,
 		@RequestPart(required = false) MultipartFile image
 	) {
 		return ResponseEntity.ok(registerCustomSubscriptionUseCase.register(
@@ -65,7 +66,7 @@ public class SubscriptionController {
 	public ResponseEntity<Void> updateCustomSubscription(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
 		@PathVariable("id") Long subscriptionId,
-		@RequestPart UpdateCustomSubscriptionRequest request,
+		@Valid @RequestPart UpdateCustomSubscriptionRequest request,
 		@RequestPart(required = false) MultipartFile image
 	) {
 		updateCustomSubscriptionUseCase.update(
@@ -115,7 +116,7 @@ public class SubscriptionController {
 	@PostMapping("/{id}/plans")
 	public ResponseEntity<RegisterCustomPlanResponse> registerCustomPlan(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
-		@RequestBody RegisterCustomPlanRequest request,
+		@Valid @RequestBody RegisterCustomPlanRequest request,
 		@PathVariable("id") Long subscriptionId
 	) {
 		return ResponseEntity.ok(registerCustomPlanUseCase.register(

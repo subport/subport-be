@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import subport.adapter.in.security.oauth2.CustomOAuth2User;
 import subport.application.member.port.in.ReadMemberUseCase;
@@ -26,7 +27,7 @@ public class MemberController {
 	@PutMapping("/me")
 	public ResponseEntity<Void> updateMember(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
-		@RequestBody UpdateMemberRequest request
+		@Valid @RequestBody UpdateMemberRequest request
 	) {
 		updateMemberUseCase.update(oAuth2User.getMemberId(), request);
 

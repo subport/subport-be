@@ -1,4 +1,9 @@
 package subport.application.membersubscription.port.in.dto;
 
-public record UpdateMemberSubscriptionPlanRequest(Long planId) {
+import jakarta.validation.constraints.NotNull;
+
+public record UpdateMemberSubscriptionPlanRequest(
+	@NotNull
+	Long planId
+) {
 }

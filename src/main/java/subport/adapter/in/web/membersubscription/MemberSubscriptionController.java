@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import subport.adapter.in.security.oauth2.CustomOAuth2User;
 import subport.application.membersubscription.port.in.DeactivateMemberSubscriptionUseCase;
@@ -48,7 +49,7 @@ public class MemberSubscriptionController {
 	@PostMapping
 	public ResponseEntity<RegisterMemberSubscriptionResponse> registerMemberSubscription(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
-		@RequestBody RegisterMemberSubscriptionRequest request
+		@Valid @RequestBody RegisterMemberSubscriptionRequest request
 	) {
 		return ResponseEntity.ok(registerMemberSubscriptionUseCase.register(
 			oAuth2User.getMemberId(),
@@ -58,7 +59,7 @@ public class MemberSubscriptionController {
 	@PutMapping("/{id}/plan")
 	public ResponseEntity<Void> updateMemberSubscriptionPlan(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
-		@RequestBody UpdateMemberSubscriptionPlanRequest request,
+		@Valid @RequestBody UpdateMemberSubscriptionPlanRequest request,
 		@PathVariable("id") Long memberSubscriptionId
 	) {
 		updateMemberSubscriptionPlanUseCase.updatePlan(
@@ -106,7 +107,7 @@ public class MemberSubscriptionController {
 	@PutMapping("/{id}/memo")
 	public ResponseEntity<Void> updateMemberSubscriptionMemo(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
-		@RequestBody UpdateMemberSubscriptionMemoRequest request,
+		@Valid @RequestBody UpdateMemberSubscriptionMemoRequest request,
 		@PathVariable("id") Long memberSubscriptionId
 	) {
 		updateMemberSubscriptionMemoUseCase.updateMemo(
@@ -153,7 +154,7 @@ public class MemberSubscriptionController {
 	@GetMapping
 	public ResponseEntity<ListMemberSubscriptionsResponse> listMemberSubscriptions(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
-		ListMemberSubscriptionsRequest request
+		@Valid ListMemberSubscriptionsRequest request
 	) {
 		return ResponseEntity.ok(readMemberSubscriptionUseCase.list(
 			oAuth2User.getMemberId(), request));
