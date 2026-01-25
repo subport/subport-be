@@ -34,6 +34,8 @@ public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 
 	private Integer reminderDaysBefore;
 
+	private LocalDate reminderDate;
+
 	private String memo;
 
 	private boolean dutchPay;
@@ -65,6 +67,7 @@ public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 	public MemberSubscriptionJpaEntity(
 		LocalDate startDate,
 		Integer reminderDaysBefore,
+		LocalDate reminderDate,
 		String memo,
 		boolean dutchPay,
 		BigDecimal dutchPayAmount,
@@ -79,6 +82,7 @@ public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 	) {
 		this.startDate = startDate;
 		this.reminderDaysBefore = reminderDaysBefore;
+		this.reminderDate = reminderDate;
 		this.memo = memo;
 		this.dutchPay = dutchPay;
 		this.dutchPayAmount = dutchPayAmount;
@@ -94,6 +98,7 @@ public class MemberSubscriptionJpaEntity extends BaseTimeEntity {
 
 	public void apply(MemberSubscription memberSubscription) {
 		this.reminderDaysBefore = memberSubscription.getReminderDaysBefore();
+		this.reminderDate = memberSubscription.getReminderDate();
 		this.memo = memberSubscription.getMemo();
 		this.dutchPay = memberSubscription.isDutchPay();
 		this.dutchPayAmount = memberSubscription.getDutchPayAmount();

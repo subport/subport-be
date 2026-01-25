@@ -14,6 +14,8 @@ public class MemberSubscription {
 
 	private Integer reminderDaysBefore;
 
+	private LocalDate reminderDate;
+
 	private String memo;
 
 	private boolean dutchPay;
@@ -55,6 +57,7 @@ public class MemberSubscription {
 		this.id = id;
 		this.startDate = startDate;
 		this.reminderDaysBefore = reminderDaysBefore;
+		this.reminderDate = nextPaymentDate.minusDays(reminderDaysBefore);
 		this.memo = memo;
 		this.dutchPay = dutchPay;
 		this.dutchPayAmount = dutchPayAmount;
@@ -160,7 +163,7 @@ public class MemberSubscription {
 	public void updateLastPaymentDate(LocalDate lastPaymentDate) {
 		this.lastPaymentDate = lastPaymentDate;
 	}
-	
+
 	public void updateNextPaymentDate(LocalDate nextPaymentDate) {
 		this.nextPaymentDate = nextPaymentDate;
 	}

@@ -19,6 +19,7 @@ public class MemberSubscriptionMapper {
 		return new MemberSubscriptionJpaEntity(
 			memberSubscription.getStartDate(),
 			memberSubscription.getReminderDaysBefore(),
+			memberSubscription.getReminderDate(),
 			memberSubscription.getMemo(),
 			memberSubscription.isDutchPay(),
 			memberSubscription.getDutchPayAmount(),
