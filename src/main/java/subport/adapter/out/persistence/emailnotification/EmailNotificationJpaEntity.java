@@ -28,7 +28,7 @@ public class EmailNotificationJpaEntity extends BaseTimeEntity {
 
 	private LocalDate paymentDate;
 
-	private int daysBeforePayment;
+	private Integer daysBeforePayment;
 
 	private Long memberId;
 
@@ -48,7 +48,7 @@ public class EmailNotificationJpaEntity extends BaseTimeEntity {
 	public EmailNotificationJpaEntity(
 		Long memberSubscriptionId,
 		LocalDate paymentDate,
-		int daysBeforePayment,
+		Integer daysBeforePayment,
 		Long memberId,
 		String recipientEmail,
 		String subscriptionName,

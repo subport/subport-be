@@ -14,7 +14,7 @@ public class EmailNotification {
 
 	private final LocalDate paymentDate;
 
-	private final int daysBeforePayment;
+	private final Integer daysBeforePayment;
 
 	private final Long memberId;
 
@@ -34,7 +34,7 @@ public class EmailNotification {
 		Long id,
 		Long memberSubscriptionId,
 		LocalDate paymentDate,
-		int daysBeforePayment,
+		Integer daysBeforePayment,
 		Long memberId,
 		String recipientEmail,
 		String subscriptionName,
@@ -60,7 +60,7 @@ public class EmailNotification {
 		Long id,
 		Long memberSubscriptionId,
 		LocalDate paymentDate,
-		int daysBeforePayment,
+		Integer daysBeforePayment,
 		Long memberId,
 		String recipientEmail,
 		String subscriptionName,
@@ -87,7 +87,7 @@ public class EmailNotification {
 	public static EmailNotification withoutId(
 		Long memberSubscriptionId,
 		LocalDate paymentDate,
-		int daysBeforePayment,
+		Integer daysBeforePayment,
 		Long memberId,
 		String recipientEmail,
 		String subscriptionName,

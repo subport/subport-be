@@ -42,4 +42,10 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 		boolean active,
 		Sort sort
 	);
+
+	@EntityGraph(attributePaths = {
+		"member",
+		"subscription"
+	})
+	List<MemberSubscriptionJpaEntity> findByReminderDateAndActiveTrue(LocalDate reminderDate);
 }

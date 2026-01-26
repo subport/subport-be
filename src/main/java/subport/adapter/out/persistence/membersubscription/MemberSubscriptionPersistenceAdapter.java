@@ -23,6 +23,7 @@ import subport.application.membersubscription.port.out.LoadMemberSubscriptionPor
 import subport.application.membersubscription.port.out.SaveMemberSubscriptionPort;
 import subport.application.membersubscription.port.out.UpdateMemberSubscriptionPort;
 import subport.application.membersubscription.port.out.dto.MemberSubscriptionDetail;
+import subport.application.membersubscription.port.out.dto.MemberSubscriptionForMail;
 import subport.application.membersubscription.port.out.dto.MemberSubscriptionForSpendingRecord;
 import subport.domain.membersubscription.MemberSubscription;
 
@@ -163,6 +164,25 @@ public class MemberSubscriptionPersistenceAdapter implements
 					plan.getDurationMonths(),
 					subscription.getName(),
 					subscription.getLogoImageUrl());
+			})
+			.toList();
+	}
+
+	@Override
+	public List<MemberSubscriptionForMail> loadForEmail(LocalDate currentDate) {
+		return memberSubscriptionRepository.findByReminderDateAndActiveTrue(currentDate).stream()
+			.map(memberSubscription -> {
+				MemberJpaEntity member = memberSubscription.getMember();
+				SubscriptionJpaEntity subscription = memberSubscription.getSubscription();
+				return new MemberSubscriptionForMail(
+					memberSubscription.getId(),
+					memberSubscription.getNextPaymentDate(),
+					memberSubscription.getReminderDaysBefore(),
+					member.getId(),
+					member.getEmail(),
+					subscription.getName(),
+					subscription.getLogoImageUrl()
+				);
 			})
 			.toList();
 	}
