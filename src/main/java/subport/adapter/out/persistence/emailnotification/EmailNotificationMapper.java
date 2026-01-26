@@ -21,4 +21,20 @@ public class EmailNotificationMapper {
 			emailNotification.getRetryCount()
 		);
 	}
+
+	public EmailNotification toDomain(EmailNotificationJpaEntity emailNotificationEntity) {
+		return EmailNotification.withId(
+			emailNotificationEntity.getId(),
+			emailNotificationEntity.getMemberSubscriptionId(),
+			emailNotificationEntity.getPaymentDate(),
+			emailNotificationEntity.getDaysBeforePayment(),
+			emailNotificationEntity.getMemberId(),
+			emailNotificationEntity.getRecipientEmail(),
+			emailNotificationEntity.getSubscriptionName(),
+			emailNotificationEntity.getSubscriptionLogoImageUrl(),
+			emailNotificationEntity.getStatus(),
+			emailNotificationEntity.getSentAt(),
+			emailNotificationEntity.getRetryCount()
+		);
+	}
 }

@@ -11,13 +11,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import subport.adapter.out.persistence.BaseTimeEntity;
+import subport.domain.emailnotification.EmailNotification;
 import subport.domain.emailnotification.SendingStatus;
 
 @Entity
 @Table(name = "email_notification")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class EmailNotificationJpaEntity extends BaseTimeEntity {
 
 	@Id
@@ -67,5 +70,10 @@ public class EmailNotificationJpaEntity extends BaseTimeEntity {
 		this.status = status;
 		this.sentAt = sentAt;
 		this.retryCount = retryCount;
+	}
+
+	public void apply(EmailNotification emailNotification) {
+		this.status = emailNotification.getStatus();
+		this.sentAt = emailNotification.getSentAt();
 	}
 }

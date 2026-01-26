@@ -24,9 +24,9 @@ public class EmailNotification {
 
 	private final String subscriptionLogoImageUrl;
 
-	private final SendingStatus status;
+	private SendingStatus status;
 
-	private final LocalDateTime sentAt;
+	private LocalDateTime sentAt;
 
 	private final int retryCount;
 
@@ -109,5 +109,17 @@ public class EmailNotification {
 			sentAt,
 			retryCount
 		);
+	}
+
+	public void markSent() {
+		this.status = SendingStatus.SENT;
+	}
+
+	public void markFailed() {
+		this.status = SendingStatus.FAILED;
+	}
+
+	public void updateSentAt(LocalDateTime sentAt) {
+		this.sentAt = sentAt;
 	}
 }
