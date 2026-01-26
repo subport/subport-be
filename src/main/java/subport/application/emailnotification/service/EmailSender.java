@@ -22,7 +22,7 @@ public class EmailSender {
 	private final EmailResultHandler emailResultHandler;
 
 	@Async
-	public void sendAsync(EmailNotification emailNotification) {
+	public void sendAsync(EmailNotification emailNotification, boolean isRetry) {
 		try {
 			MimeMessage message = mailSender.createMimeMessage();
 			MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -40,14 +40,18 @@ public class EmailSender {
 				""", true);
 
 			mailSender.send(message);
-			emailResultHandler.success(emailNotification, LocalDateTime.now());
+			emailResultHandler.success(
+				emailNotification,
+				LocalDateTime.now(),
+				isRetry
+			);
 		} catch (MessagingException e) {
 			log.warn(
 				"Send email failed for memberSubscriptionId {}: {}",
 				emailNotification.getMemberSubscriptionId(),
 				e.getMessage()
 			);
-			emailResultHandler.fail(emailNotification);
+			emailResultHandler.fail(emailNotification, isRetry);
 		}
 	}
 }

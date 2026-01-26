@@ -6,25 +6,29 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import subport.application.emailnotification.port.in.SendEmailNotificationsUseCase;
+import subport.application.emailnotification.port.in.RetryFailedEmailNotificationsUseCase;
 import subport.application.emailnotification.port.out.LoadEmailNotificationPort;
 import subport.domain.emailnotification.EmailNotification;
 import subport.domain.emailnotification.SendingStatus;
 
 @Service
 @RequiredArgsConstructor
-public class SendEmailNotificationsService implements SendEmailNotificationsUseCase {
+public class RetryFailedEmailNotificationsService implements RetryFailedEmailNotificationsUseCase {
 
 	private final EmailSender emailSender;
 	private final LoadEmailNotificationPort loadEmailNotificationPort;
 
 	@Override
-	public void send(LocalDate currentDate) {
+	public void retry(LocalDate currentDate) {
 		List<EmailNotification> emailNotifications =
-			loadEmailNotificationPort.loadEmailNotifications(currentDate, SendingStatus.PENDING);
+			loadEmailNotificationPort.loadEmailNotifications(currentDate, SendingStatus.FAILED);
+
+		if (emailNotifications.isEmpty()) {
+			return;
+		}
 
 		for (EmailNotification emailNotification : emailNotifications) {
-			emailSender.sendAsync(emailNotification, false);
+			emailSender.sendAsync(emailNotification, true);
 		}
 	}
 }

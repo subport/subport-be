@@ -18,17 +18,31 @@ public class EmailResultHandler {
 	private final LoadEmailNotificationPort loadEmailNotificationPort;
 	private final UpdateEmailNotificationPort updateEmailNotificationPort;
 
-	public void success(EmailNotification notification, LocalDateTime currentDateTime) {
+	public void success(
+		EmailNotification notification,
+		LocalDateTime currentDateTime,
+		boolean isRetry
+	) {
 		EmailNotification emailNotification = loadEmailNotificationPort.loadEmailNotification(notification.getId());
+
+		if (isRetry) {
+			emailNotification.increaseRetryCount();
+		}
 		emailNotification.markSent();
 		emailNotification.updateSentAt(currentDateTime);
 
 		updateEmailNotificationPort.update(emailNotification);
 	}
 
-	public void fail(EmailNotification notification) {
+	public void fail(EmailNotification notification, boolean isRetry) {
 		EmailNotification emailNotification = loadEmailNotificationPort.loadEmailNotification(notification.getId());
-		emailNotification.markFailed();
+
+		if (isRetry) {
+			emailNotification.increaseRetryCount();
+		}
+		if (!isRetry) {
+			emailNotification.markFailed();
+		}
 
 		updateEmailNotificationPort.update(emailNotification);
 	}

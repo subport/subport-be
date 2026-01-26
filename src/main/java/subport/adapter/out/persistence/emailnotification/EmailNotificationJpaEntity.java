@@ -75,5 +75,6 @@ public class EmailNotificationJpaEntity extends BaseTimeEntity {
 	public void apply(EmailNotification emailNotification) {
 		this.status = emailNotification.getStatus();
 		this.sentAt = emailNotification.getSentAt();
+		this.retryCount = emailNotification.getRetryCount();
 	}
 }

@@ -28,7 +28,7 @@ public class EmailNotification {
 
 	private LocalDateTime sentAt;
 
-	private final int retryCount;
+	private int retryCount;
 
 	public EmailNotification(
 		Long id,
@@ -121,5 +121,9 @@ public class EmailNotification {
 
 	public void updateSentAt(LocalDateTime sentAt) {
 		this.sentAt = sentAt;
+	}
+
+	public void increaseRetryCount() {
+		this.retryCount++;
 	}
 }
