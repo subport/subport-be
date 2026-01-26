@@ -8,14 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import subport.adapter.in.web.AuthCookieProvider;
 import subport.application.token.port.in.LogoutUseCase;
 import subport.application.token.port.in.ReissueTokenUseCase;
-import subport.application.token.port.in.dto.TokenPair;
 import subport.application.token.port.in.dto.ReissueTokenResponse;
+import subport.application.token.port.in.dto.TokenPair;
 
-@Slf4j
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
