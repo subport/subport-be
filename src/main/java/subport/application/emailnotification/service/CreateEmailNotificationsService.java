@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import subport.application.emailnotification.port.in.CreateEmailNotificationUseCase;
+import subport.application.emailnotification.port.in.CreateEmailNotificationsUseCase;
 import subport.application.emailnotification.port.out.SaveEmailNotificationsPort;
 import subport.application.membersubscription.port.out.LoadMemberSubscriptionPort;
 import subport.domain.emailnotification.EmailNotification;
@@ -14,7 +14,7 @@ import subport.domain.emailnotification.SendingStatus;
 
 @Service
 @RequiredArgsConstructor
-public class CreateEmailNotificationService implements CreateEmailNotificationUseCase {
+public class CreateEmailNotificationsService implements CreateEmailNotificationsUseCase {
 
 	private final LoadMemberSubscriptionPort loadMemberSubscriptionPort;
 	private final SaveEmailNotificationsPort saveEmailNotificationsPort;
