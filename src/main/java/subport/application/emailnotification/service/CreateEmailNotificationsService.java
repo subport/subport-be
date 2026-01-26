@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import subport.application.emailnotification.port.in.CreateEmailNotificationsUseCase;
@@ -13,6 +14,7 @@ import subport.domain.emailnotification.EmailNotification;
 import subport.domain.emailnotification.SendingStatus;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CreateEmailNotificationsService implements CreateEmailNotificationsUseCase {
 
