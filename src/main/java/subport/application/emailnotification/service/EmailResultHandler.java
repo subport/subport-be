@@ -18,7 +18,7 @@ public class EmailResultHandler {
 	private final LoadEmailNotificationPort loadEmailNotificationPort;
 	private final UpdateEmailNotificationPort updateEmailNotificationPort;
 
-	public void success(
+	public void handleSuccess(
 		EmailNotification notification,
 		LocalDateTime currentDateTime,
 		boolean isRetry
@@ -34,7 +34,7 @@ public class EmailResultHandler {
 		updateEmailNotificationPort.update(emailNotification);
 	}
 
-	public void fail(EmailNotification notification, boolean isRetry) {
+	public void handleFailure(EmailNotification notification, boolean isRetry) {
 		EmailNotification emailNotification = loadEmailNotificationPort.loadEmailNotification(notification.getId());
 
 		if (isRetry) {

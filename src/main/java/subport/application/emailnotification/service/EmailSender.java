@@ -40,7 +40,7 @@ public class EmailSender {
 				""", true);
 
 			mailSender.send(message);
-			emailResultHandler.success(
+			emailResultHandler.handleSuccess(
 				emailNotification,
 				LocalDateTime.now(),
 				isRetry
@@ -51,7 +51,7 @@ public class EmailSender {
 				emailNotification.getMemberSubscriptionId(),
 				e.getMessage()
 			);
-			emailResultHandler.fail(emailNotification, isRetry);
+			emailResultHandler.handleFailure(emailNotification, isRetry);
 		}
 	}
 }
