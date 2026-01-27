@@ -20,6 +20,6 @@ public class GetMemberService implements GetMemberUseCase {
 	public GetMemberResponse get(Long memberId) {
 		Member member = loadMemberPort.load(memberId);
 
-		return GetMemberResponse.fromMember(member);
+		return GetMemberResponse.from(member);
 	}
 }

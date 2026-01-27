@@ -8,7 +8,7 @@ public record GetMemberResponse(
 	String email
 ) {
 
-	public static GetMemberResponse fromMember(Member member) {
+	public static GetMemberResponse from(Member member) {
 		return new GetMemberResponse(
 			member.getId(),
 			member.getNickname(),
