@@ -52,10 +52,8 @@ public class ReadMemberSubscriptionService implements ReadMemberSubscriptionUseC
 
 		BigDecimal actualPaymentAmount = calculateActualPaymentAmount(memberSubscriptionDetail);
 
-		List<SpendingRecordSummary> spendingRecords = loadSpendingRecordPort.loadRecent3ByMemberIdAndSubscriptionName(
-				memberId,
-				memberSubscriptionDetail.subscriptionName()
-			).stream()
+		List<SpendingRecordSummary> spendingRecords = loadSpendingRecordPort.loadSpendingRecords(memberSubscriptionId)
+			.stream()
 			.map(SpendingRecordSummary::fromDomain)
 			.toList();
 

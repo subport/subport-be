@@ -28,9 +28,9 @@ public class SpendingRecordPersistenceAdapter implements
 	}
 
 	@Override
-	public List<SpendingRecord> loadRecent3ByMemberIdAndSubscriptionName(Long memberId, String subscriptionName) {
-		return spendingRecordRepository
-			.findTop3ByMemberIdAndSubscriptionNameOrderByPaymentDateDesc(memberId, subscriptionName).stream()
+	public List<SpendingRecord> loadSpendingRecords(Long memberSubscriptionId) {
+		return spendingRecordRepository.findTop3ByMemberSubscriptionIdOrderByPaymentDateDesc(memberSubscriptionId)
+			.stream()
 			.map(spendingRecordMapper::toDomain)
 			.toList();
 	}

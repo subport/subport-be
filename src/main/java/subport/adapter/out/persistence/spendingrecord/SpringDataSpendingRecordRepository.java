@@ -6,8 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SpringDataSpendingRecordRepository extends JpaRepository<SpendingRecordJpaEntity, Long> {
 
-	List<SpendingRecordJpaEntity> findTop3ByMemberIdAndSubscriptionNameOrderByPaymentDateDesc(
-		Long memberId,
-		String subscriptionName
-	);
+	List<SpendingRecordJpaEntity> findTop3ByMemberSubscriptionIdOrderByPaymentDateDesc(Long memberSubscriptionId);
 }

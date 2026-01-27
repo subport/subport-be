@@ -6,5 +6,5 @@ import subport.domain.spendingrecord.SpendingRecord;
 
 public interface LoadSpendingRecordPort {
 
-	List<SpendingRecord> loadRecent3ByMemberIdAndSubscriptionName(Long memberId, String subscriptionName);
+	List<SpendingRecord> loadSpendingRecords(Long memberSubscriptionId);
 }
