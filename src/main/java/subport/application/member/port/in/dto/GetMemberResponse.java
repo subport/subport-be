@@ -2,14 +2,14 @@ package subport.application.member.port.in.dto;
 
 import subport.domain.member.Member;
 
-public record ReadMemberResponse(
+public record GetMemberResponse(
 	Long id,
 	String nickname,
 	String email
 ) {
 
-	public static ReadMemberResponse fromDomain(Member member) {
-		return new ReadMemberResponse(
+	public static GetMemberResponse fromMember(Member member) {
+		return new GetMemberResponse(
 			member.getId(),
 			member.getNickname(),
 			member.getEmail()

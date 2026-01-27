@@ -8,8 +8,8 @@ public record LoginMemberInfo(
 	String email
 ) {
 
-	public Member toDomain() {
-		return Member.withoutId(
+	public Member toMember() {
+		return new Member(
 			providerId,
 			nickname,
 			email

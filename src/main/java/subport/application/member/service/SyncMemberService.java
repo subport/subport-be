@@ -10,15 +10,15 @@ import subport.application.member.port.out.SyncMemberPort;
 import subport.domain.member.Member;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class SyncMemberService implements SyncMemberUseCase {
 
 	private final SyncMemberPort syncMemberPort;
 
-	@Transactional
 	@Override
 	public Long sync(LoginMemberInfo loginMemberInfo) {
-		Member member = loginMemberInfo.toDomain();
+		Member member = loginMemberInfo.toMember();
 
 		return syncMemberPort.sync(member);
 	}

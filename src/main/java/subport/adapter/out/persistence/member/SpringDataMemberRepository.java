@@ -4,7 +4,9 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface SpringDataMemberRepository extends JpaRepository<MemberJpaEntity, Long> {
+import subport.domain.member.Member;
 
-	Optional<MemberJpaEntity> findByProviderId(String providerId);
+public interface SpringDataMemberRepository extends JpaRepository<Member, Long> {
+
+	Optional<Member> findByProviderId(String providerId);
 }

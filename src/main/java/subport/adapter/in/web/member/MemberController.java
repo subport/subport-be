@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import subport.adapter.in.security.oauth2.CustomOAuth2User;
-import subport.application.member.port.in.ReadMemberUseCase;
+import subport.application.member.port.in.GetMemberUseCase;
 import subport.application.member.port.in.UpdateMemberUseCase;
-import subport.application.member.port.in.dto.ReadMemberResponse;
+import subport.application.member.port.in.dto.GetMemberResponse;
 import subport.application.member.port.in.dto.UpdateMemberRequest;
 
 @RestController
@@ -22,7 +22,7 @@ import subport.application.member.port.in.dto.UpdateMemberRequest;
 public class MemberController {
 
 	private final UpdateMemberUseCase updateMemberUseCase;
-	private final ReadMemberUseCase readMemberUseCase;
+	private final GetMemberUseCase getMemberUseCase;
 
 	@PutMapping("/me")
 	public ResponseEntity<Void> updateMember(
@@ -36,9 +36,9 @@ public class MemberController {
 	}
 
 	@GetMapping("/me")
-	public ResponseEntity<ReadMemberResponse> readMember(@AuthenticationPrincipal CustomOAuth2User oAuth2User) {
+	public ResponseEntity<GetMemberResponse> getMember(@AuthenticationPrincipal CustomOAuth2User oAuth2User) {
 		return ResponseEntity.ok(
-			readMemberUseCase.read(oAuth2User.getMemberId())
+			getMemberUseCase.get(oAuth2User.getMemberId())
 		);
 	}
 }

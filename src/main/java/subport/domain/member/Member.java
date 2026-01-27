@@ -1,10 +1,23 @@
 package subport.domain.member;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import subport.adapter.out.persistence.BaseTimeEntity;
 
+@Entity
+@Table(name = "member")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Member {
+public class Member extends BaseTimeEntity {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	private String providerId;
@@ -13,43 +26,14 @@ public class Member {
 
 	private String email;
 
-	private Member(
-		Long id,
+	public Member(
 		String providerId,
 		String nickname,
 		String email
 	) {
-		this.id = id;
 		this.providerId = providerId;
 		this.nickname = nickname;
 		this.email = email;
-	}
-
-	public static Member withId(
-		Long id,
-		String providerId,
-		String nickname,
-		String email
-	) {
-		return new Member(
-			id,
-			providerId,
-			nickname,
-			email
-		);
-	}
-
-	public static Member withoutId(
-		String providerId,
-		String nickname,
-		String email
-	) {
-		return new Member(
-			null,
-			providerId,
-			nickname,
-			email
-		);
 	}
 
 	public void update(String nickname, String email) {
