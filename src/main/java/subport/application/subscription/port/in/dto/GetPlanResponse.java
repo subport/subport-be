@@ -5,7 +5,7 @@ import java.math.RoundingMode;
 
 import subport.domain.subscription.Plan;
 
-public record ReadPlanResponse(
+public record GetPlanResponse(
 	Long id,
 	String name,
 	BigDecimal amount,
@@ -14,8 +14,8 @@ public record ReadPlanResponse(
 	boolean defaultProvided
 ) {
 
-	public static ReadPlanResponse fromDomain(Plan plan) {
-		return new ReadPlanResponse(
+	public static GetPlanResponse from(Plan plan) {
+		return new GetPlanResponse(
 			plan.getId(),
 			plan.getName(),
 			plan.getAmount().setScale(0, RoundingMode.HALF_UP),

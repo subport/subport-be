@@ -14,9 +14,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import subport.adapter.in.security.oauth2.CustomOAuth2User;
 import subport.application.subscription.port.in.DeleteCustomPlanUseCase;
-import subport.application.subscription.port.in.ReadPlanUseCase;
+import subport.application.subscription.port.in.PlanQueryUseCase;
 import subport.application.subscription.port.in.UpdateCustomPlanUseCase;
-import subport.application.subscription.port.in.dto.ReadPlanResponse;
+import subport.application.subscription.port.in.dto.GetPlanResponse;
 import subport.application.subscription.port.in.dto.UpdateCustomPlanRequest;
 
 @RestController
@@ -24,16 +24,16 @@ import subport.application.subscription.port.in.dto.UpdateCustomPlanRequest;
 @RequiredArgsConstructor
 public class PlanController {
 
-	private final ReadPlanUseCase readPlanUseCase;
+	private final PlanQueryUseCase planQueryUseCase;
 	private final UpdateCustomPlanUseCase updateCustomPlanUseCase;
 	private final DeleteCustomPlanUseCase deleteCustomPlanUseCase;
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ReadPlanResponse> readPlan(
+	public ResponseEntity<GetPlanResponse> getPlan(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
 		@PathVariable("id") Long planId
 	) {
-		return ResponseEntity.ok(readPlanUseCase.read(
+		return ResponseEntity.ok(planQueryUseCase.getPlan(
 			oAuth2User.getMemberId(), planId));
 	}
 

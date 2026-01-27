@@ -9,31 +9,29 @@ import subport.application.exception.ErrorCode;
 import subport.application.subscription.port.in.UpdateCustomPlanUseCase;
 import subport.application.subscription.port.in.dto.UpdateCustomPlanRequest;
 import subport.application.subscription.port.out.LoadPlanPort;
-import subport.application.subscription.port.out.UpdatePlanPort;
 import subport.domain.subscription.AmountUnit;
 import subport.domain.subscription.Plan;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UpdateCustomPlanService implements UpdateCustomPlanUseCase {
 
 	private final LoadPlanPort loadPlanPort;
-	private final UpdatePlanPort updatePlanPort;
 
-	@Transactional
 	@Override
 	public void update(
 		Long memberId,
 		UpdateCustomPlanRequest request,
 		Long planId
 	) {
-		Plan plan = loadPlanPort.load(planId);
+		Plan plan = loadPlanPort.loadPlan(planId);
 
 		if (plan.isSystemProvided()) {
 			throw new CustomException(ErrorCode.SYSTEM_PLAN_WRITE_FORBIDDEN);
 		}
 
-		if (!plan.getMemberId().equals(memberId)) {
+		if (!plan.getMember().getId().equals(memberId)) {
 			throw new CustomException(ErrorCode.PLAN_WRITE_FORBIDDEN);
 		}
 
@@ -43,7 +41,5 @@ public class UpdateCustomPlanService implements UpdateCustomPlanUseCase {
 			AmountUnit.fromString(request.amountUnit()),
 			request.durationMonths()
 		);
-
-		updatePlanPort.update(plan);
 	}
 }

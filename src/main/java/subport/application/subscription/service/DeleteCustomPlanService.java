@@ -21,16 +21,16 @@ public class DeleteCustomPlanService implements DeleteCustomPlanUseCase {
 	@Transactional
 	@Override
 	public void delete(Long memberId, Long planId) {
-		Plan plan = loadPlanPort.load(planId);
+		Plan plan = loadPlanPort.loadPlan(planId);
 
 		if (plan.isSystemProvided()) {
 			throw new CustomException(ErrorCode.SYSTEM_PLAN_WRITE_FORBIDDEN);
 		}
 
-		if (!plan.getMemberId().equals(memberId)) {
+		if (!plan.getMember().getId().equals(memberId)) {
 			throw new CustomException(ErrorCode.PLAN_WRITE_FORBIDDEN);
 		}
 
-		deletePlanPort.deleteById(planId);
+		deletePlanPort.delete(plan);
 	}
 }

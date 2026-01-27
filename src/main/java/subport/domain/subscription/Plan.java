@@ -2,88 +2,67 @@ package subport.domain.subscription;
 
 import java.math.BigDecimal;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import subport.adapter.out.persistence.BaseTimeEntity;
+import subport.domain.member.Member;
 
+@Entity
+@Table(name = "plan")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Plan {
+public class Plan extends BaseTimeEntity {
 
-	private final Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	private String name;
 
 	private BigDecimal amount;
 
+	@Enumerated(value = EnumType.STRING)
 	private AmountUnit amountUnit;
 
 	private int durationMonths;
 
-	private final boolean systemProvided;
+	private boolean systemProvided;
 
-	private final Long memberId;
+	@JoinColumn(name = "member_id", nullable = true)
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Member member;
 
-	private final Long subscriptionId;
+	@JoinColumn(name = "subscription_id", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Subscription subscription;
 
-	private Plan(
-		Long id,
+	public Plan(
 		String name,
 		BigDecimal amount,
 		AmountUnit amountUnit,
 		int durationMonths,
 		boolean systemProvided,
-		Long memberId,
-		Long subscriptionId
+		Member member,
+		Subscription subscription
 	) {
-		this.id = id;
 		this.name = name;
 		this.amount = amount;
 		this.amountUnit = amountUnit;
 		this.durationMonths = durationMonths;
 		this.systemProvided = systemProvided;
-		this.memberId = memberId;
-		this.subscriptionId = subscriptionId;
-	}
-
-	public static Plan withId(
-		Long id,
-		String name,
-		BigDecimal amount,
-		AmountUnit amountUnit,
-		int durationMonths,
-		boolean systemProvided,
-		Long memberId,
-		Long subscriptionId
-	) {
-		return new Plan(
-			id,
-			name,
-			amount,
-			amountUnit,
-			durationMonths,
-			systemProvided,
-			memberId,
-			subscriptionId
-		);
-	}
-
-	public static Plan withoutId(
-		String name,
-		BigDecimal amount,
-		AmountUnit amountUnit,
-		int durationMonths,
-		boolean systemProvided,
-		Long memberId,
-		Long subscriptionId
-	) {
-		return new Plan(
-			null,
-			name,
-			amount,
-			amountUnit,
-			durationMonths,
-			systemProvided,
-			memberId,
-			subscriptionId
-		);
+		this.member = member;
+		this.subscription = subscription;
 	}
 
 	public void update(

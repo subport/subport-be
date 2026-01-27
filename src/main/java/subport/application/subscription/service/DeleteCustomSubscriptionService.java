@@ -34,7 +34,7 @@ public class DeleteCustomSubscriptionService implements DeleteCustomSubscription
 		}
 
 		// 관련 플랜 삭제
-		deletePlanPort.deleteBySubscriptionId(subscriptionId);
+		deletePlanPort.delete(subscriptionId);
 
 		deleteSubscriptionPort.delete(subscription);
 

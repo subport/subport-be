@@ -1,8 +1,10 @@
 package subport.application.subscription.port.out;
 
+import subport.domain.subscription.Plan;
+
 public interface DeletePlanPort {
 
-	void deleteById(Long planId);
+	void delete(Plan plan);
 
-	void deleteBySubscriptionId(Long subscriptionId);
+	void delete(Long subscriptionId);
 }
