@@ -35,13 +35,16 @@ public class SpendingRecordJpaEntity extends BaseTimeEntity {
 
 	private Long memberId;
 
+	private Long memberSubscriptionId;
+
 	public SpendingRecordJpaEntity(
 		LocalDate paymentDate,
 		BigDecimal amount,
 		int durationMonths,
 		String subscriptionName,
 		String subscriptionLogoImageUrl,
-		Long memberId
+		Long memberId,
+		Long memberSubscriptionId
 	) {
 		this.paymentDate = paymentDate;
 		this.amount = amount;
@@ -49,5 +52,6 @@ public class SpendingRecordJpaEntity extends BaseTimeEntity {
 		this.subscriptionName = subscriptionName;
 		this.subscriptionLogoImageUrl = subscriptionLogoImageUrl;
 		this.memberId = memberId;
+		this.memberSubscriptionId = memberSubscriptionId;
 	}
 }

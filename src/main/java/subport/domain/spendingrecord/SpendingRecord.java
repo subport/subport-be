@@ -25,6 +25,8 @@ public class SpendingRecord {
 
 	private final Long memberId;
 
+	private final Long memberSubscriptionId;
+
 	public SpendingRecord(
 		Long id,
 		LocalDate paymentDate,
@@ -32,7 +34,8 @@ public class SpendingRecord {
 		int durationMonths,
 		String subscriptionName,
 		String subscriptionLogoImageUrl,
-		Long memberId
+		Long memberId,
+		Long memberSubscriptionId
 	) {
 		this.id = id;
 		this.paymentDate = paymentDate;
@@ -41,6 +44,7 @@ public class SpendingRecord {
 		this.subscriptionName = subscriptionName;
 		this.subscriptionLogoImageUrl = subscriptionLogoImageUrl;
 		this.memberId = memberId;
+		this.memberSubscriptionId = memberSubscriptionId;
 	}
 
 	public static SpendingRecord withId(
@@ -50,7 +54,8 @@ public class SpendingRecord {
 		int durationMonths,
 		String subscriptionName,
 		String subscriptionLogoImageUrl,
-		Long memberId
+		Long memberId,
+		Long memberSubscriptionId
 	) {
 		return new SpendingRecord(
 			id,
@@ -59,7 +64,8 @@ public class SpendingRecord {
 			durationMonths,
 			subscriptionName,
 			subscriptionLogoImageUrl,
-			memberId
+			memberId,
+			memberSubscriptionId
 		);
 	}
 
@@ -69,7 +75,8 @@ public class SpendingRecord {
 		int durationMonths,
 		String subscriptionName,
 		String subscriptionLogoImageUrl,
-		Long memberId
+		Long memberId,
+		Long memberSubscriptionId
 	) {
 		return new SpendingRecord(
 			null,
@@ -78,7 +85,8 @@ public class SpendingRecord {
 			durationMonths,
 			subscriptionName,
 			subscriptionLogoImageUrl,
-			memberId
+			memberId,
+			memberSubscriptionId
 		);
 	}
 
@@ -99,7 +107,8 @@ public class SpendingRecord {
 			plan.getDurationMonths(),
 			subscription.getName(),
 			subscription.getLogoImageUrl(),
-			memberSubscription.getMemberId()
+			memberSubscription.getMemberId(),
+			memberSubscription.getId()
 		);
 	}
 }

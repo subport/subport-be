@@ -53,7 +53,8 @@ public record MemberSubscriptionForSpendingRecord(
 			planDurationMonths,
 			subscriptionName,
 			subscriptionLogoImageUrl,
-			memberId
+			memberId,
+			id
 		);
 	}
 

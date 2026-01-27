@@ -14,7 +14,8 @@ public class SpendingRecordMapper {
 			spendingRecord.getDurationMonths(),
 			spendingRecord.getSubscriptionName(),
 			spendingRecord.getSubscriptionLogoImageUrl(),
-			spendingRecord.getMemberId()
+			spendingRecord.getMemberId(),
+			spendingRecord.getMemberSubscriptionId()
 		);
 	}
 
@@ -26,7 +27,8 @@ public class SpendingRecordMapper {
 			spendingRecordJpaEntity.getDurationMonths(),
 			spendingRecordJpaEntity.getSubscriptionName(),
 			spendingRecordJpaEntity.getSubscriptionLogoImageUrl(),
-			spendingRecordJpaEntity.getMemberId()
+			spendingRecordJpaEntity.getMemberId(),
+			spendingRecordJpaEntity.getMemberSubscriptionId()
 		);
 	}
 }
