@@ -5,22 +5,25 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
-import subport.application.subscription.port.in.dto.RegisterCustomSubscriptionRequest;
+import subport.application.member.port.out.LoadMemberPort;
 import subport.application.subscription.port.in.RegisterCustomSubscriptionUseCase;
+import subport.application.subscription.port.in.dto.RegisterCustomSubscriptionRequest;
 import subport.application.subscription.port.in.dto.RegisterCustomSubscriptionResponse;
 import subport.application.subscription.port.out.SaveSubscriptionPort;
 import subport.application.subscription.port.out.UploadSubscriptionImagePort;
+import subport.domain.member.Member;
 import subport.domain.subscription.Subscription;
 import subport.domain.subscription.SubscriptionType;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class RegisterCustomSubscriptionService implements RegisterCustomSubscriptionUseCase {
 
 	private final SaveSubscriptionPort saveSubscriptionPort;
+	private final LoadMemberPort loadMemberPort;
 	private final UploadSubscriptionImagePort uploadSubscriptionImagePort;
 
-	@Transactional
 	@Override
 	public RegisterCustomSubscriptionResponse register(
 		Long memberId,
@@ -32,15 +35,19 @@ public class RegisterCustomSubscriptionService implements RegisterCustomSubscrip
 			logoImageUrl = uploadSubscriptionImagePort.upload(image);
 		}
 
-		Subscription subscription = Subscription.withoutId(
+		Member member = loadMemberPort.load(memberId);
+
+		Subscription subscription = new Subscription(
 			request.name(),
 			SubscriptionType.fromDisplayName(request.type()),
 			logoImageUrl,
 			null,
 			false,
-			memberId
+			member
 		);
 
-		return new RegisterCustomSubscriptionResponse(saveSubscriptionPort.save(subscription));
+		return new RegisterCustomSubscriptionResponse(
+			saveSubscriptionPort.save(subscription)
+		);
 	}
 }

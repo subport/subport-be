@@ -2,14 +2,14 @@ package subport.application.subscription.port.in.dto;
 
 import subport.domain.subscription.Subscription;
 
-public record ReadSubscriptionResponse(
+public record GetSubscriptionResponse(
 	Long id,
 	String name,
 	String type
 ) {
 
-	public static ReadSubscriptionResponse fromDomain(Subscription subscription) {
-		return new ReadSubscriptionResponse(
+	public static GetSubscriptionResponse from(Subscription subscription) {
+		return new GetSubscriptionResponse(
 			subscription.getId(),
 			subscription.getName(),
 			subscription.getType().getDisplayName()

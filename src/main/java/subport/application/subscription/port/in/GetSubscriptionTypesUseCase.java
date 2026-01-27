@@ -2,7 +2,7 @@ package subport.application.subscription.port.in;
 
 import java.util.List;
 
-public interface ListSubscriptionTypesUseCase {
+public interface GetSubscriptionTypesUseCase {
 
-	List<String> list();
+	List<String> get();
 }

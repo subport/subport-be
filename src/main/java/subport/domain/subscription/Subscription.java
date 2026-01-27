@@ -1,79 +1,60 @@
 package subport.domain.subscription;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import subport.adapter.out.persistence.BaseTimeEntity;
+import subport.domain.member.Member;
 
+@Entity
+@Table(name = "subscription")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Subscription {
+public class Subscription extends BaseTimeEntity {
 
-	private final Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	private String name;
 
+	@Enumerated(value = EnumType.STRING)
 	private SubscriptionType type;
 
 	private String logoImageUrl;
 
 	private String planUrl;
 
-	private final boolean systemProvided;
+	private boolean systemProvided;
 
-	private final Long memberId;
+	@JoinColumn(name = "member_id", nullable = true)
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Member member;
 
-	private Subscription(
-		Long id,
+	public Subscription(
 		String name,
 		SubscriptionType type,
 		String logoImageUrl,
 		String planUrl,
 		boolean systemProvided,
-		Long memberId
+		Member member
 	) {
-		this.id = id;
 		this.name = name;
 		this.type = type;
 		this.logoImageUrl = logoImageUrl;
 		this.planUrl = planUrl;
 		this.systemProvided = systemProvided;
-		this.memberId = memberId;
-	}
-
-	public static Subscription withId(
-		Long id,
-		String name,
-		SubscriptionType type,
-		String logoImageUrl,
-		String planUrl,
-		boolean systemProvided,
-		Long memberId
-	) {
-		return new Subscription(
-			id,
-			name,
-			type,
-			logoImageUrl,
-			planUrl,
-			systemProvided,
-			memberId
-		);
-	}
-
-	public static Subscription withoutId(
-		String name,
-		SubscriptionType type,
-		String logoImageUrl,
-		String planUrl,
-		boolean systemProvided,
-		Long memberId
-	) {
-		return new Subscription(
-			null,
-			name,
-			type,
-			logoImageUrl,
-			planUrl,
-			systemProvided,
-			memberId
-		);
+		this.member = member;
 	}
 
 	public void update(
@@ -84,9 +65,7 @@ public class Subscription {
 	) {
 		this.name = name;
 		this.type = type;
-		if (logoImageUrl != null) {
-			this.logoImageUrl = logoImageUrl;
-		}
+		this.logoImageUrl = logoImageUrl;
 		this.planUrl = planUrl;
 	}
 }

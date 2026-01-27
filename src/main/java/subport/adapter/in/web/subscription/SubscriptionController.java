@@ -20,15 +20,15 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import subport.adapter.in.security.oauth2.CustomOAuth2User;
 import subport.application.subscription.port.in.DeleteCustomSubscriptionUseCase;
-import subport.application.subscription.port.in.ListSubscriptionTypesUseCase;
+import subport.application.subscription.port.in.GetSubscriptionTypesUseCase;
 import subport.application.subscription.port.in.ReadPlanUseCase;
 import subport.application.subscription.port.in.RegisterCustomPlanUseCase;
 import subport.application.subscription.port.in.RegisterCustomSubscriptionUseCase;
 import subport.application.subscription.port.in.SubscriptionQueryUseCase;
 import subport.application.subscription.port.in.UpdateCustomSubscriptionUseCase;
+import subport.application.subscription.port.in.dto.GetSubscriptionResponse;
+import subport.application.subscription.port.in.dto.GetSubscriptionsResponse;
 import subport.application.subscription.port.in.dto.ListPlansResponse;
-import subport.application.subscription.port.in.dto.ListSubscriptionsResponse;
-import subport.application.subscription.port.in.dto.ReadSubscriptionResponse;
 import subport.application.subscription.port.in.dto.RegisterCustomPlanRequest;
 import subport.application.subscription.port.in.dto.RegisterCustomPlanResponse;
 import subport.application.subscription.port.in.dto.RegisterCustomSubscriptionRequest;
@@ -48,7 +48,7 @@ public class SubscriptionController {
 	private final RegisterCustomPlanUseCase registerCustomPlanUseCase;
 	private final ReadPlanUseCase readPlanUseCase;
 
-	private final ListSubscriptionTypesUseCase listSubscriptionTypesUseCase;
+	private final GetSubscriptionTypesUseCase getSubscriptionTypesUseCase;
 
 	@PostMapping
 	public ResponseEntity<RegisterCustomSubscriptionResponse> registerCustomSubscription(
@@ -60,6 +60,25 @@ public class SubscriptionController {
 			oAuth2User.getMemberId(),
 			request,
 			image));
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<GetSubscriptionResponse> getSubscription(
+		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
+		@PathVariable("id") Long subscriptionId
+	) {
+		return ResponseEntity.ok(subscriptionQueryUseCase.getSubscription(
+			oAuth2User.getMemberId(),
+			subscriptionId));
+	}
+
+	@GetMapping
+	public ResponseEntity<GetSubscriptionsResponse> searchSubscriptions(
+		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
+		@RequestParam(required = false) String name
+	) {
+		return ResponseEntity.ok(subscriptionQueryUseCase.searchSubscriptions(
+			oAuth2User.getMemberId(), name));
 	}
 
 	@PutMapping("/{id}")
@@ -94,25 +113,6 @@ public class SubscriptionController {
 			.build();
 	}
 
-	@GetMapping("/{id}")
-	public ResponseEntity<ReadSubscriptionResponse> getSubscription(
-		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
-		@PathVariable("id") Long subscriptionId
-	) {
-		return ResponseEntity.ok(subscriptionQueryUseCase.getSubscription(
-			oAuth2User.getMemberId(),
-			subscriptionId));
-	}
-
-	@GetMapping
-	public ResponseEntity<ListSubscriptionsResponse> searchSubscriptions(
-		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
-		@RequestParam(required = false) String name
-	) {
-		return ResponseEntity.ok(subscriptionQueryUseCase.searchSubscriptions(
-			oAuth2User.getMemberId(), name));
-	}
-
 	@PostMapping("/{id}/plans")
 	public ResponseEntity<RegisterCustomPlanResponse> registerCustomPlan(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
@@ -137,6 +137,6 @@ public class SubscriptionController {
 
 	@GetMapping("/types")
 	public ResponseEntity<List<String>> listSubscriptionTypes() {
-		return ResponseEntity.ok(listSubscriptionTypesUseCase.list());
+		return ResponseEntity.ok(getSubscriptionTypesUseCase.get());
 	}
 }

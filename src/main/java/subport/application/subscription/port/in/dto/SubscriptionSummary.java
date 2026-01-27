@@ -9,7 +9,7 @@ public record SubscriptionSummary(
 	boolean defaultProvided
 ) {
 
-	public static SubscriptionSummary fromDomain(Subscription subscription) {
+	public static SubscriptionSummary from(Subscription subscription) {
 		return new SubscriptionSummary(
 			subscription.getId(),
 			subscription.getName(),
