@@ -15,50 +15,51 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
-import subport.application.membersubscription.port.in.ReadMemberSubscriptionUseCase;
-import subport.application.membersubscription.port.in.dto.ListMemberSubscriptionsRequest;
-import subport.application.membersubscription.port.in.dto.ListMemberSubscriptionsResponse;
+import subport.application.membersubscription.port.in.MemberSubscriptionQueryUseCase;
+import subport.application.membersubscription.port.in.dto.GetMemberSubscriptionResponse;
+import subport.application.membersubscription.port.in.dto.GetMemberSubscriptionsRequest;
+import subport.application.membersubscription.port.in.dto.GetMemberSubscriptionsResponse;
 import subport.application.membersubscription.port.in.dto.MemberSubscriptionSummary;
-import subport.application.membersubscription.port.in.dto.ReadMemberSubscriptionResponse;
 import subport.application.membersubscription.port.in.dto.SpendingRecordSummary;
 import subport.application.membersubscription.port.out.LoadMemberSubscriptionPort;
-import subport.application.membersubscription.port.out.dto.MemberSubscriptionDetail;
 import subport.application.spendingrecord.port.out.LoadSpendingRecordPort;
+import subport.domain.membersubscription.MemberSubscription;
 import subport.domain.subscription.AmountUnit;
+import subport.domain.subscription.Plan;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class ReadMemberSubscriptionService implements ReadMemberSubscriptionUseCase {
+public class MemberSubscriptionQueryService implements MemberSubscriptionQueryUseCase {
 
 	private final LoadMemberSubscriptionPort loadMemberSubscriptionPort;
 	private final LoadSpendingRecordPort loadSpendingRecordPort;
 
 	@Override
-	public ReadMemberSubscriptionResponse read(Long memberId, Long memberSubscriptionId) {
-		MemberSubscriptionDetail memberSubscriptionDetail = loadMemberSubscriptionPort.loadDetail(memberSubscriptionId);
+	public GetMemberSubscriptionResponse getMemberSubscription(Long memberId, Long memberSubscriptionId) {
+		MemberSubscription memberSubscription = loadMemberSubscriptionPort.loadMemberSubscription(memberSubscriptionId);
 
-		if (!memberSubscriptionDetail.memberId().equals(memberId)) {
+		if (!memberSubscription.getMember().getId().equals(memberId)) {
 			throw new CustomException(ErrorCode.MEMBER_SUBSCRIPTION_FORBIDDEN);
 		}
 
-		LocalDate nextPaymentDate = memberSubscriptionDetail.nextPaymentDate();
-		LocalDate lastPaymentDate = memberSubscriptionDetail.lastPaymentDate();
+		LocalDate nextPaymentDate = memberSubscription.getNextPaymentDate();
+		LocalDate lastPaymentDate = memberSubscription.getLastPaymentDate();
 
 		LocalDate now = LocalDate.now();
 		long elapsedDays = DAYS.between(lastPaymentDate, now);
 		long totalDays = DAYS.between(lastPaymentDate, nextPaymentDate);
 		int paymentProgressPercent = (int)((double)elapsedDays / totalDays * 100);
 
-		BigDecimal actualPaymentAmount = calculateActualPaymentAmount(memberSubscriptionDetail);
+		BigDecimal actualPaymentAmount = calculateActualPaymentAmount(memberSubscription);
 
 		List<SpendingRecordSummary> spendingRecords = loadSpendingRecordPort.loadSpendingRecords(memberSubscriptionId)
 			.stream()
 			.map(SpendingRecordSummary::fromDomain)
 			.toList();
 
-		return ReadMemberSubscriptionResponse.from(
-			memberSubscriptionDetail,
+		return GetMemberSubscriptionResponse.of(
+			memberSubscription,
 			now,
 			paymentProgressPercent,
 			actualPaymentAmount,
@@ -67,23 +68,23 @@ public class ReadMemberSubscriptionService implements ReadMemberSubscriptionUseC
 	}
 
 	@Override
-	public ListMemberSubscriptionsResponse list(Long memberId, ListMemberSubscriptionsRequest request) {
+	public GetMemberSubscriptionsResponse getMemberSubscriptions(Long memberId, GetMemberSubscriptionsRequest request) {
 		boolean active = request.active();
 		String sortBy = request.sortBy();
 
-		List<MemberSubscriptionDetail> memberSubscriptionDetails = loadMemberSubscriptionPort.loadDetails(
+		List<MemberSubscription> memberSubscriptions = loadMemberSubscriptionPort.loadMemberSubscriptions(
 			memberId,
 			active,
 			sortBy
 		);
 
-		List<ComputedMemberSubscription> computed = memberSubscriptionDetails.stream()
+		List<ComputedMemberSubscription> computed = memberSubscriptions.stream()
 			.map(ms -> {
 				BigDecimal actualPaymentAmount = calculateActualPaymentAmount(ms);
 				return new ComputedMemberSubscription(
 					ms,
 					actualPaymentAmount,
-					DAYS.between(LocalDate.now(), ms.nextPaymentDate())
+					DAYS.between(LocalDate.now(), ms.getNextPaymentDate())
 				);
 			})
 			.toList();
@@ -94,14 +95,14 @@ public class ReadMemberSubscriptionService implements ReadMemberSubscriptionUseC
 			.setScale(0, RoundingMode.HALF_UP);
 
 		if (active & sortBy.equals("type")) {
-			return new ListMemberSubscriptionsResponse(
+			return new GetMemberSubscriptionsResponse(
 				totalAmount,
 				computed.stream()
 					.collect(Collectors.groupingBy(
-						c -> c.detail.subscriptionType().getDisplayName(),
+						c -> c.memberSubscription.getSubscription().getType().getDisplayName(),
 						TreeMap::new,
-						Collectors.mapping(c -> MemberSubscriptionSummary.from(
-								c.detail,
+						Collectors.mapping(c -> MemberSubscriptionSummary.of(
+								c.memberSubscription,
 								c.actualPaymentAmount,
 								c.daysUntilPayment
 							),
@@ -111,11 +112,11 @@ public class ReadMemberSubscriptionService implements ReadMemberSubscriptionUseC
 			);
 		}
 
-		return new ListMemberSubscriptionsResponse(
+		return new GetMemberSubscriptionsResponse(
 			totalAmount,
 			computed.stream()
-				.map(c -> MemberSubscriptionSummary.from(
-					c.detail,
+				.map(c -> MemberSubscriptionSummary.of(
+					c.memberSubscription,
 					c.actualPaymentAmount,
 					c.daysUntilPayment
 				))
@@ -123,16 +124,17 @@ public class ReadMemberSubscriptionService implements ReadMemberSubscriptionUseC
 		);
 	}
 
-	private BigDecimal calculateActualPaymentAmount(MemberSubscriptionDetail detail) {
-		boolean dutchPay = detail.dutchPay();
-		AmountUnit amountUnit = detail.planAmountUnit();
-		BigDecimal planAmount = detail.planAmount();
+	private BigDecimal calculateActualPaymentAmount(MemberSubscription memberSubscription) {
+		boolean dutchPay = memberSubscription.isDutchPay();
+		Plan plan = memberSubscription.getPlan();
+		AmountUnit amountUnit = plan.getAmountUnit();
+		BigDecimal planAmount = plan.getAmount();
 
 		if (dutchPay) {
-			return detail.dutchPayAmount();
+			return memberSubscription.getDutchPayAmount();
 		}
 		if (amountUnit.equals(AmountUnit.USD)) {
-			return planAmount.multiply(detail.exchangeRate())
+			return planAmount.multiply(memberSubscription.getExchangeRate())
 				.setScale(0, RoundingMode.HALF_UP);
 		}
 
@@ -140,7 +142,7 @@ public class ReadMemberSubscriptionService implements ReadMemberSubscriptionUseC
 	}
 
 	private record ComputedMemberSubscription(
-		MemberSubscriptionDetail detail,
+		MemberSubscription memberSubscription,
 		BigDecimal actualPaymentAmount,
 		long daysUntilPayment
 	) {

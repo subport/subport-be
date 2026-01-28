@@ -12,21 +12,22 @@ import subport.application.membersubscription.port.out.LoadMemberSubscriptionPor
 import subport.domain.membersubscription.MemberSubscription;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class DeleteMemberSubscriptionService implements DeleteMemberSubscriptionUseCase {
 
 	private final LoadMemberSubscriptionPort loadMemberSubscriptionPort;
 	private final DeleteMemberSubscriptionPort deleteMemberSubscriptionPort;
 
-	@Transactional
 	@Override
 	public void delete(Long memberId, Long memberSubscriptionId) {
-		MemberSubscription memberSubscription = loadMemberSubscriptionPort.load(memberSubscriptionId);
+		MemberSubscription memberSubscription =
+			loadMemberSubscriptionPort.loadMemberSubscription(memberSubscriptionId);
 
-		if (!memberSubscription.getMemberId().equals(memberId)) {
+		if (!memberSubscription.getMember().getId().equals(memberId)) {
 			throw new CustomException(ErrorCode.MEMBER_SUBSCRIPTION_FORBIDDEN);
 		}
 
-		deleteMemberSubscriptionPort.delete(memberSubscription.getId());
+		deleteMemberSubscriptionPort.delete(memberSubscription);
 	}
 }

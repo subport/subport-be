@@ -9,35 +9,26 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-public interface SpringDataMemberSubscriptionRepository extends JpaRepository<MemberSubscriptionJpaEntity, Long> {
+import subport.domain.membersubscription.MemberSubscription;
+
+public interface SpringDataMemberSubscriptionRepository extends JpaRepository<MemberSubscription, Long> {
 
 	@Query("""
 		SELECT ms
-		FROM MemberSubscriptionJpaEntity ms
-		JOIN FETCH ms.member
-		JOIN FETCH ms.subscription
-		JOIN FETCH ms.plan
-		WHERE ms.nextPaymentDate = :nextPaymentDate
-		AND ms.active = true
-		""")
-	List<MemberSubscriptionJpaEntity> findByNextPaymentDateAndActiveTrueWithFetch(LocalDate nextPaymentDate);
-
-	@Query("""
-		SELECT ms
-		FROM MemberSubscriptionJpaEntity ms
+		FROM MemberSubscription ms
 		JOIN FETCH ms.member
 		JOIN FETCH ms.subscription
 		JOIN FETCH ms.plan
 		WHERE ms.id = :id
 		""")
-	Optional<MemberSubscriptionJpaEntity> findByIdWithFetch(Long id);
+	Optional<MemberSubscription> findByIdWithFetch(Long id);
 
 	@EntityGraph(attributePaths = {
 		"member",
 		"subscription",
 		"plan"
 	})
-	List<MemberSubscriptionJpaEntity> findByMemberIdAndActive(
+	List<MemberSubscription> findByMemberIdAndActive(
 		Long memberId,
 		boolean active,
 		Sort sort
@@ -45,7 +36,14 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 
 	@EntityGraph(attributePaths = {
 		"member",
+		"subscription",
+		"plan"
+	})
+	List<MemberSubscription> findByNextPaymentDateAndActiveTrue(LocalDate nextPaymentDate);
+
+	@EntityGraph(attributePaths = {
+		"member",
 		"subscription"
 	})
-	List<MemberSubscriptionJpaEntity> findByReminderDateAndActiveTrue(LocalDate reminderDate);
+	List<MemberSubscription> findByReminderDateAndActiveTrue(LocalDate reminderDate);
 }

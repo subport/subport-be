@@ -3,7 +3,9 @@ package subport.application.membersubscription.port.in.dto;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import subport.application.membersubscription.port.out.dto.MemberSubscriptionDetail;
+import subport.domain.membersubscription.MemberSubscription;
+import subport.domain.subscription.Plan;
+import subport.domain.subscription.Subscription;
 
 public record MemberSubscriptionSummary(
 	Long id,
@@ -14,17 +16,20 @@ public record MemberSubscriptionSummary(
 	long daysUntilPayment
 ) {
 
-	public static MemberSubscriptionSummary from(
-		MemberSubscriptionDetail detail,
+	public static MemberSubscriptionSummary of(
+		MemberSubscription memberSubscription,
 		BigDecimal actualPaymentAmount,
 		long daysUntilPayment
 	) {
+		Subscription subscription = memberSubscription.getSubscription();
+		Plan plan = memberSubscription.getPlan();
+
 		return new MemberSubscriptionSummary(
-			detail.id(),
-			detail.subscriptionName(),
-			detail.subscriptionLogoImageUrl(),
+			memberSubscription.getId(),
+			subscription.getName(),
+			subscription.getLogoImageUrl(),
 			actualPaymentAmount.setScale(0, RoundingMode.HALF_UP),
-			detail.durationMonths(),
+			plan.getDurationMonths(),
 			daysUntilPayment
 		);
 	}

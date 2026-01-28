@@ -16,15 +16,15 @@ import lombok.RequiredArgsConstructor;
 import subport.adapter.in.security.oauth2.CustomOAuth2User;
 import subport.application.membersubscription.port.in.DeactivateMemberSubscriptionUseCase;
 import subport.application.membersubscription.port.in.DeleteMemberSubscriptionUseCase;
-import subport.application.membersubscription.port.in.ReadMemberSubscriptionUseCase;
+import subport.application.membersubscription.port.in.MemberSubscriptionQueryUseCase;
 import subport.application.membersubscription.port.in.RegisterMemberSubscriptionUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionDutchPayUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionMemoUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionPlanUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionReminderUseCase;
-import subport.application.membersubscription.port.in.dto.ListMemberSubscriptionsRequest;
-import subport.application.membersubscription.port.in.dto.ListMemberSubscriptionsResponse;
-import subport.application.membersubscription.port.in.dto.ReadMemberSubscriptionResponse;
+import subport.application.membersubscription.port.in.dto.GetMemberSubscriptionResponse;
+import subport.application.membersubscription.port.in.dto.GetMemberSubscriptionsRequest;
+import subport.application.membersubscription.port.in.dto.GetMemberSubscriptionsResponse;
 import subport.application.membersubscription.port.in.dto.RegisterMemberSubscriptionRequest;
 import subport.application.membersubscription.port.in.dto.RegisterMemberSubscriptionResponse;
 import subport.application.membersubscription.port.in.dto.UpdateMemberSubscriptionDutchPayRequest;
@@ -44,7 +44,7 @@ public class MemberSubscriptionController {
 	private final UpdateMemberSubscriptionMemoUseCase updateMemberSubscriptionMemoUseCase;
 	private final DeactivateMemberSubscriptionUseCase deactivateMemberSubscriptionUseCase;
 	private final DeleteMemberSubscriptionUseCase deleteMemberSubscriptionUseCase;
-	private final ReadMemberSubscriptionUseCase readMemberSubscriptionUseCase;
+	private final MemberSubscriptionQueryUseCase memberSubscriptionQueryUseCase;
 
 	@PostMapping
 	public ResponseEntity<RegisterMemberSubscriptionResponse> registerMemberSubscription(
@@ -54,6 +54,24 @@ public class MemberSubscriptionController {
 		return ResponseEntity.ok(registerMemberSubscriptionUseCase.register(
 			oAuth2User.getMemberId(),
 			request));
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<GetMemberSubscriptionResponse> getMemberSubscription(
+		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
+		@PathVariable("id") Long memberSubscriptionId
+	) {
+		return ResponseEntity.ok(memberSubscriptionQueryUseCase.getMemberSubscription(
+			oAuth2User.getMemberId(), memberSubscriptionId));
+	}
+
+	@GetMapping
+	public ResponseEntity<GetMemberSubscriptionsResponse> getMemberSubscriptions(
+		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
+		@Valid GetMemberSubscriptionsRequest request
+	) {
+		return ResponseEntity.ok(memberSubscriptionQueryUseCase.getMemberSubscriptions(
+			oAuth2User.getMemberId(), request));
 	}
 
 	@PutMapping("/{id}/plan")
@@ -140,23 +158,5 @@ public class MemberSubscriptionController {
 
 		return ResponseEntity.noContent()
 			.build();
-	}
-
-	@GetMapping("/{id}")
-	public ResponseEntity<ReadMemberSubscriptionResponse> readMemberSubscription(
-		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
-		@PathVariable("id") Long memberSubscriptionId
-	) {
-		return ResponseEntity.ok(readMemberSubscriptionUseCase.read(
-			oAuth2User.getMemberId(), memberSubscriptionId));
-	}
-
-	@GetMapping
-	public ResponseEntity<ListMemberSubscriptionsResponse> listMemberSubscriptions(
-		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
-		@Valid ListMemberSubscriptionsRequest request
-	) {
-		return ResponseEntity.ok(readMemberSubscriptionUseCase.list(
-			oAuth2User.getMemberId(), request));
 	}
 }

@@ -8,22 +8,21 @@ import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.membersubscription.port.in.DeactivateMemberSubscriptionUseCase;
 import subport.application.membersubscription.port.out.LoadMemberSubscriptionPort;
-import subport.application.membersubscription.port.out.UpdateMemberSubscriptionPort;
 import subport.domain.membersubscription.MemberSubscription;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class DeactivateMemberSubscriptionService implements DeactivateMemberSubscriptionUseCase {
 
 	private final LoadMemberSubscriptionPort loadMemberSubscriptionPort;
-	private final UpdateMemberSubscriptionPort updateMemberSubscriptionPort;
 
-	@Transactional
 	@Override
 	public void deactivate(Long memberId, Long memberSubscriptionId) {
-		MemberSubscription memberSubscription = loadMemberSubscriptionPort.load(memberSubscriptionId);
+		MemberSubscription memberSubscription =
+			loadMemberSubscriptionPort.loadMemberSubscription(memberSubscriptionId);
 
-		if (!memberSubscription.getMemberId().equals(memberId)) {
+		if (!memberSubscription.getMember().getId().equals(memberId)) {
 			throw new CustomException(ErrorCode.MEMBER_SUBSCRIPTION_FORBIDDEN);
 		}
 		if (!memberSubscription.isActive()) {
@@ -31,6 +30,5 @@ public class DeactivateMemberSubscriptionService implements DeactivateMemberSubs
 		}
 
 		memberSubscription.deactivate();
-		updateMemberSubscriptionPort.update(memberSubscription);
 	}
 }

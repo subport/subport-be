@@ -3,14 +3,33 @@ package subport.domain.membersubscription;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import subport.adapter.out.persistence.BaseTimeEntity;
+import subport.domain.member.Member;
+import subport.domain.subscription.Plan;
+import subport.domain.subscription.Subscription;
 
+@Entity
+@Table(name = "member_subscription")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class MemberSubscription {
+public class MemberSubscription extends BaseTimeEntity {
 
-	private final Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-	private final LocalDate startDate;
+	private LocalDate startDate;
 
 	private Integer reminderDaysBefore;
 
@@ -32,110 +51,47 @@ public class MemberSubscription {
 
 	private LocalDate nextPaymentDate;
 
-	private final Long memberId;
+	@JoinColumn(name = "member_id", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Member member;
 
-	private final Long subscriptionId;
+	@JoinColumn(name = "subscription_id", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Subscription subscription;
 
-	private Long planId;
+	@JoinColumn(name = "plan_id", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Plan plan;
 
-	private MemberSubscription(
-		Long id,
+	public MemberSubscription(
 		LocalDate startDate,
 		Integer reminderDaysBefore,
+		LocalDate reminderDate,
 		String memo,
 		boolean dutchPay,
 		BigDecimal dutchPayAmount,
 		BigDecimal exchangeRate,
 		LocalDate exchangeRateDate,
-		boolean active,
 		LocalDate lastPaymentDate,
 		LocalDate nextPaymentDate,
-		Long memberId,
-		Long subscriptionId,
-		Long planId
+		Member member,
+		Subscription subscription,
+		Plan plan
 	) {
-		this.id = id;
 		this.startDate = startDate;
 		this.reminderDaysBefore = reminderDaysBefore;
-		this.reminderDate = nextPaymentDate.minusDays(reminderDaysBefore);
+		this.reminderDate = reminderDate;
 		this.memo = memo;
 		this.dutchPay = dutchPay;
 		this.dutchPayAmount = dutchPayAmount;
 		this.exchangeRate = exchangeRate;
 		this.exchangeRateDate = exchangeRateDate;
-		this.active = active;
+		this.active = true;
 		this.lastPaymentDate = lastPaymentDate;
 		this.nextPaymentDate = nextPaymentDate;
-		this.memberId = memberId;
-		this.subscriptionId = subscriptionId;
-		this.planId = planId;
-	}
-
-	public static MemberSubscription withId(
-		Long id,
-		LocalDate startDate,
-		Integer reminderDaysBefore,
-		String memo,
-		boolean dutchPay,
-		BigDecimal dutchPayAmount,
-		BigDecimal exchangeRate,
-		LocalDate exchangeRateDate,
-		boolean active,
-		LocalDate lastPaymentDate,
-		LocalDate nextPaymentDate,
-		Long memberId,
-		Long subscriptionId,
-		Long planId
-	) {
-		return new MemberSubscription(
-			id,
-			startDate,
-			reminderDaysBefore,
-			memo,
-			dutchPay,
-			dutchPayAmount,
-			exchangeRate,
-			exchangeRateDate,
-			active,
-			lastPaymentDate,
-			nextPaymentDate,
-			memberId,
-			subscriptionId,
-			planId
-		);
-	}
-
-	public static MemberSubscription withoutId(
-		LocalDate startDate,
-		Integer reminderDaysBefore,
-		String memo,
-		boolean dutchPay,
-		BigDecimal dutchPayAmount,
-		BigDecimal exchangeRate,
-		LocalDate exchangeRateDate,
-		boolean active,
-		LocalDate lastPaymentDate,
-		LocalDate nextPaymentDate,
-		Long memberId,
-		Long subscriptionId,
-		Long planId
-	) {
-		return new MemberSubscription(
-			null,
-			startDate,
-			reminderDaysBefore,
-			memo,
-			dutchPay,
-			dutchPayAmount,
-			exchangeRate,
-			exchangeRateDate,
-			active,
-			lastPaymentDate,
-			nextPaymentDate,
-			memberId,
-			subscriptionId,
-			planId
-		);
+		this.member = member;
+		this.subscription = subscription;
+		this.plan = plan;
 	}
 
 	public void updateReminderDaysBefore(Integer reminderDaysBefore) {
@@ -146,8 +102,8 @@ public class MemberSubscription {
 		this.memo = memo;
 	}
 
-	public void updatePlan(Long planId) {
-		this.planId = planId;
+	public void updatePlan(Plan plan) {
+		this.plan = plan;
 	}
 
 	public void updateDutchPay(boolean dutchPay, BigDecimal dutchPayAmount) {

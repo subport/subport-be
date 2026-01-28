@@ -19,7 +19,6 @@ import subport.application.membersubscription.port.in.dto.UpdateMemberSubscripti
 import subport.application.membersubscription.port.in.dto.UpdateMemberSubscriptionPlanRequest;
 import subport.application.membersubscription.port.in.dto.UpdateMemberSubscriptionReminderRequest;
 import subport.application.membersubscription.port.out.LoadMemberSubscriptionPort;
-import subport.application.membersubscription.port.out.UpdateMemberSubscriptionPort;
 import subport.application.subscription.port.out.LoadPlanPort;
 import subport.domain.exchangeRate.ExchangeRate;
 import subport.domain.membersubscription.MemberSubscription;
@@ -36,7 +35,6 @@ public class UpdateMemberSubscriptionService implements
 	UpdateMemberSubscriptionMemoUseCase {
 
 	private final LoadMemberSubscriptionPort loadMemberSubscriptionPort;
-	private final UpdateMemberSubscriptionPort updateMemberSubscriptionPort;
 	private final LoadPlanPort loadPlanPort;
 	private final ExchangeRateService exchangeRateService;
 
@@ -46,23 +44,23 @@ public class UpdateMemberSubscriptionService implements
 		UpdateMemberSubscriptionPlanRequest request,
 		Long memberSubscriptionId
 	) {
-		MemberSubscription memberSubscription = loadMemberSubscriptionPort.load(memberSubscriptionId);
+		MemberSubscription memberSubscription = loadMemberSubscriptionPort.loadMemberSubscription(memberSubscriptionId);
 
 		Long newPlanId = request.planId();
-		if (newPlanId.equals(memberSubscription.getPlanId())) {
+		if (newPlanId.equals(memberSubscription.getPlan().getId())) {
 			return;
 		}
 
-		if (!memberSubscription.getMemberId().equals(memberId)) {
+		if (!memberSubscription.getMember().getId().equals(memberId)) {
 			throw new CustomException(ErrorCode.MEMBER_SUBSCRIPTION_FORBIDDEN);
 		}
 
-		Plan newPlan = loadPlanPort.load(newPlanId);
-		if (!newPlan.getSubscriptionId().equals(memberSubscription.getSubscriptionId())) {
+		Plan newPlan = loadPlanPort.loadPlan(newPlanId);
+		if (!newPlan.getSubscription().getId().equals(memberSubscription.getSubscription().getId())) {
 			throw new CustomException(ErrorCode.INVALID_MEMBER_SUBSCRIPTION_PLAN);
 		}
 
-		if (!newPlan.isSystemProvided() && !newPlan.getMemberId().equals(memberId)) {
+		if (!newPlan.isSystemProvided() && !newPlan.getMember().getId().equals(memberId)) {
 			throw new CustomException(ErrorCode.PLAN_USE_FORBIDDEN);
 		}
 
@@ -80,12 +78,10 @@ public class UpdateMemberSubscriptionService implements
 		}
 		memberSubscription.updateExchangeRate(rate, exchangeRateDate);
 
-		memberSubscription.updatePlan(newPlanId);
+		memberSubscription.updatePlan(newPlan);
 		memberSubscription.updateNextPaymentDate(
 			lastPaymentDate.plusMonths(newPlan.getDurationMonths())
 		);
-
-		updateMemberSubscriptionPort.update(memberSubscription);
 	}
 
 	@Override
@@ -94,9 +90,9 @@ public class UpdateMemberSubscriptionService implements
 		UpdateMemberSubscriptionDutchPayRequest request,
 		Long memberSubscriptionId
 	) {
-		MemberSubscription memberSubscription = loadMemberSubscriptionPort.load(memberSubscriptionId);
+		MemberSubscription memberSubscription = loadMemberSubscriptionPort.loadMemberSubscription(memberSubscriptionId);
 
-		if (!memberSubscription.getMemberId().equals(memberId)) {
+		if (!memberSubscription.getMember().getId().equals(memberId)) {
 			throw new CustomException(ErrorCode.MEMBER_SUBSCRIPTION_FORBIDDEN);
 		}
 
@@ -110,8 +106,6 @@ public class UpdateMemberSubscriptionService implements
 		}
 
 		memberSubscription.updateDutchPay(dutchPay, dutchPayAmount);
-
-		updateMemberSubscriptionPort.update(memberSubscription);
 	}
 
 	@Override
@@ -120,15 +114,13 @@ public class UpdateMemberSubscriptionService implements
 		UpdateMemberSubscriptionReminderRequest request,
 		Long memberSubscriptionId
 	) {
-		MemberSubscription memberSubscription = loadMemberSubscriptionPort.load(memberSubscriptionId);
+		MemberSubscription memberSubscription = loadMemberSubscriptionPort.loadMemberSubscription(memberSubscriptionId);
 
-		if (!memberSubscription.getMemberId().equals(memberId)) {
+		if (!memberSubscription.getMember().getId().equals(memberId)) {
 			throw new CustomException(ErrorCode.MEMBER_SUBSCRIPTION_FORBIDDEN);
 		}
 
 		memberSubscription.updateReminderDaysBefore(request.reminderDaysBefore());
-
-		updateMemberSubscriptionPort.update(memberSubscription);
 	}
 
 	@Override
@@ -137,14 +129,12 @@ public class UpdateMemberSubscriptionService implements
 		UpdateMemberSubscriptionMemoRequest request,
 		Long memberSubscriptionId
 	) {
-		MemberSubscription memberSubscription = loadMemberSubscriptionPort.load(memberSubscriptionId);
+		MemberSubscription memberSubscription = loadMemberSubscriptionPort.loadMemberSubscription(memberSubscriptionId);
 
-		if (!memberSubscription.getMemberId().equals(memberId)) {
+		if (!memberSubscription.getMember().getId().equals(memberId)) {
 			throw new CustomException(ErrorCode.MEMBER_SUBSCRIPTION_FORBIDDEN);
 		}
 
 		memberSubscription.updateMemo(request.memo());
-
-		updateMemberSubscriptionPort.update(memberSubscription);
 	}
 }
