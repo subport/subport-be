@@ -52,6 +52,11 @@ public class MemberSubscriptionPersistenceAdapter implements
 	}
 
 	@Override
+	public List<MemberSubscription> loadMemberSubscriptionsForEmail(LocalDate currentDate) {
+		return memberSubscriptionRepository.findByReminderDateAndActiveTrue(currentDate);
+	}
+
+	@Override
 	public void delete(MemberSubscription memberSubscription) {
 		memberSubscriptionRepository.delete(memberSubscription);
 	}

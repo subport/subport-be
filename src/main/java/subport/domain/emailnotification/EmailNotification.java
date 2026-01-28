@@ -3,27 +3,43 @@ package subport.domain.emailnotification;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import subport.adapter.out.persistence.BaseTimeEntity;
 
+@Entity
+@Table(name = "email_notification")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class EmailNotification {
+public class EmailNotification extends BaseTimeEntity {
 
-	private final Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-	private final Long memberSubscriptionId;
+	private Long memberSubscriptionId;
 
-	private final LocalDate paymentDate;
+	private LocalDate paymentDate;
 
-	private final Integer daysBeforePayment;
+	private Integer daysBeforePayment;
 
-	private final Long memberId;
+	private Long memberId;
 
-	private final String recipientEmail;
+	private String recipientEmail;
 
-	private final String subscriptionName;
+	private String subscriptionName;
 
-	private final String subscriptionLogoImageUrl;
+	private String subscriptionLogoImageUrl;
 
+	@Enumerated(value = EnumType.STRING)
 	private SendingStatus status;
 
 	private LocalDateTime sentAt;
@@ -31,7 +47,6 @@ public class EmailNotification {
 	private int retryCount;
 
 	public EmailNotification(
-		Long id,
 		Long memberSubscriptionId,
 		LocalDate paymentDate,
 		Integer daysBeforePayment,
@@ -43,7 +58,6 @@ public class EmailNotification {
 		LocalDateTime sentAt,
 		int retryCount
 	) {
-		this.id = id;
 		this.memberSubscriptionId = memberSubscriptionId;
 		this.paymentDate = paymentDate;
 		this.daysBeforePayment = daysBeforePayment;
@@ -56,67 +70,12 @@ public class EmailNotification {
 		this.retryCount = retryCount;
 	}
 
-	public static EmailNotification withId(
-		Long id,
-		Long memberSubscriptionId,
-		LocalDate paymentDate,
-		Integer daysBeforePayment,
-		Long memberId,
-		String recipientEmail,
-		String subscriptionName,
-		String subscriptionLogoImageUrl,
-		SendingStatus status,
-		LocalDateTime sentAt,
-		int retryCount
-	) {
-		return new EmailNotification(
-			id,
-			memberSubscriptionId,
-			paymentDate,
-			daysBeforePayment,
-			memberId,
-			recipientEmail,
-			subscriptionName,
-			subscriptionLogoImageUrl,
-			status,
-			sentAt,
-			retryCount
-		);
-	}
-
-	public static EmailNotification withoutId(
-		Long memberSubscriptionId,
-		LocalDate paymentDate,
-		Integer daysBeforePayment,
-		Long memberId,
-		String recipientEmail,
-		String subscriptionName,
-		String subscriptionLogoImageUrl,
-		SendingStatus status,
-		LocalDateTime sentAt,
-		int retryCount
-	) {
-		return new EmailNotification(
-			null,
-			memberSubscriptionId,
-			paymentDate,
-			daysBeforePayment,
-			memberId,
-			recipientEmail,
-			subscriptionName,
-			subscriptionLogoImageUrl,
-			status,
-			sentAt,
-			retryCount
-		);
-	}
-
 	public void markSent() {
-		this.status = SendingStatus.SENT;
+		status = SendingStatus.SENT;
 	}
 
 	public void markFailed() {
-		this.status = SendingStatus.FAILED;
+		status = SendingStatus.FAILED;
 	}
 
 	public void updateSentAt(LocalDateTime sentAt) {
@@ -124,6 +83,6 @@ public class EmailNotification {
 	}
 
 	public void increaseRetryCount() {
-		this.retryCount++;
+		retryCount++;
 	}
 }

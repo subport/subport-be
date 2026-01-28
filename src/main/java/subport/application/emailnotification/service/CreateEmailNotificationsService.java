@@ -12,6 +12,8 @@ import subport.application.emailnotification.port.out.SaveEmailNotificationsPort
 import subport.application.membersubscription.port.out.LoadMemberSubscriptionPort;
 import subport.domain.emailnotification.EmailNotification;
 import subport.domain.emailnotification.SendingStatus;
+import subport.domain.member.Member;
+import subport.domain.subscription.Subscription;
 
 @Service
 @Transactional
@@ -23,19 +25,25 @@ public class CreateEmailNotificationsService implements CreateEmailNotifications
 
 	@Override
 	public void create(LocalDate currentDate) {
-		List<EmailNotification> emailNotifications = loadMemberSubscriptionPort.loadForEmail(currentDate).stream()
-			.map(memberSubscription -> EmailNotification.withoutId(
-				memberSubscription.memberSubscriptionId(),
-				memberSubscription.paymentDate(),
-				memberSubscription.daysBeforePayment(),
-				memberSubscription.memberId(),
-				memberSubscription.memberEmail(),
-				memberSubscription.subscriptionName(),
-				memberSubscription.subscriptionLogoImageUrl(),
-				SendingStatus.PENDING,
-				null,
-				0
-			))
+		List<EmailNotification> emailNotifications
+			= loadMemberSubscriptionPort.loadMemberSubscriptionsForEmail(currentDate).stream()
+			.map(memberSubscription -> {
+				Member member = memberSubscription.getMember();
+				Subscription subscription = memberSubscription.getSubscription();
+
+				return new EmailNotification(
+					memberSubscription.getId(),
+					memberSubscription.getNextPaymentDate(),
+					memberSubscription.getReminderDaysBefore(),
+					member.getId(),
+					member.getEmail(),
+					subscription.getName(),
+					subscription.getLogoImageUrl(),
+					SendingStatus.PENDING,
+					null,
+					0
+				);
+			})
 			.toList();
 
 		saveEmailNotificationsPort.save(emailNotifications);

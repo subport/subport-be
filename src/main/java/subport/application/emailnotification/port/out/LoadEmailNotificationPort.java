@@ -8,7 +8,5 @@ import subport.domain.emailnotification.SendingStatus;
 
 public interface LoadEmailNotificationPort {
 
-	EmailNotification loadEmailNotification(Long id);
-
 	List<EmailNotification> loadEmailNotifications(LocalDate currentDate, SendingStatus status);
 }
