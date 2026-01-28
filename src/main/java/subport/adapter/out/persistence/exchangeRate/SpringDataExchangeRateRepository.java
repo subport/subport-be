@@ -5,7 +5,9 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface SpringDataExchangeRateRepository extends JpaRepository<ExchangeRateJpaEntity, Long> {
+import subport.domain.exchangeRate.ExchangeRate;
 
-	Optional<ExchangeRateJpaEntity> findByRequestDate(LocalDate requestDate);
+public interface SpringDataExchangeRateRepository extends JpaRepository<ExchangeRate, Long> {
+
+	Optional<ExchangeRate> findByRequestDate(LocalDate requestDate);
 }

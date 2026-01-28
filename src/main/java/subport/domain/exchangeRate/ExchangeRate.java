@@ -2,28 +2,38 @@ package subport.domain.exchangeRate;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import subport.adapter.out.persistence.BaseTimeEntity;
 
+@Entity
+@Table(name = "exchange_rate")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class ExchangeRate {
+public class ExchangeRate extends BaseTimeEntity {
 
-	private final LocalDate requestDate;
+	@Id
+	@Column(updatable = false)
+	private LocalDate requestDate;
+
 	private LocalDate applyDate;
+
 	private BigDecimal rate;
-	private final LocalDateTime lastModifiedAt;
 
 	public ExchangeRate(
 		LocalDate requestDate,
 		LocalDate applyDate,
-		BigDecimal rate,
-		LocalDateTime lastModifiedAt
+		BigDecimal rate
 	) {
 		this.requestDate = requestDate;
 		this.applyDate = applyDate;
 		this.rate = rate;
-		this.lastModifiedAt = lastModifiedAt;
 	}
 
 	public void updateRate(LocalDate applyDate, BigDecimal rate) {

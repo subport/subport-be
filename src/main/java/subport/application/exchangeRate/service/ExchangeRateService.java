@@ -11,19 +11,17 @@ import lombok.RequiredArgsConstructor;
 import subport.application.exchangeRate.port.out.FetchExchangeRatePort;
 import subport.application.exchangeRate.port.out.LoadExchangeRatePort;
 import subport.application.exchangeRate.port.out.SaveExchangeRatePort;
-import subport.application.exchangeRate.port.out.UpdateExchangeRatePort;
 import subport.domain.exchangeRate.ExchangeRate;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ExchangeRateService {
 
 	private final LoadExchangeRatePort loadExchangeRatePort;
 	private final FetchExchangeRatePort fetchExchangeRatePort;
 	private final SaveExchangeRatePort saveExchangeRatePort;
-	private final UpdateExchangeRatePort updateExchangeRatePort;
 
-	@Transactional
 	public ExchangeRate getExchangeRate(LocalDate startDate) {
 		LocalDate startWeekdayDate = getLastWeekdayDate(startDate);
 
@@ -38,7 +36,6 @@ public class ExchangeRateService {
 				BigDecimal rate = fetchExchangeRatePort.fetch(startWeekdayDate.toString());
 				if (rate != null) {
 					exchangeRate.updateRate(startWeekdayDate, rate);
-					updateExchangeRatePort.update(exchangeRate);
 				}
 			}
 
@@ -57,8 +54,7 @@ public class ExchangeRateService {
 		exchangeRate = new ExchangeRate(
 			startWeekdayDate,
 			targetDate,
-			rate,
-			null
+			rate
 		);
 		saveExchangeRatePort.save(exchangeRate);
 
