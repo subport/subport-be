@@ -36,4 +36,9 @@ public class SpendingRecordPersistenceAdapter implements
 			end
 		);
 	}
+
+	@Override
+	public List<SpendingRecord> loadSpendingRecords(Long memberId, LocalDate targetDate) {
+		return spendingRecordRepository.findByMemberIdAndPaymentDate(memberId, targetDate);
+	}
 }

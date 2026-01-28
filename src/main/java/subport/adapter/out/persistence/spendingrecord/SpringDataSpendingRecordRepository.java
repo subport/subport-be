@@ -16,4 +16,6 @@ public interface SpringDataSpendingRecordRepository extends JpaRepository<Spendi
 		LocalDate paymentDateIsGreaterThan,
 		LocalDate paymentDateIsLessThan
 	);
+
+	List<SpendingRecord> findByMemberIdAndPaymentDate(Long memberId, LocalDate paymentDate);
 }

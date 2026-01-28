@@ -10,4 +10,6 @@ public interface LoadSpendingRecordPort {
 	List<SpendingRecord> loadSpendingRecords(Long memberSubscriptionId);
 
 	List<SpendingRecord> loadSpendingRecords(Long memberId, LocalDate start, LocalDate end);
+
+	List<SpendingRecord> loadSpendingRecords(Long memberId, LocalDate targetDate);
 }
