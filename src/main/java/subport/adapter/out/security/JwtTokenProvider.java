@@ -56,7 +56,7 @@ public class JwtTokenProvider implements
 		);
 		Claims claims = parseClaims(refreshToken);
 
-		return RefreshToken.withoutId(
+		return new RefreshToken(
 			refreshToken,
 			memberId,
 			claims.getIssuedAt().toInstant(),

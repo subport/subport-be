@@ -4,7 +4,11 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface SpringDataRefreshTokenRepository extends JpaRepository<RefreshTokenJpaEntity, Long> {
+import subport.domain.token.RefreshToken;
 
-	Optional<RefreshTokenJpaEntity> findByTokenValue(String tokenValue);
+public interface SpringDataRefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
+
+	Optional<RefreshToken> findByTokenValue(String tokenValue);
+
+	void deleteByTokenValue(String tokenValue);
 }

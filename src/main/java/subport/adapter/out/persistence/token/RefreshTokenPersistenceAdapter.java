@@ -18,24 +18,25 @@ public class RefreshTokenPersistenceAdapter implements
 	DeleteRefreshTokenPort {
 
 	private final SpringDataRefreshTokenRepository refreshTokenRepository;
-	private final RefreshTokenMapper refreshTokenMapper;
 
 	@Override
 	public void save(RefreshToken refreshToken) {
-		RefreshTokenJpaEntity refreshTokenEntity = refreshTokenMapper.toJpaEntity(refreshToken);
-		refreshTokenRepository.save(refreshTokenEntity);
+		refreshTokenRepository.save(refreshToken);
 	}
 
 	@Override
 	public RefreshToken load(String tokenValue) {
-		RefreshTokenJpaEntity refreshTokenEntity = refreshTokenRepository.findByTokenValue(tokenValue)
+		return refreshTokenRepository.findByTokenValue(tokenValue)
 			.orElseThrow(() -> new CustomException(ErrorCode.REFRESH_TOKEN_NOT_FOUND));
-
-		return refreshTokenMapper.toDomain(refreshTokenEntity);
 	}
 
 	@Override
-	public void delete(Long refreshTokenId) {
-		refreshTokenRepository.deleteById(refreshTokenId);
+	public void delete(String refreshTokenValue) {
+		refreshTokenRepository.deleteByTokenValue(refreshTokenValue);
+	}
+
+	@Override
+	public void delete(RefreshToken refreshToken) {
+		refreshTokenRepository.delete(refreshToken);
 	}
 }

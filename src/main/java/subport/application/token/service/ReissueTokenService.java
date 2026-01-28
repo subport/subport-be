@@ -19,6 +19,7 @@ import subport.application.token.port.out.SaveRefreshTokenPort;
 import subport.domain.token.RefreshToken;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ReissueTokenService implements ReissueTokenUseCase {
 
@@ -28,7 +29,6 @@ public class ReissueTokenService implements ReissueTokenUseCase {
 	private final CreateRefreshTokenPort createRefreshTokenPort;
 	private final SaveRefreshTokenPort saveRefreshTokenPort;
 
-	@Transactional
 	@Override
 	public TokenPair reissue(String refreshTokenValue) {
 		if (refreshTokenValue == null) {
@@ -38,14 +38,14 @@ public class ReissueTokenService implements ReissueTokenUseCase {
 		RefreshToken refreshToken = loadRefreshTokenPort.load(refreshTokenValue);
 		Instant now = Instant.now();
 		if (refreshToken.isExpired(now)) {
-			deleteRefreshTokenPort.delete(refreshToken.getId());
+			deleteRefreshTokenPort.delete(refreshToken);
 			throw new RefreshTokenExpiredException();
 		}
 
 		Long memberId = refreshToken.getMemberId();
 		String accessToken = createAccessTokenPort.createAccessToken(memberId, now);
 
-		deleteRefreshTokenPort.delete(refreshToken.getId());
+		deleteRefreshTokenPort.delete(refreshToken);
 		refreshToken = createRefreshTokenPort.createRefreshToken(memberId, now);
 		saveRefreshTokenPort.save(refreshToken);
 

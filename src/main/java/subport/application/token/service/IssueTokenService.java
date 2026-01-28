@@ -14,6 +14,7 @@ import subport.application.token.port.out.SaveRefreshTokenPort;
 import subport.domain.token.RefreshToken;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class IssueTokenService implements IssueTokenUseCase {
 
@@ -21,7 +22,6 @@ public class IssueTokenService implements IssueTokenUseCase {
 	private final CreateRefreshTokenPort createRefreshTokenPort;
 	private final SaveRefreshTokenPort saveRefreshTokenPort;
 
-	@Transactional
 	@Override
 	public TokenPair issue(Long memberId) {
 		Instant now = Instant.now();
