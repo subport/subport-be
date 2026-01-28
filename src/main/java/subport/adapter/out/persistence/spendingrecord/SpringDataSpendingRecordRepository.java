@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface SpringDataSpendingRecordRepository extends JpaRepository<SpendingRecordJpaEntity, Long> {
+import subport.domain.spendingrecord.SpendingRecord;
 
-	List<SpendingRecordJpaEntity> findTop3ByMemberSubscriptionIdOrderByPaymentDateDesc(Long memberSubscriptionId);
+public interface SpringDataSpendingRecordRepository extends JpaRepository<SpendingRecord, Long> {
+
+	List<SpendingRecord> findTop3ByMemberSubscriptionIdOrderByPaymentDateDesc(Long memberSubscriptionId);
 }

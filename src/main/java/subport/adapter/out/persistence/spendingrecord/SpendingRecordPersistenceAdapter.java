@@ -16,22 +16,14 @@ public class SpendingRecordPersistenceAdapter implements
 	LoadSpendingRecordPort {
 
 	private final SpringDataSpendingRecordRepository spendingRecordRepository;
-	private final SpendingRecordMapper spendingRecordMapper;
 
 	@Override
 	public void save(List<SpendingRecord> spendingRecords) {
-		List<SpendingRecordJpaEntity> spendingRecordEntities = spendingRecords.stream()
-			.map(spendingRecordMapper::toJpaEntity)
-			.toList();
-
-		spendingRecordRepository.saveAll(spendingRecordEntities);
+		spendingRecordRepository.saveAll(spendingRecords);
 	}
 
 	@Override
 	public List<SpendingRecord> loadSpendingRecords(Long memberSubscriptionId) {
-		return spendingRecordRepository.findTop3ByMemberSubscriptionIdOrderByPaymentDateDesc(memberSubscriptionId)
-			.stream()
-			.map(spendingRecordMapper::toDomain)
-			.toList();
+		return spendingRecordRepository.findTop3ByMemberSubscriptionIdOrderByPaymentDateDesc(memberSubscriptionId);
 	}
 }

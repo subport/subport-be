@@ -24,8 +24,6 @@ import subport.application.membersubscription.port.in.dto.SpendingRecordSummary;
 import subport.application.membersubscription.port.out.LoadMemberSubscriptionPort;
 import subport.application.spendingrecord.port.out.LoadSpendingRecordPort;
 import subport.domain.membersubscription.MemberSubscription;
-import subport.domain.subscription.AmountUnit;
-import subport.domain.subscription.Plan;
 
 @Service
 @Transactional(readOnly = true)
@@ -51,11 +49,11 @@ public class MemberSubscriptionQueryService implements MemberSubscriptionQueryUs
 		long totalDays = DAYS.between(lastPaymentDate, nextPaymentDate);
 		int paymentProgressPercent = (int)((double)elapsedDays / totalDays * 100);
 
-		BigDecimal actualPaymentAmount = calculateActualPaymentAmount(memberSubscription);
+		BigDecimal actualPaymentAmount = memberSubscription.calculateActualPaymentAmount();
 
 		List<SpendingRecordSummary> spendingRecords = loadSpendingRecordPort.loadSpendingRecords(memberSubscriptionId)
 			.stream()
-			.map(SpendingRecordSummary::fromDomain)
+			.map(SpendingRecordSummary::from)
 			.toList();
 
 		return GetMemberSubscriptionResponse.of(
@@ -80,7 +78,7 @@ public class MemberSubscriptionQueryService implements MemberSubscriptionQueryUs
 
 		List<ComputedMemberSubscription> computed = memberSubscriptions.stream()
 			.map(ms -> {
-				BigDecimal actualPaymentAmount = calculateActualPaymentAmount(ms);
+				BigDecimal actualPaymentAmount = ms.calculateActualPaymentAmount();
 				return new ComputedMemberSubscription(
 					ms,
 					actualPaymentAmount,
@@ -122,23 +120,6 @@ public class MemberSubscriptionQueryService implements MemberSubscriptionQueryUs
 				))
 				.toList()
 		);
-	}
-
-	private BigDecimal calculateActualPaymentAmount(MemberSubscription memberSubscription) {
-		boolean dutchPay = memberSubscription.isDutchPay();
-		Plan plan = memberSubscription.getPlan();
-		AmountUnit amountUnit = plan.getAmountUnit();
-		BigDecimal planAmount = plan.getAmount();
-
-		if (dutchPay) {
-			return memberSubscription.getDutchPayAmount();
-		}
-		if (amountUnit.equals(AmountUnit.USD)) {
-			return planAmount.multiply(memberSubscription.getExchangeRate())
-				.setScale(0, RoundingMode.HALF_UP);
-		}
-
-		return planAmount;
 	}
 
 	private record ComputedMemberSubscription(

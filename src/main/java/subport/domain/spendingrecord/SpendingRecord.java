@@ -3,32 +3,41 @@ package subport.domain.spendingrecord;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Getter;
-import subport.domain.membersubscription.MemberSubscription;
-import subport.domain.subscription.Plan;
-import subport.domain.subscription.Subscription;
+import lombok.NoArgsConstructor;
+import subport.adapter.out.persistence.BaseTimeEntity;
 
+@Entity
+@Table(name = "spending_record")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class SpendingRecord {
+public class SpendingRecord extends BaseTimeEntity {
 
-	private final Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-	private final LocalDate paymentDate;
+	private LocalDate paymentDate;
 
-	private final BigDecimal amount;
+	private BigDecimal amount;
 
-	private final int durationMonths;
+	private int durationMonths;
 
-	private final String subscriptionName;
+	private String subscriptionName;
 
-	private final String subscriptionLogoImageUrl;
+	private String subscriptionLogoImageUrl;
 
-	private final Long memberId;
+	private Long memberId;
 
-	private final Long memberSubscriptionId;
+	private Long memberSubscriptionId;
 
 	public SpendingRecord(
-		Long id,
 		LocalDate paymentDate,
 		BigDecimal amount,
 		int durationMonths,
@@ -37,7 +46,6 @@ public class SpendingRecord {
 		Long memberId,
 		Long memberSubscriptionId
 	) {
-		this.id = id;
 		this.paymentDate = paymentDate;
 		this.amount = amount;
 		this.durationMonths = durationMonths;
@@ -47,68 +55,25 @@ public class SpendingRecord {
 		this.memberSubscriptionId = memberSubscriptionId;
 	}
 
-	public static SpendingRecord withId(
-		Long id,
-		LocalDate paymentDate,
-		BigDecimal amount,
-		int durationMonths,
-		String subscriptionName,
-		String subscriptionLogoImageUrl,
-		Long memberId,
-		Long memberSubscriptionId
-	) {
-		return new SpendingRecord(
-			id,
-			paymentDate,
-			amount,
-			durationMonths,
-			subscriptionName,
-			subscriptionLogoImageUrl,
-			memberId,
-			memberSubscriptionId
-		);
-	}
-
-	public static SpendingRecord withoutId(
-		LocalDate paymentDate,
-		BigDecimal amount,
-		int durationMonths,
-		String subscriptionName,
-		String subscriptionLogoImageUrl,
-		Long memberId,
-		Long memberSubscriptionId
-	) {
-		return new SpendingRecord(
-			null,
-			paymentDate,
-			amount,
-			durationMonths,
-			subscriptionName,
-			subscriptionLogoImageUrl,
-			memberId,
-			memberSubscriptionId
-		);
-	}
-
-	public static SpendingRecord from(
-		Plan plan,
-		Subscription subscription,
-		MemberSubscription memberSubscription
+	/*public static SpendingRecordTemp from(
+		PlanTemp plan,
+		SubscriptionTemp subscription,
+		MemberSubscriptionTemp memberSubscriptionTemp
 	) {
 		BigDecimal amount = plan.getAmount();
-		BigDecimal dutchPayAmount = memberSubscription.getDutchPayAmount();
-		if (memberSubscription.isDutchPay() && dutchPayAmount != null) {
+		BigDecimal dutchPayAmount = memberSubscriptionTemp.getDutchPayAmount();
+		if (memberSubscriptionTemp.isDutchPay() && dutchPayAmount != null) {
 			amount = dutchPayAmount;
 		}
-		return new SpendingRecord(
+		return new SpendingRecordTemp(
 			null,
-			memberSubscription.getNextPaymentDate(),
+			memberSubscriptionTemp.getNextPaymentDate(),
 			amount,
 			plan.getDurationMonths(),
 			subscription.getName(),
 			subscription.getLogoImageUrl(),
-			memberSubscription.getMemberId(),
-			memberSubscription.getId()
+			memberSubscriptionTemp.getMemberId(),
+			memberSubscriptionTemp.getId()
 		);
-	}
+	}*/
 }

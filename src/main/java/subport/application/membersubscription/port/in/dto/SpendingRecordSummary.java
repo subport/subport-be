@@ -10,7 +10,7 @@ public record SpendingRecordSummary(
 	LocalDate paymentDate
 ) {
 
-	public static SpendingRecordSummary fromDomain(SpendingRecord spendingRecord) {
+	public static SpendingRecordSummary from(SpendingRecord spendingRecord) {
 		return new SpendingRecordSummary(
 			spendingRecord.getAmount(),
 			spendingRecord.getPaymentDate()

@@ -10,58 +10,62 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import subport.application.exchangeRate.service.ExchangeRateService;
 import subport.application.membersubscription.port.out.LoadMemberSubscriptionPort;
-import subport.application.membersubscription.port.out.UpdateMemberSubscriptionPort;
-import subport.application.membersubscription.port.out.dto.MemberSubscriptionForSpendingRecord;
 import subport.application.spendingrecord.port.in.CreateSpendingRecordUseCase;
 import subport.application.spendingrecord.port.out.SaveSpendingRecordPort;
 import subport.domain.exchangeRate.ExchangeRate;
 import subport.domain.membersubscription.MemberSubscription;
 import subport.domain.spendingrecord.SpendingRecord;
+import subport.domain.subscription.Plan;
+import subport.domain.subscription.Subscription;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CreateSpendingRecordService implements CreateSpendingRecordUseCase {
 
 	private final LoadMemberSubscriptionPort loadMemberSubscriptionPort;
-	private final UpdateMemberSubscriptionPort updateMemberSubscriptionPort;
 	private final SaveSpendingRecordPort saveSpendingRecordPort;
 	private final ExchangeRateService exchangeRateService;
 
-	@Transactional
 	@Override
 	public void create() {
-		List<MemberSubscriptionForSpendingRecord> memberSubscriptionsForSpendingRecord =
-			loadMemberSubscriptionPort.loadForSpendingRecordByNextPaymentDate(LocalDate.now());
+		List<MemberSubscription> memberSubscriptions =
+			loadMemberSubscriptionPort.loadMemberSubscriptions(LocalDate.now());
 
-		List<SpendingRecord> spendingRecords = memberSubscriptionsForSpendingRecord.stream()
-			.map(MemberSubscriptionForSpendingRecord::toSpendingRecord)
-			.toList();
+		List<SpendingRecord> spendingRecords = memberSubscriptions.stream()
+			.map(memberSubscription -> {
+				Subscription subscription = memberSubscription.getSubscription();
+				Plan plan = memberSubscription.getPlan();
 
-		saveSpendingRecordPort.save(spendingRecords);
-
-		List<MemberSubscription> memberSubscriptions = memberSubscriptionsForSpendingRecord.stream()
-			.map(detail -> {
-				MemberSubscription memberSubscription = detail.toMemberSubscription();
-
-				BigDecimal rate = memberSubscription.getExchangeRate();
-				LocalDate exchangeRateDate = memberSubscription.getExchangeRateDate();
-				if (rate != null && exchangeRateDate != null) {
-					ExchangeRate exchangeRate =
-						exchangeRateService.getExchangeRate(memberSubscription.getNextPaymentDate());
-
-					rate = exchangeRate.getRate();
-					exchangeRateDate = exchangeRate.getApplyDate();
-
-					memberSubscription.updateExchangeRate(rate, exchangeRateDate);
-				}
-
-				memberSubscription.updateLastPaymentDate(detail.nextPaymentDate());
-				memberSubscription.increaseNextPaymentDateByMonths(detail.planDurationMonths());
-
-				return memberSubscription;
+				return new SpendingRecord(
+					memberSubscription.getLastPaymentDate(),
+					memberSubscription.calculateActualPaymentAmount(),
+					plan.getDurationMonths(),
+					subscription.getName(),
+					subscription.getLogoImageUrl(),
+					subscription.getMember().getId(),
+					memberSubscription.getId()
+				);
 			})
 			.toList();
+		saveSpendingRecordPort.save(spendingRecords);
 
-		updateMemberSubscriptionPort.update(memberSubscriptions);
+		for (MemberSubscription memberSubscription : memberSubscriptions) {
+			BigDecimal rate = memberSubscription.getExchangeRate();
+			LocalDate exchangeRateDate = memberSubscription.getExchangeRateDate();
+
+			if (rate != null && exchangeRateDate != null) {
+				ExchangeRate exchangeRate =
+					exchangeRateService.getExchangeRate(memberSubscription.getNextPaymentDate());
+
+				rate = exchangeRate.getRate();
+				exchangeRateDate = exchangeRate.getApplyDate();
+
+				memberSubscription.updateExchangeRate(rate, exchangeRateDate);
+			}
+
+			memberSubscription.updateLastPaymentDate(memberSubscription.getNextPaymentDate());
+			memberSubscription.increaseNextPaymentDateByMonths(memberSubscription.getPlan().getDurationMonths());
+		}
 	}
 }
