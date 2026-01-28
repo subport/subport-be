@@ -57,6 +57,15 @@ public class MemberSubscriptionPersistenceAdapter implements
 	}
 
 	@Override
+	public List<MemberSubscription> loadMemberSubscriptions(Long memberId, LocalDate start, LocalDate end) {
+		return memberSubscriptionRepository.findByMemberIdAndLastPaymentDateGreaterThanEqualAndLastPaymentDateLessThan(
+			memberId,
+			start,
+			end
+		);
+	}
+
+	@Override
 	public void delete(MemberSubscription memberSubscription) {
 		memberSubscriptionRepository.delete(memberSubscription);
 	}

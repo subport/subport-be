@@ -18,4 +18,6 @@ public interface LoadMemberSubscriptionPort {
 	List<MemberSubscription> loadMemberSubscriptions(LocalDate currentDate);
 
 	List<MemberSubscription> loadMemberSubscriptionsForEmail(LocalDate currentDate);
+
+	List<MemberSubscription> loadMemberSubscriptions(Long memberId, LocalDate start, LocalDate end);
 }
