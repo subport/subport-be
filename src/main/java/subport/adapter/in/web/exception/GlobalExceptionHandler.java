@@ -5,8 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import lombok.extern.slf4j.Slf4j;
 import subport.adapter.in.web.AuthCookieProvider;
@@ -50,6 +52,32 @@ public class GlobalExceptionHandler {
 			.body(ErrorResponse.of(errorCode, e.getBindingResult()));
 	}
 
+	@ExceptionHandler(MissingServletRequestParameterException.class)
+	public ResponseEntity<ErrorResponse> handleMissingServletRequestParameter(
+		MissingServletRequestParameterException e) {
+		log.warn("Missing required parameter: parameter='{}', type='{}'",
+			e.getParameterName(),
+			e.getParameterType());
+
+		ErrorCode errorCode = ErrorCode.MISSING_REQUEST_PARAMETER;
+
+		return ResponseEntity.status(errorCode.getHttpStatus())
+			.body(ErrorResponse.of(errorCode));
+	}
+
+	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
+	public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException e) {
+		log.warn("Method argument type mismatch: parameter='{}', value='{}', requiredType='{}'",
+			e.getName(),
+			e.getValue(),
+			e.getRequiredType() != null ? e.getRequiredType().getSimpleName() : "unknown");
+
+		ErrorCode errorCode = ErrorCode.INVALID_INPUT_VALUE;
+
+		return ResponseEntity.status(errorCode.getHttpStatus())
+			.body(ErrorResponse.of(errorCode));
+	}
+
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(HttpMessageNotReadableException e) {
 		log.warn("HTTP message not readable: {}", e.getMessage());
@@ -57,7 +85,7 @@ public class GlobalExceptionHandler {
 		ErrorCode errorCode = ErrorCode.INVALID_REQUEST_BODY;
 
 		return ResponseEntity.status(errorCode.getHttpStatus())
-			.body(ErrorResponse.of(ErrorCode.INVALID_REQUEST_BODY));
+			.body(ErrorResponse.of(errorCode));
 	}
 
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
