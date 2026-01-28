@@ -61,8 +61,8 @@ public class GetMonthlyCalendarService implements GetMonthlyCalendarUseCase {
 		);
 
 		return new GetMonthlyCalendarResponse(
-			totalAmount,
-			totalAmount.subtract(previousMonthTotalAmount),
+			totalAmount.setScale(0, RoundingMode.HALF_UP),
+			totalAmount.subtract(previousMonthTotalAmount).setScale(0, RoundingMode.HALF_UP),
 			paymentDates
 		);
 	}
@@ -106,14 +106,12 @@ public class GetMonthlyCalendarService implements GetMonthlyCalendarUseCase {
 	private BigDecimal calculateTotalSpendingAmount(List<SpendingRecord> spendingRecords) {
 		return spendingRecords.stream()
 			.map(SpendingRecord::getAmount)
-			.reduce(BigDecimal.ZERO, BigDecimal::add)
-			.setScale(0, RoundingMode.HALF_UP);
+			.reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
 
 	private BigDecimal calculateTotalActualPaymentAmount(List<MemberSubscription> memberSubscriptions) {
 		return memberSubscriptions.stream()
 			.map(MemberSubscription::calculateActualPaymentAmount)
-			.reduce(BigDecimal.ZERO, BigDecimal::add)
-			.setScale(0, RoundingMode.HALF_UP);
+			.reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
 }
