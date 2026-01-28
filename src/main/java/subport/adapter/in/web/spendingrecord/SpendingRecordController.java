@@ -1,5 +1,6 @@
 package subport.adapter.in.web.spendingrecord;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import subport.adapter.in.security.oauth2.CustomOAuth2User;
+import subport.application.spendingrecord.port.in.GetDailyCalendarUseCase;
 import subport.application.spendingrecord.port.in.GetMonthlyCalendarUseCase;
+import subport.application.spendingrecord.port.in.dto.GetDailyCalendarResponse;
 import subport.application.spendingrecord.port.in.dto.GetMonthlyCalendarResponse;
 
 @RestController
@@ -20,13 +23,23 @@ import subport.application.spendingrecord.port.in.dto.GetMonthlyCalendarResponse
 public class SpendingRecordController {
 
 	private final GetMonthlyCalendarUseCase getMonthlyCalendarUseCase;
+	private final GetDailyCalendarUseCase getDailyCalendarUseCase;
 
 	@GetMapping("/summary")
 	public ResponseEntity<GetMonthlyCalendarResponse> getMonthlyCalendar(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
-		@RequestParam YearMonth date
+		@RequestParam YearMonth yearMonth
 	) {
 		return ResponseEntity.ok(getMonthlyCalendarUseCase.get(
+			oAuth2User.getMemberId(), yearMonth));
+	}
+
+	@GetMapping
+	public ResponseEntity<GetDailyCalendarResponse> getDailyCalendar(
+		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
+		@RequestParam LocalDate date
+	) {
+		return ResponseEntity.ok(getDailyCalendarUseCase.get(
 			oAuth2User.getMemberId(), date));
 	}
 }
