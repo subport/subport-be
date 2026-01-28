@@ -1,5 +1,6 @@
 package subport.adapter.out.persistence.spendingrecord;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -25,5 +26,14 @@ public class SpendingRecordPersistenceAdapter implements
 	@Override
 	public List<SpendingRecord> loadSpendingRecords(Long memberSubscriptionId) {
 		return spendingRecordRepository.findTop3ByMemberSubscriptionIdOrderByPaymentDateDesc(memberSubscriptionId);
+	}
+
+	@Override
+	public List<SpendingRecord> loadSpendingRecords(Long memberId, LocalDate start, LocalDate end) {
+		return spendingRecordRepository.findByMemberIdAndPaymentDateGreaterThanEqualAndPaymentDateLessThan(
+			memberId,
+			start,
+			end
+		);
 	}
 }

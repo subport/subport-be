@@ -1,5 +1,6 @@
 package subport.application.spendingrecord.port.out;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import subport.domain.spendingrecord.SpendingRecord;
@@ -7,4 +8,6 @@ import subport.domain.spendingrecord.SpendingRecord;
 public interface LoadSpendingRecordPort {
 
 	List<SpendingRecord> loadSpendingRecords(Long memberSubscriptionId);
+
+	List<SpendingRecord> loadSpendingRecords(Long memberId, LocalDate start, LocalDate end);
 }
