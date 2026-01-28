@@ -52,4 +52,6 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 		LocalDate lastPaymentDateIsGreaterThan,
 		LocalDate lastPaymentDateIsLessThan
 	);
+
+	List<MemberSubscription> findByMemberIdAndLastPaymentDateAndActiveTrue(Long memberId, LocalDate lastPaymentDate);
 }
