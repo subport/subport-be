@@ -1,6 +1,7 @@
 package subport.domain.membersubscription;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
@@ -16,6 +17,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import subport.adapter.out.persistence.BaseTimeEntity;
 import subport.domain.member.Member;
+import subport.domain.subscription.AmountUnit;
 import subport.domain.subscription.Plan;
 import subport.domain.subscription.Subscription;
 
@@ -130,5 +132,20 @@ public class MemberSubscription extends BaseTimeEntity {
 
 	public void deactivate() {
 		this.active = false;
+	}
+
+	public BigDecimal calculateActualPaymentAmount() {
+		AmountUnit amountUnit = plan.getAmountUnit();
+		BigDecimal planAmount = plan.getAmount();
+
+		if (dutchPay) {
+			return dutchPayAmount;
+		}
+		if (amountUnit.equals(AmountUnit.USD) && exchangeRate != null) {
+			return planAmount.multiply(exchangeRate)
+				.setScale(0, RoundingMode.HALF_UP);
+		}
+
+		return planAmount;
 	}
 }
