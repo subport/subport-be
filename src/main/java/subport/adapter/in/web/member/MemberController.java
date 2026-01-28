@@ -21,8 +21,15 @@ import subport.application.member.port.in.dto.UpdateMemberRequest;
 @RequiredArgsConstructor
 public class MemberController {
 
-	private final UpdateMemberUseCase updateMemberUseCase;
 	private final GetMemberUseCase getMemberUseCase;
+	private final UpdateMemberUseCase updateMemberUseCase;
+
+	@GetMapping("/me")
+	public ResponseEntity<GetMemberResponse> getMember(@AuthenticationPrincipal CustomOAuth2User oAuth2User) {
+		return ResponseEntity.ok(
+			getMemberUseCase.get(oAuth2User.getMemberId())
+		);
+	}
 
 	@PutMapping("/me")
 	public ResponseEntity<Void> updateMember(
@@ -33,12 +40,5 @@ public class MemberController {
 
 		return ResponseEntity.noContent()
 			.build();
-	}
-
-	@GetMapping("/me")
-	public ResponseEntity<GetMemberResponse> getMember(@AuthenticationPrincipal CustomOAuth2User oAuth2User) {
-		return ResponseEntity.ok(
-			getMemberUseCase.get(oAuth2User.getMemberId())
-		);
 	}
 }
