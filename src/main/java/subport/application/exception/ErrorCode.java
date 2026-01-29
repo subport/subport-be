@@ -55,7 +55,11 @@ public enum ErrorCode {
 	SYSTEM_PLAN_WRITE_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공 플랜은 수정 및 삭제가 불가능합니다."),
 	PLAN_WRITE_FORBIDDEN(HttpStatus.FORBIDDEN, "본인이 등록한 플랜이 아니면 수정 및 삭제가 불가능합니다."),
 	PLAN_READ_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공이 아니면 본인이 등록한 플랜만 조회가 가능합니다."),
-	PLAN_USE_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공 플랜이거나 본인이 등록한 플랜만 사용이 가능합니다.");
+	PLAN_USE_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공 플랜이거나 본인이 등록한 플랜만 사용이 가능합니다."),
+
+	// 소비 내역 관련
+	SPENDING_RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 소비 내역입니다."),
+	SPENDING_RECORD_FORBIDDEN(HttpStatus.FORBIDDEN, "본인의 소비 내역만 삭제가 가능합니다.");
 
 	private final HttpStatus httpStatus;
 	private final String message;

@@ -7,6 +7,8 @@ import subport.domain.spendingrecord.SpendingRecord;
 
 public interface LoadSpendingRecordPort {
 
+	SpendingRecord loadSpendingRecord(Long spendingRecordId);
+
 	List<SpendingRecord> loadSpendingRecords(Long memberSubscriptionId);
 
 	List<SpendingRecord> loadSpendingRecords(Long memberId, LocalDate start, LocalDate end);
