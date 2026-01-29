@@ -41,26 +41,30 @@ public class MemberSubscriptionQueryService implements MemberSubscriptionQueryUs
 			throw new CustomException(ErrorCode.MEMBER_SUBSCRIPTION_FORBIDDEN);
 		}
 
-		LocalDate nextPaymentDate = memberSubscription.getNextPaymentDate();
-		LocalDate lastPaymentDate = memberSubscription.getLastPaymentDate();
-
-		LocalDate now = LocalDate.now();
-		long elapsedDays = DAYS.between(lastPaymentDate, now);
-		long totalDays = DAYS.between(lastPaymentDate, nextPaymentDate);
-		int paymentProgressPercent = (int)((double)elapsedDays / totalDays * 100);
-
-		BigDecimal actualPaymentAmount = memberSubscription.calculateActualPaymentAmount();
-
 		List<SpendingRecordSummary> spendingRecords = loadSpendingRecordPort.loadSpendingRecords(memberSubscriptionId)
 			.stream()
 			.map(SpendingRecordSummary::from)
 			.toList();
 
-		return GetMemberSubscriptionResponse.of(
+		if (memberSubscription.isActive()) {
+			LocalDate now = LocalDate.now();
+			LocalDate nextPaymentDate = memberSubscription.getNextPaymentDate();
+			LocalDate lastPaymentDate = memberSubscription.getLastPaymentDate();
+
+			long elapsedDays = DAYS.between(lastPaymentDate, now);
+			long totalDays = DAYS.between(lastPaymentDate, nextPaymentDate);
+			int paymentProgressPercent = (int)((double)elapsedDays / totalDays * 100);
+
+			return GetMemberSubscriptionResponse.forActive(
+				memberSubscription,
+				now,
+				paymentProgressPercent,
+				spendingRecords
+			);
+		}
+
+		return GetMemberSubscriptionResponse.forInActive(
 			memberSubscription,
-			now,
-			paymentProgressPercent,
-			actualPaymentAmount,
 			spendingRecords
 		);
 	}

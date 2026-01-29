@@ -20,27 +20,27 @@ public record GetMemberSubscriptionResponse(
 	BigDecimal planAmount,
 	String planAmountUnit,
 	int durationMonths,
-	long daysUntilPayment,
-	long monthsSinceStart,
-	int paymentProgressPercent,
-	LocalDate nextPaymentDate,
+	Long daysUntilPayment,
+	Long monthsSinceStart,
+	Integer paymentProgressPercent,
+	LocalDate paymentDate,
 	Integer reminderDaysBefore,
 	boolean active,
-	boolean dutchPay,
+	Boolean dutchPay,
 	BigDecimal actualPayment,
 	List<SpendingRecordSummary> spendingRecords,
 	String memo
 ) {
 
-	public static GetMemberSubscriptionResponse of(
+	public static GetMemberSubscriptionResponse forActive(
 		MemberSubscription memberSubscription,
 		LocalDate now,
 		int paymentProgressPercent,
-		BigDecimal actualPayment,
 		List<SpendingRecordSummary> spendingRecords
 	) {
 		Subscription subscription = memberSubscription.getSubscription();
 		Plan plan = memberSubscription.getPlan();
+		BigDecimal actualPaymentAmount = memberSubscription.calculateActualPaymentAmount();
 
 		return new GetMemberSubscriptionResponse(
 			memberSubscription.getId(),
@@ -49,7 +49,7 @@ public record GetMemberSubscriptionResponse(
 			subscription.getLogoImageUrl(),
 			plan.getId(),
 			plan.getName(),
-			plan.getAmount(),
+			plan.getAmount().setScale(0, RoundingMode.HALF_UP),
 			plan.getAmountUnit().name(),
 			plan.getDurationMonths(),
 			ChronoUnit.DAYS.between(now, memberSubscription.getNextPaymentDate()),
@@ -59,7 +59,38 @@ public record GetMemberSubscriptionResponse(
 			memberSubscription.getReminderDaysBefore(),
 			memberSubscription.isActive(),
 			memberSubscription.isDutchPay(),
-			actualPayment.setScale(0, RoundingMode.HALF_UP),
+			actualPaymentAmount.setScale(0, RoundingMode.HALF_UP),
+			spendingRecords,
+			memberSubscription.getMemo()
+		);
+	}
+
+	public static GetMemberSubscriptionResponse forInActive(
+		MemberSubscription memberSubscription,
+		List<SpendingRecordSummary> spendingRecords
+	) {
+		Subscription subscription = memberSubscription.getSubscription();
+		Plan plan = memberSubscription.getPlan();
+		BigDecimal actualPaymentAmount = memberSubscription.calculateActualPaymentAmount();
+
+		return new GetMemberSubscriptionResponse(
+			memberSubscription.getId(),
+			subscription.getId(),
+			subscription.getName(),
+			subscription.getLogoImageUrl(),
+			plan.getId(),
+			plan.getName(),
+			plan.getAmount().setScale(0, RoundingMode.HALF_UP),
+			plan.getAmountUnit().name(),
+			plan.getDurationMonths(),
+			null,
+			null,
+			null,
+			memberSubscription.getLastPaymentDate(),
+			null,
+			memberSubscription.isActive(),
+			null,
+			actualPaymentAmount.setScale(0, RoundingMode.HALF_UP),
 			spendingRecords,
 			memberSubscription.getMemo()
 		);
