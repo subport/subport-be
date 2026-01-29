@@ -5,6 +5,7 @@ import static java.time.temporal.ChronoUnit.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -98,14 +99,18 @@ public class MemberSubscriptionQueryService implements MemberSubscriptionQueryUs
 			})
 			.toList();
 
-		BigDecimal totalAmount = computed.stream()
+		BigDecimal currentMonthTotalAmount = computed.stream()
+			.filter(c ->
+				YearMonth.from(c.memberSubscription.getLastPaymentDate())
+					.equals(YearMonth.from(currentDate))
+			)
 			.map(ComputedMemberSubscription::actualPaymentAmount)
 			.reduce(BigDecimal.ZERO, BigDecimal::add)
 			.setScale(0, RoundingMode.HALF_UP);
 
 		if (active & sortBy.equals("type")) {
 			return new GetMemberSubscriptionsResponse(
-				totalAmount,
+				currentMonthTotalAmount,
 				computed.stream()
 					.collect(Collectors.groupingBy(
 						c -> c.memberSubscription.getSubscription().getType().getDisplayName(),
@@ -122,7 +127,7 @@ public class MemberSubscriptionQueryService implements MemberSubscriptionQueryUs
 		}
 
 		return new GetMemberSubscriptionsResponse(
-			totalAmount,
+			currentMonthTotalAmount,
 			computed.stream()
 				.map(c -> MemberSubscriptionSummary.of(
 					c.memberSubscription,
