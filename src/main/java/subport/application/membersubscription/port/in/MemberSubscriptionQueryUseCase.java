@@ -3,7 +3,6 @@ package subport.application.membersubscription.port.in;
 import java.time.LocalDate;
 
 import subport.application.membersubscription.port.in.dto.GetMemberSubscriptionResponse;
-import subport.application.membersubscription.port.in.dto.GetMemberSubscriptionsRequest;
 import subport.application.membersubscription.port.in.dto.GetMemberSubscriptionsResponse;
 
 public interface MemberSubscriptionQueryUseCase {
@@ -16,7 +15,8 @@ public interface MemberSubscriptionQueryUseCase {
 
 	GetMemberSubscriptionsResponse getMemberSubscriptions(
 		Long memberId,
-		GetMemberSubscriptionsRequest request,
+		boolean active,
+		String sortBy,
 		LocalDate currentDate
 	);
 }

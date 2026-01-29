@@ -18,7 +18,6 @@ import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.membersubscription.port.in.MemberSubscriptionQueryUseCase;
 import subport.application.membersubscription.port.in.dto.GetMemberSubscriptionResponse;
-import subport.application.membersubscription.port.in.dto.GetMemberSubscriptionsRequest;
 import subport.application.membersubscription.port.in.dto.GetMemberSubscriptionsResponse;
 import subport.application.membersubscription.port.in.dto.MemberSubscriptionSummary;
 import subport.application.membersubscription.port.in.dto.SpendingRecordSummary;
@@ -76,12 +75,10 @@ public class MemberSubscriptionQueryService implements MemberSubscriptionQueryUs
 	@Override
 	public GetMemberSubscriptionsResponse getMemberSubscriptions(
 		Long memberId,
-		GetMemberSubscriptionsRequest request,
+		boolean active,
+		String sortBy,
 		LocalDate currentDate
 	) {
-		boolean active = request.active();
-		String sortBy = request.sortBy();
-
 		List<MemberSubscription> memberSubscriptions = loadMemberSubscriptionPort.loadMemberSubscriptions(
 			memberId,
 			active,

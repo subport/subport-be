@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
@@ -26,7 +27,6 @@ import subport.application.membersubscription.port.in.UpdateMemberSubscriptionMe
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionPlanUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionReminderUseCase;
 import subport.application.membersubscription.port.in.dto.GetMemberSubscriptionResponse;
-import subport.application.membersubscription.port.in.dto.GetMemberSubscriptionsRequest;
 import subport.application.membersubscription.port.in.dto.GetMemberSubscriptionsResponse;
 import subport.application.membersubscription.port.in.dto.RegisterMemberSubscriptionRequest;
 import subport.application.membersubscription.port.in.dto.RegisterMemberSubscriptionResponse;
@@ -76,11 +76,13 @@ public class MemberSubscriptionController {
 	@GetMapping
 	public ResponseEntity<GetMemberSubscriptionsResponse> getMemberSubscriptions(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
-		@Valid GetMemberSubscriptionsRequest request
+		@RequestParam(defaultValue = "true") boolean active,
+		@RequestParam(defaultValue = "type") String sortBy
 	) {
 		return ResponseEntity.ok(memberSubscriptionQueryUseCase.getMemberSubscriptions(
 			oAuth2User.getMemberId(),
-			request,
+			active,
+			sortBy,
 			LocalDate.now()
 		));
 	}
