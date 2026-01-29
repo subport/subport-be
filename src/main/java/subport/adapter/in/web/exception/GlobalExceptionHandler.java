@@ -54,7 +54,7 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(MissingServletRequestParameterException.class)
-	public ResponseEntity<ErrorResponse> handleMissingServletRequestParameter(
+	public ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(
 		MissingServletRequestParameterException e) {
 		log.warn("Missing required parameter: parameter='{}', type='{}'",
 			e.getParameterName(),
@@ -67,7 +67,8 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
-	public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException e) {
+	public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(
+		MethodArgumentTypeMismatchException e) {
 		log.warn("Method argument type mismatch: parameter='{}', value='{}', requiredType='{}'",
 			e.getName(),
 			e.getValue(),
@@ -80,7 +81,7 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(HttpMessageNotReadableException.class)
-	public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(HttpMessageNotReadableException e) {
+	public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
 		log.warn("HTTP message not readable: {}", e.getMessage());
 
 		ErrorCode errorCode = ErrorCode.INVALID_REQUEST_BODY;
@@ -90,7 +91,7 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(NoResourceFoundException.class)
-	public ResponseEntity<ErrorResponse> handleNotFound(NoResourceFoundException e) {
+	public ResponseEntity<ErrorResponse> handleNoResourceFoundException(NoResourceFoundException e) {
 		log.warn("No resource found: {}", e.getMessage());
 
 		ErrorCode errorCode = ErrorCode.RESOURCE_NOT_FOUND;
@@ -101,7 +102,8 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-	public ResponseEntity<ErrorResponse> handleMethodNotSupported(HttpRequestMethodNotSupportedException e) {
+	public ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(
+		HttpRequestMethodNotSupportedException e) {
 		log.warn("Method not supported: {}", e.getMessage());
 
 		ErrorCode errorCode = ErrorCode.METHOD_NOT_ALLOWED;
@@ -112,7 +114,7 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ErrorResponse> handleException(Exception e) {
+	public ResponseEntity<ErrorResponse> handleRemainingExceptions(Exception e) {
 		log.error("Unexpected exception occurred", e);
 
 		ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
