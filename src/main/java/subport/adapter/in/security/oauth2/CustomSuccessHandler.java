@@ -3,6 +3,7 @@ package subport.adapter.in.security.oauth2;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
@@ -32,7 +33,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		OAuth2User oAuth2User = (CustomOAuth2User)authentication.getPrincipal();
 		Long memberId = Long.valueOf(oAuth2User.getName());
 
-		TokenPair tokenPair = issueTokenUseCase.issue(memberId);
+		TokenPair tokenPair = issueTokenUseCase.issue(memberId, Instant.now());
 
 		String url = String.format(
 			"%s?access=%s",

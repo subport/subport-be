@@ -23,11 +23,10 @@ public class IssueTokenService implements IssueTokenUseCase {
 	private final SaveRefreshTokenPort saveRefreshTokenPort;
 
 	@Override
-	public TokenPair issue(Long memberId) {
-		Instant now = Instant.now();
-		String accessToken = createAccessTokenPort.createAccessToken(memberId, now);
+	public TokenPair issue(Long memberId, Instant currentInstant) {
+		String accessToken = createAccessTokenPort.createAccessToken(memberId, currentInstant);
 
-		RefreshToken refreshToken = createRefreshTokenPort.createRefreshToken(memberId, now);
+		RefreshToken refreshToken = createRefreshTokenPort.createRefreshToken(memberId, currentInstant);
 		saveRefreshTokenPort.save(refreshToken);
 
 		return new TokenPair(accessToken, refreshToken.getTokenValue());

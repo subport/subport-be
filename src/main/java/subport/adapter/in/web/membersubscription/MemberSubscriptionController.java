@@ -1,5 +1,8 @@
 package subport.adapter.in.web.membersubscription;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -53,7 +56,9 @@ public class MemberSubscriptionController {
 	) {
 		return ResponseEntity.ok(registerMemberSubscriptionUseCase.register(
 			oAuth2User.getMemberId(),
-			request));
+			request,
+			LocalDateTime.now()
+		));
 	}
 
 	@GetMapping("/{id}")
@@ -62,7 +67,10 @@ public class MemberSubscriptionController {
 		@PathVariable("id") Long memberSubscriptionId
 	) {
 		return ResponseEntity.ok(memberSubscriptionQueryUseCase.getMemberSubscription(
-			oAuth2User.getMemberId(), memberSubscriptionId));
+			oAuth2User.getMemberId(),
+			memberSubscriptionId,
+			LocalDate.now()
+		));
 	}
 
 	@GetMapping
@@ -71,7 +79,10 @@ public class MemberSubscriptionController {
 		@Valid GetMemberSubscriptionsRequest request
 	) {
 		return ResponseEntity.ok(memberSubscriptionQueryUseCase.getMemberSubscriptions(
-			oAuth2User.getMemberId(), request));
+			oAuth2User.getMemberId(),
+			request,
+			LocalDate.now()
+		));
 	}
 
 	@PutMapping("/{id}/plan")
@@ -83,7 +94,8 @@ public class MemberSubscriptionController {
 		updateMemberSubscriptionPlanUseCase.updatePlan(
 			oAuth2User.getMemberId(),
 			request,
-			memberSubscriptionId
+			memberSubscriptionId,
+			LocalDateTime.now()
 		);
 
 		return ResponseEntity.noContent()

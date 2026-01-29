@@ -34,7 +34,11 @@ public class MemberSubscriptionQueryService implements MemberSubscriptionQueryUs
 	private final LoadSpendingRecordPort loadSpendingRecordPort;
 
 	@Override
-	public GetMemberSubscriptionResponse getMemberSubscription(Long memberId, Long memberSubscriptionId) {
+	public GetMemberSubscriptionResponse getMemberSubscription(
+		Long memberId,
+		Long memberSubscriptionId,
+		LocalDate currentDate
+	) {
 		MemberSubscription memberSubscription = loadMemberSubscriptionPort.loadMemberSubscription(memberSubscriptionId);
 
 		if (!memberSubscription.getMember().getId().equals(memberId)) {
@@ -47,17 +51,16 @@ public class MemberSubscriptionQueryService implements MemberSubscriptionQueryUs
 			.toList();
 
 		if (memberSubscription.isActive()) {
-			LocalDate now = LocalDate.now();
 			LocalDate nextPaymentDate = memberSubscription.getNextPaymentDate();
 			LocalDate lastPaymentDate = memberSubscription.getLastPaymentDate();
 
-			long elapsedDays = DAYS.between(lastPaymentDate, now);
+			long elapsedDays = DAYS.between(lastPaymentDate, currentDate);
 			long totalDays = DAYS.between(lastPaymentDate, nextPaymentDate);
 			int paymentProgressPercent = (int)((double)elapsedDays / totalDays * 100);
 
 			return GetMemberSubscriptionResponse.forActive(
 				memberSubscription,
-				now,
+				currentDate,
 				paymentProgressPercent,
 				spendingRecords
 			);
@@ -70,7 +73,11 @@ public class MemberSubscriptionQueryService implements MemberSubscriptionQueryUs
 	}
 
 	@Override
-	public GetMemberSubscriptionsResponse getMemberSubscriptions(Long memberId, GetMemberSubscriptionsRequest request) {
+	public GetMemberSubscriptionsResponse getMemberSubscriptions(
+		Long memberId,
+		GetMemberSubscriptionsRequest request,
+		LocalDate currentDate
+	) {
 		boolean active = request.active();
 		String sortBy = request.sortBy();
 
@@ -86,7 +93,7 @@ public class MemberSubscriptionQueryService implements MemberSubscriptionQueryUs
 				return new ComputedMemberSubscription(
 					ms,
 					actualPaymentAmount,
-					DAYS.between(LocalDate.now(), ms.getNextPaymentDate())
+					DAYS.between(currentDate, ms.getNextPaymentDate())
 				);
 			})
 			.toList();

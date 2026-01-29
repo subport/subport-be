@@ -1,8 +1,8 @@
 package subport.application.emailnotification.port.in;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public interface SendEmailNotificationsUseCase {
 
-	void send(LocalDate currentDate);
+	void send(LocalDateTime currentDateTime);
 }

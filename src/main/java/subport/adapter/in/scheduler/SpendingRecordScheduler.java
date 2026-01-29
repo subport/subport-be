@@ -1,5 +1,7 @@
 package subport.adapter.in.scheduler;
 
+import java.time.LocalDateTime;
+
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +16,6 @@ public class SpendingRecordScheduler {
 
 	@Scheduled(cron = "0 0 0 * * *")
 	public void run() {
-		createSpendingRecordUseCase.create();
+		createSpendingRecordUseCase.create(LocalDateTime.now());
 	}
 }

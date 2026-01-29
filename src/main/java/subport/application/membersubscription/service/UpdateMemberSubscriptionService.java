@@ -2,6 +2,7 @@ package subport.application.membersubscription.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +43,8 @@ public class UpdateMemberSubscriptionService implements
 	public void updatePlan(
 		Long memberId,
 		UpdateMemberSubscriptionPlanRequest request,
-		Long memberSubscriptionId
+		Long memberSubscriptionId,
+		LocalDateTime currentDateTime
 	) {
 		MemberSubscription memberSubscription = loadMemberSubscriptionPort.loadMemberSubscription(memberSubscriptionId);
 
@@ -71,7 +73,7 @@ public class UpdateMemberSubscriptionService implements
 		if (amountUnitName.equals(AmountUnit.USD.name())
 			&& memberSubscription.getExchangeRate() == null
 			&& memberSubscription.getExchangeRateDate() == null) {
-			ExchangeRate exchangeRate = exchangeRateService.getExchangeRate(lastPaymentDate);
+			ExchangeRate exchangeRate = exchangeRateService.getExchangeRate(lastPaymentDate, currentDateTime);
 
 			rate = exchangeRate.getRate();
 			exchangeRateDate = exchangeRate.getApplyDate();

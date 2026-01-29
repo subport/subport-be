@@ -22,7 +22,11 @@ public class EmailSender {
 	private final EmailResultHandler emailResultHandler;
 
 	@Async
-	public void sendAsync(EmailNotification emailNotification, boolean isRetry) {
+	public void sendAsync(
+		EmailNotification emailNotification,
+		boolean isRetry,
+		LocalDateTime currentDateTime
+	) {
 		try {
 			MimeMessage message = mailSender.createMimeMessage();
 			MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -42,7 +46,7 @@ public class EmailSender {
 			mailSender.send(message);
 			emailResultHandler.handleSuccess(
 				emailNotification,
-				LocalDateTime.now(),
+				currentDateTime,
 				isRetry
 			);
 		} catch (MessagingException e) {

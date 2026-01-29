@@ -1,6 +1,7 @@
 package subport.adapter.in.scheduler;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -25,11 +26,11 @@ public class EmailNotificationScheduler {
 
 	@Scheduled(cron = "0 0 09 * * *")
 	public void sendEmailNotifications() {
-		sendEmailNotificationsUseCase.send(LocalDate.now());
+		sendEmailNotificationsUseCase.send(LocalDateTime.now());
 	}
 
 	@Scheduled(cron = "0 5-15/5 09 * * *")
 	public void retryFailedEmailNotifications() {
-		retryFailedEmailNotificationsUseCase.retry(LocalDate.now());
+		retryFailedEmailNotificationsUseCase.retry(LocalDateTime.now());
 	}
 }

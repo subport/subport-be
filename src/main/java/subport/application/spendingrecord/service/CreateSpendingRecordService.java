@@ -2,6 +2,7 @@ package subport.application.spendingrecord.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -28,9 +29,9 @@ public class CreateSpendingRecordService implements CreateSpendingRecordUseCase 
 	private final ExchangeRateService exchangeRateService;
 
 	@Override
-	public void create() {
+	public void create(LocalDateTime currentDateTime) {
 		List<MemberSubscription> memberSubscriptions =
-			loadMemberSubscriptionPort.loadMemberSubscriptions(LocalDate.now());
+			loadMemberSubscriptionPort.loadMemberSubscriptions(currentDateTime.toLocalDate());
 
 		List<SpendingRecord> spendingRecords = memberSubscriptions.stream()
 			.map(memberSubscription -> {
@@ -56,7 +57,7 @@ public class CreateSpendingRecordService implements CreateSpendingRecordUseCase 
 
 			if (rate != null && exchangeRateDate != null) {
 				ExchangeRate exchangeRate =
-					exchangeRateService.getExchangeRate(memberSubscription.getNextPaymentDate());
+					exchangeRateService.getExchangeRate(memberSubscription.getNextPaymentDate(), currentDateTime);
 
 				rate = exchangeRate.getRate();
 				exchangeRateDate = exchangeRate.getApplyDate();

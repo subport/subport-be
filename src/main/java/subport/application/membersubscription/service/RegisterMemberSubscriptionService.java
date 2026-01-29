@@ -2,6 +2,7 @@ package subport.application.membersubscription.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +37,11 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 	private final LoadMemberPort loadMemberPort;
 
 	@Override
-	public RegisterMemberSubscriptionResponse register(Long memberId, RegisterMemberSubscriptionRequest request) {
+	public RegisterMemberSubscriptionResponse register(
+		Long memberId,
+		RegisterMemberSubscriptionRequest request,
+		LocalDateTime currentDateTime
+	) {
 		boolean dutchPay = request.dutchPay();
 		BigDecimal dutchPayAmount = request.dutchPayAmount();
 		if (dutchPay && dutchPayAmount == null) {
@@ -64,7 +69,7 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 		LocalDate exchangeRateDate = null;
 		LocalDate startDate = request.startDate();
 		if (plan.getAmountUnit().name().equals(AmountUnit.USD.name())) {
-			ExchangeRate exchangeRate = exchangeRateService.getExchangeRate(startDate);
+			ExchangeRate exchangeRate = exchangeRateService.getExchangeRate(startDate, currentDateTime);
 
 			rate = exchangeRate.getRate();
 			exchangeRateDate = exchangeRate.getApplyDate();

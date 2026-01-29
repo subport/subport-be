@@ -1,5 +1,7 @@
 package subport.adapter.in.web.auth;
 
+import java.time.Instant;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -24,7 +26,7 @@ public class AuthController {
 
 	@PostMapping("/refresh")
 	public ResponseEntity<ReissueTokenResponse> refresh(@CookieValue(required = false) String refreshToken) {
-		TokenPair tokenPair = reissueTokenUseCase.reissue(refreshToken);
+		TokenPair tokenPair = reissueTokenUseCase.reissue(refreshToken, Instant.now());
 
 		return ResponseEntity.ok()
 			.header(

@@ -1,6 +1,6 @@
 package subport.application.emailnotification.service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -19,12 +19,12 @@ public class SendEmailNotificationsService implements SendEmailNotificationsUseC
 	private final LoadEmailNotificationPort loadEmailNotificationPort;
 
 	@Override
-	public void send(LocalDate currentDate) {
+	public void send(LocalDateTime currentDateTime) {
 		List<EmailNotification> emailNotifications =
-			loadEmailNotificationPort.loadEmailNotifications(currentDate, SendingStatus.PENDING);
+			loadEmailNotificationPort.loadEmailNotifications(currentDateTime.toLocalDate(), SendingStatus.PENDING);
 
 		for (EmailNotification emailNotification : emailNotifications) {
-			emailSender.sendAsync(emailNotification, false);
+			emailSender.sendAsync(emailNotification, false, currentDateTime);
 		}
 	}
 }

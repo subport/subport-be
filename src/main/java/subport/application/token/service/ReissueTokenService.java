@@ -30,23 +30,22 @@ public class ReissueTokenService implements ReissueTokenUseCase {
 	private final SaveRefreshTokenPort saveRefreshTokenPort;
 
 	@Override
-	public TokenPair reissue(String refreshTokenValue) {
+	public TokenPair reissue(String refreshTokenValue, Instant currentInstant) {
 		if (refreshTokenValue == null) {
 			throw new CustomException(ErrorCode.REFRESH_TOKEN_NOT_NULL);
 		}
 
 		RefreshToken refreshToken = loadRefreshTokenPort.load(refreshTokenValue);
-		Instant now = Instant.now();
-		if (refreshToken.isExpired(now)) {
+		if (refreshToken.isExpired(currentInstant)) {
 			deleteRefreshTokenPort.delete(refreshToken);
 			throw new RefreshTokenExpiredException();
 		}
 
 		Long memberId = refreshToken.getMemberId();
-		String accessToken = createAccessTokenPort.createAccessToken(memberId, now);
+		String accessToken = createAccessTokenPort.createAccessToken(memberId, currentInstant);
 
 		deleteRefreshTokenPort.delete(refreshToken);
-		refreshToken = createRefreshTokenPort.createRefreshToken(memberId, now);
+		refreshToken = createRefreshTokenPort.createRefreshToken(memberId, currentInstant);
 		saveRefreshTokenPort.save(refreshToken);
 
 		return new TokenPair(accessToken, refreshToken.getTokenValue());

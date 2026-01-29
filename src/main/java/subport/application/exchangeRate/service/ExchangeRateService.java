@@ -22,17 +22,16 @@ public class ExchangeRateService {
 	private final FetchExchangeRatePort fetchExchangeRatePort;
 	private final SaveExchangeRatePort saveExchangeRatePort;
 
-	public ExchangeRate getExchangeRate(LocalDate startDate) {
+	public ExchangeRate getExchangeRate(LocalDate startDate, LocalDateTime currentDateTime) {
 		LocalDate startWeekdayDate = getLastWeekdayDate(startDate);
 
 		ExchangeRate exchangeRate = loadExchangeRatePort.load(startWeekdayDate);
 		if (exchangeRate != null) {
 			LocalDateTime noon = startWeekdayDate.atTime(12, 0);
-			LocalDateTime now = LocalDateTime.now();
 
 			if (exchangeRate.getApplyDate().equals(startWeekdayDate.minusDays(1))
 				&& exchangeRate.getLastModifiedAt().isBefore(noon)
-				&& !now.isBefore(noon)) {
+				&& !currentDateTime.isBefore(noon)) {
 				BigDecimal rate = fetchExchangeRatePort.fetch(startWeekdayDate.toString());
 				if (rate != null) {
 					exchangeRate.updateRate(startWeekdayDate, rate);

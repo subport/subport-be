@@ -1,6 +1,6 @@
 package subport.application.emailnotification.service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -19,16 +19,16 @@ public class RetryFailedEmailNotificationsService implements RetryFailedEmailNot
 	private final LoadEmailNotificationPort loadEmailNotificationPort;
 
 	@Override
-	public void retry(LocalDate currentDate) {
+	public void retry(LocalDateTime currentDateTime) {
 		List<EmailNotification> emailNotifications =
-			loadEmailNotificationPort.loadEmailNotifications(currentDate, SendingStatus.FAILED);
+			loadEmailNotificationPort.loadEmailNotifications(currentDateTime.toLocalDate(), SendingStatus.FAILED);
 
 		if (emailNotifications.isEmpty()) {
 			return;
 		}
 
 		for (EmailNotification emailNotification : emailNotifications) {
-			emailSender.sendAsync(emailNotification, true);
+			emailSender.sendAsync(emailNotification, true, currentDateTime);
 		}
 	}
 }
