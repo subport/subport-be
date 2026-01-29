@@ -81,7 +81,6 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 		MemberSubscription memberSubscription = new MemberSubscription(
 			startDate,
 			reminderDaysBefore,
-			startDate.minusDays(reminderDaysBefore),
 			request.memo(),
 			dutchPay,
 			dutchPayAmount,

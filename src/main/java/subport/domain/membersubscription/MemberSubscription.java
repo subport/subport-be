@@ -68,7 +68,6 @@ public class MemberSubscription extends BaseTimeEntity {
 	public MemberSubscription(
 		LocalDate startDate,
 		Integer reminderDaysBefore,
-		LocalDate reminderDate,
 		String memo,
 		boolean dutchPay,
 		BigDecimal dutchPayAmount,
@@ -82,7 +81,7 @@ public class MemberSubscription extends BaseTimeEntity {
 	) {
 		this.startDate = startDate;
 		this.reminderDaysBefore = reminderDaysBefore;
-		this.reminderDate = reminderDate;
+		this.reminderDate = calculateReminderDate();
 		this.memo = memo;
 		this.dutchPay = dutchPay;
 		this.dutchPayAmount = dutchPayAmount;
@@ -98,6 +97,7 @@ public class MemberSubscription extends BaseTimeEntity {
 
 	public void updateReminderDaysBefore(Integer reminderDaysBefore) {
 		this.reminderDaysBefore = reminderDaysBefore;
+		this.reminderDate = calculateReminderDate();
 	}
 
 	public void updateMemo(String memo) {
@@ -147,5 +147,12 @@ public class MemberSubscription extends BaseTimeEntity {
 		}
 
 		return planAmount;
+	}
+
+	private LocalDate calculateReminderDate() {
+		if (reminderDaysBefore == null) {
+			return null;
+		}
+		return nextPaymentDate.minusDays(reminderDaysBefore);
 	}
 }
