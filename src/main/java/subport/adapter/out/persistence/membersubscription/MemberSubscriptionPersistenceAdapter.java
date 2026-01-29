@@ -77,9 +77,24 @@ public class MemberSubscriptionPersistenceAdapter implements
 
 	private Sort createSort(String sortBy) {
 		return switch (sortBy) {
-			case "type" -> Sort.by(Sort.Direction.ASC, "subscription.type", "subscription.name");
-			case "nextPaymentDate" -> Sort.by(Sort.Direction.ASC, "nextPaymentDate", "subscription.name");
-			default -> Sort.by(Sort.Direction.ASC, "subscription.name");
+			case "nextPaymentDate" -> Sort.by(
+				Sort.Direction.ASC,
+				"nextPaymentDate",
+				"subscription.name"
+			);
+			case "createdAt" -> Sort.by(
+				Sort.Order.desc("createdAt"),
+				Sort.Order.asc("subscription.name")
+			);
+			case "name" -> Sort.by(
+				Sort.Direction.ASC,
+				"subscription.name"
+			);
+			default -> Sort.by(
+				Sort.Direction.ASC,
+				"subscription.type",
+				"subscription.name"
+			);
 		};
 	}
 }
