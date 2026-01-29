@@ -9,6 +9,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import lombok.extern.slf4j.Slf4j;
 import subport.adapter.in.web.AuthCookieProvider;
@@ -85,6 +86,17 @@ public class GlobalExceptionHandler {
 		ErrorCode errorCode = ErrorCode.INVALID_REQUEST_BODY;
 
 		return ResponseEntity.status(errorCode.getHttpStatus())
+			.body(ErrorResponse.of(errorCode));
+	}
+
+	@ExceptionHandler(NoResourceFoundException.class)
+	public ResponseEntity<ErrorResponse> handleNotFound(NoResourceFoundException e) {
+		log.warn("No resource found: {}", e.getMessage());
+
+		ErrorCode errorCode = ErrorCode.RESOURCE_NOT_FOUND;
+
+		return ResponseEntity
+			.status(errorCode.getHttpStatus())
 			.body(ErrorResponse.of(errorCode));
 	}
 
