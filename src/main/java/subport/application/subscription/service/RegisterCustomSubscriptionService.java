@@ -20,6 +20,9 @@ import subport.domain.subscription.SubscriptionType;
 @RequiredArgsConstructor
 public class RegisterCustomSubscriptionService implements RegisterCustomSubscriptionUseCase {
 
+	private static final String SUBSCRIPTION_DEFAULT_LOGO_IMAGE_URL =
+		"https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axnklumwzgke/b/subpport-bucket/o/subscription_default.png";
+
 	private final SaveSubscriptionPort saveSubscriptionPort;
 	private final LoadMemberPort loadMemberPort;
 	private final UploadSubscriptionImagePort uploadSubscriptionImagePort;
@@ -30,7 +33,7 @@ public class RegisterCustomSubscriptionService implements RegisterCustomSubscrip
 		RegisterCustomSubscriptionRequest request,
 		MultipartFile image
 	) {
-		String logoImageUrl = null; // 기본 이미지 디자인 완성되면 대체
+		String logoImageUrl = SUBSCRIPTION_DEFAULT_LOGO_IMAGE_URL;
 		if (image != null) {
 			logoImageUrl = uploadSubscriptionImagePort.upload(image);
 		}
