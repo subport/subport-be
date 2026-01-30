@@ -19,7 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import subport.adapter.in.security.oauth2.CustomOAuth2User;
 import subport.application.exception.CustomException;
-import subport.application.token.port.in.ValidateAccessTokenUseCase;
+import subport.application.token.port.in.AuthenticateAccessTokenUseCase;
 
 @Component
 @RequiredArgsConstructor
@@ -28,7 +28,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	private static final List<String> EXCLUDE_PATTERNS = List.of("/api/auth/refresh");
 	private static final AntPathMatcher pathMatcher = new AntPathMatcher();
 
-	private final ValidateAccessTokenUseCase validateAccessTokenUseCase;
+	private final AuthenticateAccessTokenUseCase authenticateAccessTokenUseCase;
 
 	@Override
 	protected void doFilterInternal(
@@ -38,7 +38,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	) throws ServletException, IOException {
 		Long memberId;
 		try {
-			memberId = validateAccessTokenUseCase.validate(
+			memberId = authenticateAccessTokenUseCase.authenticateAndGetMemberId(
 				request.getHeader("Authorization")
 			);
 		} catch (JwtException | CustomException e) {
