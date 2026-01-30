@@ -12,13 +12,13 @@ import subport.application.subscription.port.out.LoadPlanPort;
 import subport.domain.subscription.Plan;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class DeleteCustomPlanService implements DeleteCustomPlanUseCase {
 
 	private final LoadPlanPort loadPlanPort;
 	private final DeletePlanPort deletePlanPort;
 
-	@Transactional
 	@Override
 	public void delete(Long memberId, Long planId) {
 		Plan plan = loadPlanPort.loadPlan(planId);

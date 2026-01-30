@@ -16,6 +16,7 @@ import subport.domain.subscription.Plan;
 import subport.domain.subscription.Subscription;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class RegisterCustomPlanService implements RegisterCustomPlanUseCase {
 
@@ -23,7 +24,6 @@ public class RegisterCustomPlanService implements RegisterCustomPlanUseCase {
 	private final LoadMemberPort loadMemberPort;
 	private final LoadSubscriptionPort loadSubscriptionPort;
 
-	@Transactional
 	@Override
 	public RegisterCustomPlanResponse register(
 		Long memberId,
