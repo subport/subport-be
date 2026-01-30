@@ -130,6 +130,13 @@ public class MemberSubscription extends BaseTimeEntity {
 		this.active = false;
 	}
 
+	public void activate(LocalDate startDate) {
+		this.startDate = startDate;
+		lastPaymentDate = startDate;
+		nextPaymentDate = startDate.plusMonths(plan.getDurationMonths());
+		reminderDate = calculateReminderDate();
+	}
+
 	public BigDecimal calculateActualPaymentAmount() {
 		AmountUnit amountUnit = plan.getAmountUnit();
 		BigDecimal planAmount = plan.getAmount();

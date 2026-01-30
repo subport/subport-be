@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import subport.adapter.in.security.oauth2.CustomOAuth2User;
+import subport.application.membersubscription.port.in.ActivateMemberSubscriptionUseCase;
 import subport.application.membersubscription.port.in.DeactivateMemberSubscriptionUseCase;
 import subport.application.membersubscription.port.in.DeleteMemberSubscriptionUseCase;
 import subport.application.membersubscription.port.in.MemberSubscriptionQueryUseCase;
@@ -26,6 +27,7 @@ import subport.application.membersubscription.port.in.UpdateMemberSubscriptionDu
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionMemoUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionPlanUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionReminderUseCase;
+import subport.application.membersubscription.port.in.dto.ActivateMemberSubscriptionRequest;
 import subport.application.membersubscription.port.in.dto.GetMemberSubscriptionResponse;
 import subport.application.membersubscription.port.in.dto.GetMemberSubscriptionsResponse;
 import subport.application.membersubscription.port.in.dto.RegisterMemberSubscriptionRequest;
@@ -46,6 +48,7 @@ public class MemberSubscriptionController {
 	private final UpdateMemberSubscriptionReminderUseCase updateMemberSubscriptionReminderUseCase;
 	private final UpdateMemberSubscriptionMemoUseCase updateMemberSubscriptionMemoUseCase;
 	private final DeactivateMemberSubscriptionUseCase deactivateMemberSubscriptionUseCase;
+	private final ActivateMemberSubscriptionUseCase activateMemberSubscriptionUseCase;
 	private final DeleteMemberSubscriptionUseCase deleteMemberSubscriptionUseCase;
 	private final MemberSubscriptionQueryUseCase memberSubscriptionQueryUseCase;
 
@@ -158,6 +161,23 @@ public class MemberSubscriptionController {
 		@PathVariable("id") Long memberSubscriptionId
 	) {
 		deactivateMemberSubscriptionUseCase.deactivate(oAuth2User.getMemberId(), memberSubscriptionId);
+
+		return ResponseEntity.noContent()
+			.build();
+	}
+
+	@PutMapping("/{id}/activate")
+	public ResponseEntity<Void> activateMemberSubscription(
+		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
+		@Valid @RequestBody ActivateMemberSubscriptionRequest request,
+		@PathVariable("id") Long memberSubscriptionId
+	) {
+		activateMemberSubscriptionUseCase.activate(
+			oAuth2User.getMemberId(),
+			request,
+			memberSubscriptionId,
+			LocalDateTime.now()
+		);
 
 		return ResponseEntity.noContent()
 			.build();
