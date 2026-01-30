@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import subport.application.exchangeRate.service.ExchangeRateService;
 import subport.application.membersubscription.port.out.LoadMemberSubscriptionPort;
-import subport.application.spendingrecord.port.in.CreateSpendingRecordUseCase;
+import subport.application.spendingrecord.port.in.CreateSpendingRecordsUseCase;
 import subport.application.spendingrecord.port.out.SaveSpendingRecordPort;
 import subport.domain.exchangeRate.ExchangeRate;
 import subport.domain.membersubscription.MemberSubscription;
@@ -22,7 +22,7 @@ import subport.domain.subscription.Subscription;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class CreateSpendingRecordService implements CreateSpendingRecordUseCase {
+public class CreateSpendingRecordsService implements CreateSpendingRecordsUseCase {
 
 	private final LoadMemberSubscriptionPort loadMemberSubscriptionPort;
 	private final SaveSpendingRecordPort saveSpendingRecordPort;
@@ -51,6 +51,13 @@ public class CreateSpendingRecordService implements CreateSpendingRecordUseCase 
 			.toList();
 		saveSpendingRecordPort.save(spendingRecords);
 
+		updateMemberSubscriptions(memberSubscriptions, currentDateTime);
+	}
+
+	private void updateMemberSubscriptions(
+		List<MemberSubscription> memberSubscriptions,
+		LocalDateTime currentDateTime
+	) {
 		for (MemberSubscription memberSubscription : memberSubscriptions) {
 			BigDecimal rate = memberSubscription.getExchangeRate();
 			LocalDate exchangeRateDate = memberSubscription.getExchangeRateDate();
