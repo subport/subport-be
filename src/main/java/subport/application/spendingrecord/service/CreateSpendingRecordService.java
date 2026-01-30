@@ -65,8 +65,7 @@ public class CreateSpendingRecordService implements CreateSpendingRecordUseCase 
 				memberSubscription.updateExchangeRate(rate, exchangeRateDate);
 			}
 
-			memberSubscription.updateLastPaymentDate(memberSubscription.getNextPaymentDate());
-			memberSubscription.increaseNextPaymentDateByMonths(memberSubscription.getPlan().getDurationMonths());
+			memberSubscription.updateLastPaymentDate();
 		}
 	}
 }

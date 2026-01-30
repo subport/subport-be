@@ -81,9 +81,6 @@ public class UpdateMemberSubscriptionService implements
 		memberSubscription.updateExchangeRate(rate, exchangeRateDate);
 
 		memberSubscription.updatePlan(newPlan);
-		memberSubscription.updateNextPaymentDate(
-			lastPaymentDate.plusMonths(newPlan.getDurationMonths())
-		);
 	}
 
 	@Override

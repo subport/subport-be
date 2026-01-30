@@ -106,6 +106,8 @@ public class MemberSubscription extends BaseTimeEntity {
 
 	public void updatePlan(Plan plan) {
 		this.plan = plan;
+		nextPaymentDate = lastPaymentDate.plusMonths(plan.getDurationMonths());
+		reminderDate = calculateReminderDate();
 	}
 
 	public void updateDutchPay(boolean dutchPay, BigDecimal dutchPayAmount) {
@@ -118,16 +120,10 @@ public class MemberSubscription extends BaseTimeEntity {
 		this.exchangeRateDate = exchangeRateDate;
 	}
 
-	public void updateLastPaymentDate(LocalDate lastPaymentDate) {
-		this.lastPaymentDate = lastPaymentDate;
-	}
-
-	public void updateNextPaymentDate(LocalDate nextPaymentDate) {
-		this.nextPaymentDate = nextPaymentDate;
-	}
-
-	public void increaseNextPaymentDateByMonths(long months) {
-		this.nextPaymentDate = this.nextPaymentDate.plusMonths(months);
+	public void updateLastPaymentDate() {
+		lastPaymentDate = nextPaymentDate;
+		nextPaymentDate = nextPaymentDate.plusMonths(plan.getDurationMonths());
+		reminderDate = calculateReminderDate();
 	}
 
 	public void deactivate() {
