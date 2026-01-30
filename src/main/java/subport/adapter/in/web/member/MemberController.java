@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import subport.adapter.in.security.oauth2.CustomOAuth2User;
-import subport.application.member.port.in.GetMemberProfileUseCase;
-import subport.application.member.port.in.GetMemberUseCase;
+import subport.application.member.port.in.MemberQueryUseCase;
 import subport.application.member.port.in.UpdateMemberUseCase;
 import subport.application.member.port.in.dto.GetMemberProfileResponse;
 import subport.application.member.port.in.dto.GetMemberResponse;
@@ -25,21 +24,20 @@ import subport.application.member.port.in.dto.UpdateMemberRequest;
 @RequiredArgsConstructor
 public class MemberController {
 
-	private final GetMemberProfileUseCase getMemberProfileUseCase;
-	private final GetMemberUseCase getMemberUseCase;
+	private final MemberQueryUseCase memberQueryUseCase;
 	private final UpdateMemberUseCase updateMemberUseCase;
 
 	@GetMapping("/me/profile")
 	public ResponseEntity<GetMemberProfileResponse> getMemberProfile(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User) {
-		return ResponseEntity.ok(getMemberProfileUseCase.get(
+		return ResponseEntity.ok(memberQueryUseCase.getMemberProfile(
 			oAuth2User.getMemberId(), LocalDate.now()));
 	}
 
 	@GetMapping("/me")
 	public ResponseEntity<GetMemberResponse> getMember(@AuthenticationPrincipal CustomOAuth2User oAuth2User) {
 		return ResponseEntity.ok(
-			getMemberUseCase.get(oAuth2User.getMemberId())
+			memberQueryUseCase.getMember(oAuth2User.getMemberId())
 		);
 	}
 
