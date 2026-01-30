@@ -1,6 +1,7 @@
 package subport.domain.subscription;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -75,5 +76,9 @@ public class Plan extends BaseTimeEntity {
 		this.amount = amount;
 		this.amountUnit = amountUnit;
 		this.durationMonths = durationMonths;
+	}
+
+	public LocalDate calculateNextPaymentDate(LocalDate date) {
+		return date.plusMonths(durationMonths);
 	}
 }

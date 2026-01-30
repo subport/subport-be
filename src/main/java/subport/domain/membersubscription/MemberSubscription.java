@@ -97,7 +97,7 @@ public class MemberSubscription extends BaseTimeEntity {
 
 	public void updateReminderDaysBefore(Integer reminderDaysBefore) {
 		this.reminderDaysBefore = reminderDaysBefore;
-		this.reminderDate = calculateReminderDate();
+		reminderDate = calculateReminderDate();
 	}
 
 	public void updateMemo(String memo) {
@@ -106,7 +106,7 @@ public class MemberSubscription extends BaseTimeEntity {
 
 	public void updatePlan(Plan plan) {
 		this.plan = plan;
-		nextPaymentDate = lastPaymentDate.plusMonths(plan.getDurationMonths());
+		nextPaymentDate = plan.calculateNextPaymentDate(lastPaymentDate);
 		reminderDate = calculateReminderDate();
 	}
 
@@ -122,18 +122,18 @@ public class MemberSubscription extends BaseTimeEntity {
 
 	public void updateLastPaymentDate() {
 		lastPaymentDate = nextPaymentDate;
-		nextPaymentDate = nextPaymentDate.plusMonths(plan.getDurationMonths());
+		nextPaymentDate = plan.calculateNextPaymentDate(nextPaymentDate);
 		reminderDate = calculateReminderDate();
 	}
 
 	public void deactivate() {
-		this.active = false;
+		active = false;
 	}
 
 	public void activate(LocalDate startDate) {
 		this.startDate = startDate;
 		lastPaymentDate = startDate;
-		nextPaymentDate = startDate.plusMonths(plan.getDurationMonths());
+		nextPaymentDate = plan.calculateNextPaymentDate(startDate);
 		reminderDate = calculateReminderDate();
 	}
 
