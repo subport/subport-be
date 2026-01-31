@@ -6,7 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
+import subport.application.subscription.port.in.PlanQueryUseCase;
 import subport.application.subscription.port.in.UpdateCustomPlanUseCase;
+import subport.application.subscription.port.in.dto.GetPlanResponse;
 import subport.application.subscription.port.in.dto.UpdateCustomPlanRequest;
 import subport.application.subscription.port.out.LoadPlanPort;
 import subport.domain.subscription.AmountUnit;
@@ -18,9 +20,10 @@ import subport.domain.subscription.Plan;
 public class UpdateCustomPlanService implements UpdateCustomPlanUseCase {
 
 	private final LoadPlanPort loadPlanPort;
+	private final PlanQueryUseCase planQueryUseCase;
 
 	@Override
-	public void update(
+	public GetPlanResponse update(
 		Long memberId,
 		UpdateCustomPlanRequest request,
 		Long planId
@@ -41,5 +44,7 @@ public class UpdateCustomPlanService implements UpdateCustomPlanUseCase {
 			AmountUnit.fromString(request.amountUnit()),
 			request.durationMonths()
 		);
+
+		return planQueryUseCase.getPlan(memberId, planId);
 	}
 }

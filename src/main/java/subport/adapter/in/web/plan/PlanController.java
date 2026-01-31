@@ -38,19 +38,18 @@ public class PlanController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Void> updateCustomPlan(
+	public ResponseEntity<GetPlanResponse> updateCustomPlan(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
 		@Valid @RequestBody UpdateCustomPlanRequest request,
 		@PathVariable("id") Long planId
 	) {
-		updateCustomPlanUseCase.update(
-			oAuth2User.getMemberId(),
-			request,
-			planId
+		return ResponseEntity.ok(
+			updateCustomPlanUseCase.update(
+				oAuth2User.getMemberId(),
+				request,
+				planId
+			)
 		);
-
-		return ResponseEntity.noContent()
-			.build();
 	}
 
 	@DeleteMapping("/{id}")
