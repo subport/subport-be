@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.subscription.port.in.UpdateCustomSubscriptionUseCase;
+import subport.application.subscription.port.in.dto.GetSubscriptionResponse;
 import subport.application.subscription.port.in.dto.UpdateCustomSubscriptionRequest;
 import subport.application.subscription.port.out.LoadSubscriptionPort;
 import subport.application.subscription.port.out.UploadSubscriptionImagePort;
@@ -21,9 +22,10 @@ public class UpdateCustomSubscriptionService implements UpdateCustomSubscription
 
 	private final LoadSubscriptionPort loadSubscriptionPort;
 	private final UploadSubscriptionImagePort uploadSubscriptionImagePort;
+	private final SubscriptionQueryService subscriptionQueryService;
 
 	@Override
-	public void update(
+	public GetSubscriptionResponse update(
 		Long memberId,
 		Long subscriptionId,
 		UpdateCustomSubscriptionRequest request,
@@ -51,5 +53,7 @@ public class UpdateCustomSubscriptionService implements UpdateCustomSubscription
 			logoImageUrl,
 			null
 		);
+
+		return subscriptionQueryService.getSubscription(memberId, subscriptionId);
 	}
 }

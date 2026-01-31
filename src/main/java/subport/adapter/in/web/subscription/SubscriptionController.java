@@ -82,21 +82,20 @@ public class SubscriptionController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Void> updateCustomSubscription(
+	public ResponseEntity<GetSubscriptionResponse> updateCustomSubscription(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
 		@PathVariable("id") Long subscriptionId,
 		@Valid @RequestPart UpdateCustomSubscriptionRequest request,
 		@RequestPart(required = false) MultipartFile image
 	) {
-		updateCustomSubscriptionUseCase.update(
-			oAuth2User.getMemberId(),
-			subscriptionId,
-			request,
-			image
+		return ResponseEntity.ok(
+			updateCustomSubscriptionUseCase.update(
+				oAuth2User.getMemberId(),
+				subscriptionId,
+				request,
+				image
+			)
 		);
-
-		return ResponseEntity.noContent()
-			.build();
 	}
 
 	@DeleteMapping("/{id}")
