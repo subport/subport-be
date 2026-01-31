@@ -4,7 +4,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import subport.application.member.port.in.MemberQueryUseCase;
 import subport.application.member.port.in.UpdateMemberUseCase;
+import subport.application.member.port.in.dto.GetMemberResponse;
 import subport.application.member.port.in.dto.UpdateMemberRequest;
 import subport.application.member.port.out.LoadMemberPort;
 import subport.domain.member.Member;
@@ -15,14 +17,17 @@ import subport.domain.member.Member;
 public class UpdateMemberService implements UpdateMemberUseCase {
 
 	private final LoadMemberPort loadMemberPort;
+	private final MemberQueryUseCase memberQueryUseCase;
 
 	@Override
-	public void update(Long memberId, UpdateMemberRequest request) {
+	public GetMemberResponse update(Long memberId, UpdateMemberRequest request) {
 		Member member = loadMemberPort.load(memberId);
 
 		member.update(
 			request.nickname(),
 			request.email()
 		);
+
+		return memberQueryUseCase.getMember(memberId);
 	}
 }

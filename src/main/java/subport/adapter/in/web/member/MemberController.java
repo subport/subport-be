@@ -42,13 +42,12 @@ public class MemberController {
 	}
 
 	@PutMapping("/me")
-	public ResponseEntity<Void> updateMember(
+	public ResponseEntity<GetMemberResponse> updateMember(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
 		@Valid @RequestBody UpdateMemberRequest request
 	) {
-		updateMemberUseCase.update(oAuth2User.getMemberId(), request);
-
-		return ResponseEntity.noContent()
-			.build();
+		return ResponseEntity.ok(
+			updateMemberUseCase.update(oAuth2User.getMemberId(), request)
+		);
 	}
 }
