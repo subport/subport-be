@@ -1,12 +1,16 @@
 package subport.application.membersubscription.port.in;
 
+import java.time.LocalDate;
+
+import subport.application.membersubscription.port.in.dto.GetMemberSubscriptionResponse;
 import subport.application.membersubscription.port.in.dto.UpdateMemberSubscriptionReminderRequest;
 
 public interface UpdateMemberSubscriptionReminderUseCase {
 
-	void updateReminder(
+	GetMemberSubscriptionResponse updateReminder(
 		Long memberId,
 		UpdateMemberSubscriptionReminderRequest request,
-		Long memberSubscriptionId
+		Long memberSubscriptionId,
+		LocalDate currentDate
 	);
 }

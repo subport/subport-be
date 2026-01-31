@@ -1,12 +1,16 @@
 package subport.application.membersubscription.port.in;
 
+import java.time.LocalDate;
+
+import subport.application.membersubscription.port.in.dto.GetMemberSubscriptionResponse;
 import subport.application.membersubscription.port.in.dto.UpdateMemberSubscriptionMemoRequest;
 
 public interface UpdateMemberSubscriptionMemoUseCase {
 
-	void updateMemo(
+	GetMemberSubscriptionResponse updateMemo(
 		Long memberId,
 		UpdateMemberSubscriptionMemoRequest request,
-		Long memberSubscriptionId
+		Long memberSubscriptionId,
+		LocalDate currentDate
 	);
 }

@@ -1,12 +1,16 @@
 package subport.application.membersubscription.port.in;
 
+import java.time.LocalDate;
+
+import subport.application.membersubscription.port.in.dto.GetMemberSubscriptionResponse;
 import subport.application.membersubscription.port.in.dto.UpdateMemberSubscriptionDutchPayRequest;
 
 public interface UpdateMemberSubscriptionDutchPayUseCase {
 
-	void updateDutchPay(
+	GetMemberSubscriptionResponse updateDutchPay(
 		Long memberId,
 		UpdateMemberSubscriptionDutchPayRequest request,
-		Long memberSubscriptionId
+		Long memberSubscriptionId,
+		LocalDate currentDate
 	);
 }

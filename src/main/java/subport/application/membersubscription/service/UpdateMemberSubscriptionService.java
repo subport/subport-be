@@ -11,10 +11,12 @@ import lombok.RequiredArgsConstructor;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.exchangeRate.service.ExchangeRateService;
+import subport.application.membersubscription.port.in.MemberSubscriptionQueryUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionDutchPayUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionMemoUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionPlanUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionReminderUseCase;
+import subport.application.membersubscription.port.in.dto.GetMemberSubscriptionResponse;
 import subport.application.membersubscription.port.in.dto.UpdateMemberSubscriptionDutchPayRequest;
 import subport.application.membersubscription.port.in.dto.UpdateMemberSubscriptionMemoRequest;
 import subport.application.membersubscription.port.in.dto.UpdateMemberSubscriptionPlanRequest;
@@ -38,9 +40,10 @@ public class UpdateMemberSubscriptionService implements
 	private final LoadMemberSubscriptionPort loadMemberSubscriptionPort;
 	private final LoadPlanPort loadPlanPort;
 	private final ExchangeRateService exchangeRateService;
+	private final MemberSubscriptionQueryUseCase memberSubscriptionQueryUseCase;
 
 	@Override
-	public void updatePlan(
+	public GetMemberSubscriptionResponse updatePlan(
 		Long memberId,
 		UpdateMemberSubscriptionPlanRequest request,
 		Long memberSubscriptionId,
@@ -50,7 +53,11 @@ public class UpdateMemberSubscriptionService implements
 
 		Long newPlanId = request.planId();
 		if (newPlanId.equals(memberSubscription.getPlan().getId())) {
-			return;
+			return memberSubscriptionQueryUseCase.getMemberSubscription(
+				memberId,
+				memberSubscriptionId,
+				currentDateTime.toLocalDate()
+			);
 		}
 
 		if (!memberSubscription.getMember().getId().equals(memberId)) {
@@ -81,13 +88,20 @@ public class UpdateMemberSubscriptionService implements
 		memberSubscription.updateExchangeRate(rate, exchangeRateDate);
 
 		memberSubscription.updatePlan(newPlan);
+
+		return memberSubscriptionQueryUseCase.getMemberSubscription(
+			memberId,
+			memberSubscriptionId,
+			currentDateTime.toLocalDate()
+		);
 	}
 
 	@Override
-	public void updateDutchPay(
+	public GetMemberSubscriptionResponse updateDutchPay(
 		Long memberId,
 		UpdateMemberSubscriptionDutchPayRequest request,
-		Long memberSubscriptionId
+		Long memberSubscriptionId,
+		LocalDate currentDate
 	) {
 		MemberSubscription memberSubscription = loadMemberSubscriptionPort.loadMemberSubscription(memberSubscriptionId);
 
@@ -105,13 +119,20 @@ public class UpdateMemberSubscriptionService implements
 		}
 
 		memberSubscription.updateDutchPay(dutchPay, dutchPayAmount);
+
+		return memberSubscriptionQueryUseCase.getMemberSubscription(
+			memberId,
+			memberSubscriptionId,
+			currentDate
+		);
 	}
 
 	@Override
-	public void updateReminder(
+	public GetMemberSubscriptionResponse updateReminder(
 		Long memberId,
 		UpdateMemberSubscriptionReminderRequest request,
-		Long memberSubscriptionId
+		Long memberSubscriptionId,
+		LocalDate currentDate
 	) {
 		MemberSubscription memberSubscription = loadMemberSubscriptionPort.loadMemberSubscription(memberSubscriptionId);
 
@@ -120,13 +141,20 @@ public class UpdateMemberSubscriptionService implements
 		}
 
 		memberSubscription.updateReminderDaysBefore(request.reminderDaysBefore());
+
+		return memberSubscriptionQueryUseCase.getMemberSubscription(
+			memberId,
+			memberSubscriptionId,
+			currentDate
+		);
 	}
 
 	@Override
-	public void updateMemo(
+	public GetMemberSubscriptionResponse updateMemo(
 		Long memberId,
 		UpdateMemberSubscriptionMemoRequest request,
-		Long memberSubscriptionId
+		Long memberSubscriptionId,
+		LocalDate currentDate
 	) {
 		MemberSubscription memberSubscription = loadMemberSubscriptionPort.loadMemberSubscription(memberSubscriptionId);
 
@@ -135,5 +163,11 @@ public class UpdateMemberSubscriptionService implements
 		}
 
 		memberSubscription.updateMemo(request.memo());
+
+		return memberSubscriptionQueryUseCase.getMemberSubscription(
+			memberId,
+			memberSubscriptionId,
+			currentDate
+		);
 	}
 }

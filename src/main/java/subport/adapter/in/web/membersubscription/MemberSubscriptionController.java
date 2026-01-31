@@ -91,96 +91,97 @@ public class MemberSubscriptionController {
 	}
 
 	@PutMapping("/{id}/plan")
-	public ResponseEntity<Void> updateMemberSubscriptionPlan(
+	public ResponseEntity<GetMemberSubscriptionResponse> updateMemberSubscriptionPlan(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
 		@Valid @RequestBody UpdateMemberSubscriptionPlanRequest request,
 		@PathVariable("id") Long memberSubscriptionId
 	) {
-		updateMemberSubscriptionPlanUseCase.updatePlan(
-			oAuth2User.getMemberId(),
-			request,
-			memberSubscriptionId,
-			LocalDateTime.now()
+		return ResponseEntity.ok(
+			updateMemberSubscriptionPlanUseCase.updatePlan(
+				oAuth2User.getMemberId(),
+				request,
+				memberSubscriptionId,
+				LocalDateTime.now()
+			)
 		);
-
-		return ResponseEntity.noContent()
-			.build();
 	}
 
 	@PutMapping("/{id}/dutch-pay")
-	public ResponseEntity<Void> updateMemberSubscriptionDutchPay(
+	public ResponseEntity<GetMemberSubscriptionResponse> updateMemberSubscriptionDutchPay(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
 		@RequestBody UpdateMemberSubscriptionDutchPayRequest request,
 		@PathVariable("id") Long memberSubscriptionId
 	) {
-		updateMemberSubscriptionDutchPayUseCase.updateDutchPay(
-			oAuth2User.getMemberId(),
-			request,
-			memberSubscriptionId
+		return ResponseEntity.ok(
+			updateMemberSubscriptionDutchPayUseCase.updateDutchPay(
+				oAuth2User.getMemberId(),
+				request,
+				memberSubscriptionId,
+				LocalDate.now()
+			)
 		);
-
-		return ResponseEntity.noContent()
-			.build();
 	}
 
 	@PutMapping("/{id}/reminder")
-	public ResponseEntity<Void> updateMemberSubscriptionReminder(
+	public ResponseEntity<GetMemberSubscriptionResponse> updateMemberSubscriptionReminder(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
 		@RequestBody UpdateMemberSubscriptionReminderRequest request,
 		@PathVariable("id") Long memberSubscriptionId
 	) {
-		updateMemberSubscriptionReminderUseCase.updateReminder(
-			oAuth2User.getMemberId(),
-			request,
-			memberSubscriptionId
+		return ResponseEntity.ok(
+			updateMemberSubscriptionReminderUseCase.updateReminder(
+				oAuth2User.getMemberId(),
+				request,
+				memberSubscriptionId,
+				LocalDate.now()
+			)
 		);
-
-		return ResponseEntity.noContent()
-			.build();
 	}
 
 	@PutMapping("/{id}/memo")
-	public ResponseEntity<Void> updateMemberSubscriptionMemo(
+	public ResponseEntity<GetMemberSubscriptionResponse> updateMemberSubscriptionMemo(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
 		@Valid @RequestBody UpdateMemberSubscriptionMemoRequest request,
 		@PathVariable("id") Long memberSubscriptionId
 	) {
-		updateMemberSubscriptionMemoUseCase.updateMemo(
-			oAuth2User.getMemberId(),
-			request,
-			memberSubscriptionId
+		return ResponseEntity.ok(
+			updateMemberSubscriptionMemoUseCase.updateMemo(
+				oAuth2User.getMemberId(),
+				request,
+				memberSubscriptionId,
+				LocalDate.now()
+			)
 		);
-
-		return ResponseEntity.noContent()
-			.build();
 	}
 
 	@PutMapping("/{id}/deactivate")
-	public ResponseEntity<Void> deactivateMemberSubscription(
+	public ResponseEntity<GetMemberSubscriptionResponse> deactivateMemberSubscription(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
 		@PathVariable("id") Long memberSubscriptionId
 	) {
-		deactivateMemberSubscriptionUseCase.deactivate(oAuth2User.getMemberId(), memberSubscriptionId);
-
-		return ResponseEntity.noContent()
-			.build();
+		return ResponseEntity.ok(
+			deactivateMemberSubscriptionUseCase.deactivate(
+				oAuth2User.getMemberId(),
+				memberSubscriptionId,
+				LocalDate.now()
+			)
+		);
 	}
 
 	@PutMapping("/{id}/activate")
-	public ResponseEntity<Void> activateMemberSubscription(
+	public ResponseEntity<GetMemberSubscriptionResponse> activateMemberSubscription(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
 		@Valid @RequestBody ActivateMemberSubscriptionRequest request,
 		@PathVariable("id") Long memberSubscriptionId
 	) {
-		activateMemberSubscriptionUseCase.activate(
-			oAuth2User.getMemberId(),
-			request,
-			memberSubscriptionId,
-			LocalDateTime.now()
+		return ResponseEntity.ok(
+			activateMemberSubscriptionUseCase.activate(
+				oAuth2User.getMemberId(),
+				request,
+				memberSubscriptionId,
+				LocalDateTime.now()
+			)
 		);
-
-		return ResponseEntity.noContent()
-			.build();
 	}
 
 	@DeleteMapping("/{id}")

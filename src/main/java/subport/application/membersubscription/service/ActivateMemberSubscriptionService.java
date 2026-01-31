@@ -11,7 +11,9 @@ import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.exchangeRate.service.ExchangeRateService;
 import subport.application.membersubscription.port.in.ActivateMemberSubscriptionUseCase;
+import subport.application.membersubscription.port.in.MemberSubscriptionQueryUseCase;
 import subport.application.membersubscription.port.in.dto.ActivateMemberSubscriptionRequest;
+import subport.application.membersubscription.port.in.dto.GetMemberSubscriptionResponse;
 import subport.application.membersubscription.port.out.LoadMemberSubscriptionPort;
 import subport.application.subscription.port.out.LoadPlanPort;
 import subport.domain.exchangeRate.ExchangeRate;
@@ -27,9 +29,10 @@ public class ActivateMemberSubscriptionService implements ActivateMemberSubscrip
 	private final LoadMemberSubscriptionPort loadMemberSubscriptionPort;
 	private final LoadPlanPort loadPlanPort;
 	private final ExchangeRateService exchangeRateService;
+	private final MemberSubscriptionQueryUseCase memberSubscriptionQueryUseCase;
 
 	@Override
-	public void activate(
+	public GetMemberSubscriptionResponse activate(
 		Long memberId,
 		ActivateMemberSubscriptionRequest request,
 		Long memberSubscriptionId,
@@ -41,7 +44,11 @@ public class ActivateMemberSubscriptionService implements ActivateMemberSubscrip
 			throw new CustomException(ErrorCode.MEMBER_SUBSCRIPTION_FORBIDDEN);
 		}
 		if (memberSubscription.isActive()) {
-			return;
+			return memberSubscriptionQueryUseCase.getMemberSubscription(
+				memberId,
+				memberSubscriptionId,
+				currentDateTime.toLocalDate()
+			);
 		}
 
 		LocalDate startDate = request.startDate();
@@ -65,7 +72,11 @@ public class ActivateMemberSubscriptionService implements ActivateMemberSubscrip
 		}
 
 		if (request.reusePreviousInfo()) {
-			return;
+			return memberSubscriptionQueryUseCase.getMemberSubscription(
+				memberId,
+				memberSubscriptionId,
+				currentDateTime.toLocalDate()
+			);
 		}
 
 		memberSubscription.updateDutchPay(
@@ -75,5 +86,11 @@ public class ActivateMemberSubscriptionService implements ActivateMemberSubscrip
 
 		memberSubscription.updateReminderDaysBefore(request.reminderDaysBefore());
 		memberSubscription.updateMemo(request.memo());
+
+		return memberSubscriptionQueryUseCase.getMemberSubscription(
+			memberId,
+			memberSubscriptionId,
+			currentDateTime.toLocalDate()
+		);
 	}
 }
