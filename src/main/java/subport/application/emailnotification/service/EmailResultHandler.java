@@ -5,12 +5,10 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.RequiredArgsConstructor;
 import subport.domain.emailnotification.EmailNotification;
 
 @Component
 @Transactional
-@RequiredArgsConstructor
 public class EmailResultHandler {
 
 	public void handleSuccess(
