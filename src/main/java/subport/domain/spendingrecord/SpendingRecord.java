@@ -54,26 +54,4 @@ public class SpendingRecord extends BaseTimeEntity {
 		this.memberId = memberId;
 		this.memberSubscriptionId = memberSubscriptionId;
 	}
-
-	/*public static SpendingRecordTemp from(
-		PlanTemp plan,
-		SubscriptionTemp subscription,
-		MemberSubscriptionTemp memberSubscriptionTemp
-	) {
-		BigDecimal amount = plan.getAmount();
-		BigDecimal dutchPayAmount = memberSubscriptionTemp.getDutchPayAmount();
-		if (memberSubscriptionTemp.isDutchPay() && dutchPayAmount != null) {
-			amount = dutchPayAmount;
-		}
-		return new SpendingRecordTemp(
-			null,
-			memberSubscriptionTemp.getNextPaymentDate(),
-			amount,
-			plan.getDurationMonths(),
-			subscription.getName(),
-			subscription.getLogoImageUrl(),
-			memberSubscriptionTemp.getMemberId(),
-			memberSubscriptionTemp.getId()
-		);
-	}*/
 }
