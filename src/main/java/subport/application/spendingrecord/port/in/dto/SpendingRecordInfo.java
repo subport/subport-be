@@ -9,22 +9,22 @@ import subport.domain.subscription.Plan;
 import subport.domain.subscription.Subscription;
 
 public record SpendingRecordInfo(
-	Long id,
+	Long spendingRecordId,
+	Long memberSubscriptionId,
 	String subscriptionName,
 	String subscriptionLogoImageUrl,
 	BigDecimal amount,
-	int period,
-	boolean inProgress
+	int period
 ) {
 
 	public static SpendingRecordInfo from(SpendingRecord spendingRecord) {
 		return new SpendingRecordInfo(
 			spendingRecord.getId(),
+			null,
 			spendingRecord.getSubscriptionName(),
 			spendingRecord.getSubscriptionLogoImageUrl(),
 			spendingRecord.getAmount().setScale(0, RoundingMode.HALF_UP),
-			spendingRecord.getDurationMonths(),
-			false
+			spendingRecord.getDurationMonths()
 		);
 	}
 
@@ -34,11 +34,11 @@ public record SpendingRecordInfo(
 
 		return new SpendingRecordInfo(
 			null,
+			memberSubscription.getId(),
 			subscription.getName(),
 			subscription.getLogoImageUrl(),
 			memberSubscription.calculateActualPaymentAmount().setScale(0, RoundingMode.HALF_UP),
-			plan.getDurationMonths(),
-			true
+			plan.getDurationMonths()
 		);
 	}
 }

@@ -3,7 +3,6 @@ package subport.application.spendingrecord.service;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,15 +24,19 @@ public class GetDailyCalendarService implements GetDailyCalendarUseCase {
 
 	@Override
 	public GetDailyCalendarResponse get(Long memberId, LocalDate targetDate) {
-		List<SpendingRecordInfo> spendingRecords = Stream.concat(
-				loadSpendingRecordPort.loadSpendingRecords(memberId, targetDate).stream()
-					.map(SpendingRecordInfo::from),
-				loadMemberSubscriptionPort.loadMemberSubscriptions(memberId, targetDate).stream()
-					.map(SpendingRecordInfo::from)
-			)
+		List<SpendingRecordInfo> completedRecords = loadSpendingRecordPort.loadSpendingRecords(memberId,
+				targetDate).stream()
+			.map(SpendingRecordInfo::from)
 			.sorted(Comparator.comparing(SpendingRecordInfo::subscriptionName))
 			.toList();
 
-		return new GetDailyCalendarResponse(spendingRecords);
+		List<SpendingRecordInfo> ongoingRecords = loadMemberSubscriptionPort.loadMemberSubscriptions(memberId,
+				targetDate)
+			.stream()
+			.map(SpendingRecordInfo::from)
+			.sorted(Comparator.comparing(SpendingRecordInfo::subscriptionName))
+			.toList();
+
+		return new GetDailyCalendarResponse(completedRecords, ongoingRecords);
 	}
 }
