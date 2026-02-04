@@ -153,9 +153,9 @@ public class MemberSubscription extends BaseTimeEntity {
 	}
 
 	private LocalDate calculateReminderDate() {
-		if (reminderDaysBefore == null) {
+		/*if (reminderDaysBefore == null) {
 			return null;
-		}
-		return nextPaymentDate.minusDays(reminderDaysBefore);
+		}*/
+		return null;
 	}
 }
