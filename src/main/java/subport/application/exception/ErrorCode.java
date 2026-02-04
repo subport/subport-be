@@ -49,6 +49,8 @@ public enum ErrorCode {
 	INVALID_MEMBER_SUBSCRIPTION_PLAN(HttpStatus.BAD_REQUEST, "해당 구독 서비스에 속하지 않은 플랜으로는 변경이 불가능합니다."),
 	DUTCH_PAY_AMOUNT_MISSING(HttpStatus.BAD_REQUEST, "더치페이를 선택했으면 더치페이 금액을 반드시 입력해야 합니다."),
 	DUTCH_PAY_AMOUNT_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "더치페이를 선택하지 않았으면 금액을 입력할 수 없습니다."),
+	INVALID_START_DATE_FUTURE(HttpStatus.BAD_REQUEST, "시작 날짜는 미래일 수 없습니다."),
+	INVALID_START_DATE_TOO_OLD(HttpStatus.BAD_REQUEST, "시작 날짜는 최근 1년 이내로만 설정 가능합니다."),
 
 	// 플랜 관련
 	PLAN_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 플랜입니다."),
