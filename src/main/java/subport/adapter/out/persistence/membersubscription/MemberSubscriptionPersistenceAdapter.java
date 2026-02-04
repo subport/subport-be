@@ -24,8 +24,8 @@ public class MemberSubscriptionPersistenceAdapter implements
 	private final SpringDataMemberSubscriptionRepository memberSubscriptionRepository;
 
 	@Override
-	public Long save(MemberSubscription memberSubscription) {
-		return memberSubscriptionRepository.save(memberSubscription).getId();
+	public MemberSubscription save(MemberSubscription memberSubscription) {
+		return memberSubscriptionRepository.save(memberSubscription);
 	}
 
 	@Override
