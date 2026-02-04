@@ -9,6 +9,8 @@ import subport.domain.spendingrecord.SpendingRecord;
 
 public interface SpringDataSpendingRecordRepository extends JpaRepository<SpendingRecord, Long> {
 
+	boolean existsByPaymentDateAndMemberSubscriptionId(LocalDate paymentDate, Long memberSubscriptionId);
+
 	List<SpendingRecord> findTop3ByMemberSubscriptionIdOrderByPaymentDateDesc(Long memberSubscriptionId);
 
 	List<SpendingRecord> findByMemberIdAndPaymentDateGreaterThanEqualAndPaymentDateLessThan(

@@ -9,6 +9,8 @@ public interface LoadSpendingRecordPort {
 
 	SpendingRecord loadSpendingRecord(Long spendingRecordId);
 
+	boolean existsSpendingRecord(LocalDate paymentDate, Long memberSubscriptionId);
+
 	List<SpendingRecord> loadSpendingRecords(Long memberSubscriptionId);
 
 	List<SpendingRecord> loadSpendingRecords(Long memberId, LocalDate start, LocalDate end);

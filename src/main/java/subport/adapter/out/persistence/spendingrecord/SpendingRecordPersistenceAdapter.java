@@ -34,6 +34,11 @@ public class SpendingRecordPersistenceAdapter implements
 	}
 
 	@Override
+	public boolean existsSpendingRecord(LocalDate paymentDate, Long memberSubscriptionId) {
+		return spendingRecordRepository.existsByPaymentDateAndMemberSubscriptionId(paymentDate, memberSubscriptionId);
+	}
+
+	@Override
 	public List<SpendingRecord> loadSpendingRecords(Long memberSubscriptionId) {
 		return spendingRecordRepository.findTop3ByMemberSubscriptionIdOrderByPaymentDateDesc(memberSubscriptionId);
 	}
