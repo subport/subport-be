@@ -152,6 +152,12 @@ public class MemberSubscription extends BaseTimeEntity {
 		return planAmount;
 	}
 
+	public boolean isExchangeRateApplicable() {
+		return this.exchangeRate != null
+			&& this.exchangeRateDate != null
+			&& this.plan.isUsdBased();
+	}
+
 	private LocalDate calculateReminderDate() {
 		/*if (reminderDaysBefore == null) {
 			return null;
