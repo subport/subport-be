@@ -3,8 +3,6 @@ package subport.application.membersubscription.service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,14 +16,12 @@ import subport.application.membersubscription.port.in.RegisterMemberSubscription
 import subport.application.membersubscription.port.in.dto.RegisterMemberSubscriptionRequest;
 import subport.application.membersubscription.port.in.dto.RegisterMemberSubscriptionResponse;
 import subport.application.membersubscription.port.out.SaveMemberSubscriptionPort;
-import subport.application.spendingrecord.port.out.LoadSpendingRecordPort;
-import subport.application.spendingrecord.port.out.SaveSpendingRecordPort;
+import subport.application.spendingrecord.port.in.CreateSpendingRecordsUseCase;
 import subport.application.subscription.port.out.LoadPlanPort;
 import subport.application.subscription.port.out.LoadSubscriptionPort;
 import subport.domain.exchangeRate.ExchangeRate;
 import subport.domain.member.Member;
 import subport.domain.membersubscription.MemberSubscription;
-import subport.domain.spendingrecord.SpendingRecord;
 import subport.domain.subscription.Plan;
 import subport.domain.subscription.Subscription;
 
@@ -39,8 +35,7 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 	private final LoadPlanPort loadPlanPort;
 	private final ExchangeRateService exchangeRateService;
 	private final LoadMemberPort loadMemberPort;
-	private final LoadSpendingRecordPort loadSpendingRecordPort;
-	private final SaveSpendingRecordPort saveSpendingRecordPort;
+	private final CreateSpendingRecordsUseCase createSpendingRecordsUseCase;
 
 	@Override
 	public RegisterMemberSubscriptionResponse register(
@@ -102,9 +97,7 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 		);
 
 		MemberSubscription savedMemberSubscription = saveMemberSubscriptionPort.save(memberSubscription);
-
-		List<SpendingRecord> spendingRecords = createSpendingRecords(savedMemberSubscription, currentDateTime);
-		saveSpendingRecordPort.save(spendingRecords);
+		createSpendingRecordsUseCase.createMissing(savedMemberSubscription, currentDateTime);
 
 		return new RegisterMemberSubscriptionResponse(savedMemberSubscription.getId());
 	}
@@ -116,58 +109,5 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 		if (startDate.isBefore(currentDate.minusYears(1))) {
 			throw new CustomException(ErrorCode.INVALID_START_DATE_TOO_OLD);
 		}
-	}
-
-	private List<SpendingRecord> createSpendingRecords(
-		MemberSubscription memberSubscription,
-		LocalDateTime currentDateTime
-	) {
-		List<SpendingRecord> spendingRecords = new ArrayList<>();
-		LocalDate nextPaymentDate = memberSubscription.getNextPaymentDate();
-		while (!nextPaymentDate.isAfter(currentDateTime.toLocalDate())) {
-			SpendingRecord spendingRecord;
-			if (nextPaymentDate.isEqual(currentDateTime.toLocalDate())
-				&& !loadSpendingRecordPort.existsSpendingRecord(nextPaymentDate, memberSubscription.getId())) {
-				spendingRecord = createSpendingRecord(memberSubscription, currentDateTime);
-				spendingRecords.add(spendingRecord);
-				break;
-			}
-
-			spendingRecord = createSpendingRecord(memberSubscription, currentDateTime);
-			spendingRecords.add(spendingRecord);
-
-			nextPaymentDate = memberSubscription.getNextPaymentDate();
-		}
-
-		return spendingRecords;
-	}
-
-	private SpendingRecord createSpendingRecord(MemberSubscription memberSubscription, LocalDateTime currentDateTime) {
-		Subscription subscription = memberSubscription.getSubscription();
-		SpendingRecord spendingRecord = new SpendingRecord(
-			memberSubscription.getLastPaymentDate(),
-			memberSubscription.calculateActualPaymentAmount(),
-			memberSubscription.getPlan().getDurationMonths(),
-			subscription.getName(),
-			subscription.getLogoImageUrl(),
-			memberSubscription.getMember().getId(),
-			memberSubscription.getId()
-		);
-
-		memberSubscription.updateLastPaymentDate();
-
-		if (memberSubscription.getExchangeRate() != null) {
-			ExchangeRate exchangeRate = exchangeRateService.getExchangeRate(
-				memberSubscription.getLastPaymentDate(),
-				currentDateTime
-			);
-
-			memberSubscription.updateExchangeRate(
-				exchangeRate.getRate(),
-				exchangeRate.getApplyDate()
-			);
-		}
-
-		return spendingRecord;
 	}
 }

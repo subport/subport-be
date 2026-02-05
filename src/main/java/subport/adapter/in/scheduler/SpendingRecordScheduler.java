@@ -16,6 +16,6 @@ public class SpendingRecordScheduler {
 
 	@Scheduled(cron = "0 0 0 * * *")
 	public void run() {
-		createSpendingRecordsUseCase.create(LocalDateTime.now());
+		createSpendingRecordsUseCase.createForScheduling(LocalDateTime.now());
 	}
 }
