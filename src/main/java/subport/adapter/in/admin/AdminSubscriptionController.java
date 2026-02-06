@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import subport.application.admin.dto.AdminPlansResponse;
+import subport.application.admin.dto.AdminRegisterPlanRequest;
 import subport.application.admin.dto.AdminRegisterSubscriptionRequest;
 import subport.application.admin.dto.AdminSubscriptionResponse;
 import subport.application.admin.dto.AdminSubscriptionsResponse;
@@ -48,11 +50,6 @@ public class AdminSubscriptionController {
 		return ResponseEntity.ok(subscriptionService.getSubscription(subscriptionId));
 	}
 
-	@GetMapping("/{id}/plans")
-	public ResponseEntity<AdminPlansResponse> getPlans(@PathVariable("id") Long subscriptionId) {
-		return ResponseEntity.ok(planService.getPlans(subscriptionId));
-	}
-
 	@PutMapping("/{id}")
 	public ResponseEntity<Void> updateSubscription(
 		@PathVariable("id") Long subscriptionId,
@@ -69,5 +66,20 @@ public class AdminSubscriptionController {
 		subscriptionService.deleteSubscription(subscriptionId);
 
 		return ResponseEntity.noContent().build();
+	}
+
+	@PostMapping("/{id}/plans")
+	public ResponseEntity<Void> registerPlan(
+		@PathVariable("id") Long subscriptionId,
+		@RequestBody AdminRegisterPlanRequest request
+	) {
+		planService.registerPlan(subscriptionId, request);
+
+		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping("/{id}/plans")
+	public ResponseEntity<AdminPlansResponse> getPlans(@PathVariable("id") Long subscriptionId) {
+		return ResponseEntity.ok(planService.getPlans(subscriptionId));
 	}
 }
