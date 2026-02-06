@@ -88,7 +88,7 @@ public class AdminSubscriptionService {
 
 	@Transactional
 	public void deleteSubscription(Long subscriptionId) {
-		if (memberSubscriptionPort.exists(subscriptionId)) {
+		if (memberSubscriptionPort.existsBySubscriptionId(subscriptionId)) {
 			throw new CustomException(ErrorCode.SUBSCRIPTION_IN_USE);
 		}
 

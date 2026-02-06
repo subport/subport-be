@@ -101,7 +101,12 @@ public class MemberSubscriptionPersistenceAdapter implements
 	}
 
 	@Override
-	public boolean exists(Long subscriptionId) {
+	public boolean existsBySubscriptionId(Long subscriptionId) {
 		return memberSubscriptionRepository.existsBySubscriptionId(subscriptionId);
+	}
+
+	@Override
+	public boolean existsByPlanId(Long planId) {
+		return memberSubscriptionRepository.existsByPlanId(planId);
 	}
 }

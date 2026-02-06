@@ -65,7 +65,8 @@ public enum ErrorCode {
 	SPENDING_RECORD_FORBIDDEN(HttpStatus.FORBIDDEN, "본인의 소비 내역만 삭제가 가능합니다."),
 
 	// 어드민
-	SUBSCRIPTION_IN_USE(HttpStatus.CONFLICT, "회원이 사용 중인 구독은 삭제할 수 없습니다.");
+	SUBSCRIPTION_IN_USE(HttpStatus.CONFLICT, "회원이 사용 중인 구독은 삭제할 수 없습니다."),
+	PLAN_IN_USE(HttpStatus.CONFLICT, "회원이 사용 중인 플랜은 삭제할 수 없습니다.");
 
 	private final HttpStatus httpStatus;
 	private final String message;

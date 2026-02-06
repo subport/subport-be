@@ -2,5 +2,7 @@ package subport.application.admin.port;
 
 public interface AdminMemberSubscriptionPort {
 
-	boolean exists(Long subscriptionId);
+	boolean existsBySubscriptionId(Long subscriptionId);
+
+	boolean existsByPlanId(Long planId);
 }

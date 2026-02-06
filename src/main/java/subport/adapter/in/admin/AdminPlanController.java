@@ -1,6 +1,7 @@
 package subport.adapter.in.admin;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +25,13 @@ public class AdminPlanController {
 		@RequestBody AdminUpdatePlanRequest request
 	) {
 		adminPlanService.updatePlan(planId, request);
+
+		return ResponseEntity.noContent().build();
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deletePlan(@PathVariable("id") Long planId) {
+		adminPlanService.deletePlan(planId);
 
 		return ResponseEntity.noContent().build();
 	}
