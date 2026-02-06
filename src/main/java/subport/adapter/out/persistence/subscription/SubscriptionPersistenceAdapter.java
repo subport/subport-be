@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
+import subport.application.admin.port.AdminSubscriptionPort;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.subscription.port.out.DeleteSubscriptionPort;
@@ -17,7 +18,8 @@ import subport.domain.subscription.Subscription;
 public class SubscriptionPersistenceAdapter implements
 	SaveSubscriptionPort,
 	LoadSubscriptionPort,
-	DeleteSubscriptionPort {
+	DeleteSubscriptionPort,
+	AdminSubscriptionPort {
 
 	private final SpringDataSubscriptionRepository subscriptionRepository;
 
@@ -40,5 +42,10 @@ public class SubscriptionPersistenceAdapter implements
 	@Override
 	public void delete(Subscription subscription) {
 		subscriptionRepository.delete(subscription);
+	}
+
+	@Override
+	public List<Subscription> loadSubscriptions() {
+		return subscriptionRepository.findAll();
 	}
 }
