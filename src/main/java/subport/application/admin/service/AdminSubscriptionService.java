@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import subport.application.admin.dto.AdminRegisterSubscriptionRequest;
 import subport.application.admin.dto.AdminSubscriptionResponse;
 import subport.application.admin.dto.AdminSubscriptionsResponse;
+import subport.application.admin.dto.AdminUpdateSubscriptionRequest;
 import subport.application.admin.port.AdminSubscriptionPort;
 import subport.application.subscription.port.out.LoadSubscriptionPort;
 import subport.application.subscription.port.out.SaveSubscriptionPort;
@@ -55,6 +56,27 @@ public class AdminSubscriptionService {
 	public AdminSubscriptionResponse getSubscription(Long subscriptionId) {
 		return AdminSubscriptionResponse.from(
 			loadSubscriptionPort.loadSubscription(subscriptionId)
+		);
+	}
+
+	@Transactional
+	public void updateSubscription(
+		Long subscriptionId,
+		AdminUpdateSubscriptionRequest request,
+		MultipartFile image
+	) {
+		Subscription subscription = loadSubscriptionPort.loadSubscription(subscriptionId);
+
+		String logoImageUrl = subscription.getLogoImageUrl();
+		if (image != null) {
+			logoImageUrl = uploadSubscriptionImagePort.upload(image);
+		}
+
+		subscription.update(
+			request.name(),
+			SubscriptionType.fromDisplayName(request.type()),
+			logoImageUrl,
+			request.planUrl()
 		);
 	}
 }
