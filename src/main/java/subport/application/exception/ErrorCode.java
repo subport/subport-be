@@ -62,7 +62,10 @@ public enum ErrorCode {
 
 	// 소비 내역 관련
 	SPENDING_RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 소비 내역입니다."),
-	SPENDING_RECORD_FORBIDDEN(HttpStatus.FORBIDDEN, "본인의 소비 내역만 삭제가 가능합니다.");
+	SPENDING_RECORD_FORBIDDEN(HttpStatus.FORBIDDEN, "본인의 소비 내역만 삭제가 가능합니다."),
+
+	// 어드민
+	SUBSCRIPTION_IN_USE(HttpStatus.CONFLICT, "회원이 사용 중인 구독은 삭제할 수 없습니다.");
 
 	private final HttpStatus httpStatus;
 	private final String message;

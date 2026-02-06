@@ -9,7 +9,11 @@ import subport.application.admin.dto.AdminRegisterSubscriptionRequest;
 import subport.application.admin.dto.AdminSubscriptionResponse;
 import subport.application.admin.dto.AdminSubscriptionsResponse;
 import subport.application.admin.dto.AdminUpdateSubscriptionRequest;
+import subport.application.admin.port.AdminMemberSubscriptionPort;
 import subport.application.admin.port.AdminSubscriptionPort;
+import subport.application.exception.CustomException;
+import subport.application.exception.ErrorCode;
+import subport.application.subscription.port.out.DeleteSubscriptionPort;
 import subport.application.subscription.port.out.LoadSubscriptionPort;
 import subport.application.subscription.port.out.SaveSubscriptionPort;
 import subport.application.subscription.port.out.UploadSubscriptionImagePort;
@@ -25,6 +29,8 @@ public class AdminSubscriptionService {
 	private final SaveSubscriptionPort saveSubscriptionPort;
 	private final LoadSubscriptionPort loadSubscriptionPort;
 	private final UploadSubscriptionImagePort uploadSubscriptionImagePort;
+	private final DeleteSubscriptionPort deleteSubscriptionPort;
+	private final AdminMemberSubscriptionPort memberSubscriptionPort;
 
 	@Transactional
 	public Long registerSubscription(
@@ -78,5 +84,15 @@ public class AdminSubscriptionService {
 			logoImageUrl,
 			request.planUrl()
 		);
+	}
+
+	@Transactional
+	public void deleteSubscription(Long subscriptionId) {
+		if (memberSubscriptionPort.exists(subscriptionId)) {
+			throw new CustomException(ErrorCode.SUBSCRIPTION_IN_USE);
+		}
+
+		Subscription subscription = loadSubscriptionPort.loadSubscription(subscriptionId);
+		deleteSubscriptionPort.delete(subscription);
 	}
 }

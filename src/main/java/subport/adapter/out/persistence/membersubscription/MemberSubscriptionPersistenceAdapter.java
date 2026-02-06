@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
+import subport.application.admin.port.AdminMemberSubscriptionPort;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.membersubscription.port.out.DeleteMemberSubscriptionPort;
@@ -19,7 +20,8 @@ import subport.domain.membersubscription.MemberSubscription;
 public class MemberSubscriptionPersistenceAdapter implements
 	SaveMemberSubscriptionPort,
 	LoadMemberSubscriptionPort,
-	DeleteMemberSubscriptionPort {
+	DeleteMemberSubscriptionPort,
+	AdminMemberSubscriptionPort {
 
 	private final SpringDataMemberSubscriptionRepository memberSubscriptionRepository;
 
@@ -96,5 +98,10 @@ public class MemberSubscriptionPersistenceAdapter implements
 				"subscription.name"
 			);
 		};
+	}
+
+	@Override
+	public boolean exists(Long subscriptionId) {
+		return memberSubscriptionRepository.existsBySubscriptionId(subscriptionId);
 	}
 }
