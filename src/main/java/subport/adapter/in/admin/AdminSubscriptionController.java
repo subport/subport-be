@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import subport.application.admin.dto.AdminPlansResponse;
+import subport.application.admin.dto.AdminSubscriptionResponse;
 import subport.application.admin.dto.AdminSubscriptionsResponse;
 import subport.application.admin.service.AdminPlanService;
 import subport.application.admin.service.AdminSubscriptionService;
@@ -23,6 +24,11 @@ public class AdminSubscriptionController {
 	@GetMapping
 	public ResponseEntity<AdminSubscriptionsResponse> searchSubscriptions() {
 		return ResponseEntity.ok(subscriptionService.searchSubscriptions());
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<AdminSubscriptionResponse> getSubscription(@PathVariable("id") Long subscriptionId) {
+		return ResponseEntity.ok(subscriptionService.getSubscription(subscriptionId));
 	}
 
 	@GetMapping("/{id}/plans")
