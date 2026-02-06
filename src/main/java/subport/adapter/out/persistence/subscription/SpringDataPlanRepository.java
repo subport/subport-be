@@ -18,4 +18,6 @@ public interface SpringDataPlanRepository extends JpaRepository<Plan, Long> {
 	List<Plan> findByMemberIdAndSubscriptionId(Long memberId, Long subscriptionId);
 
 	void deleteBySubscriptionId(Long subscriptionId);
+
+	List<Plan> findBySubscriptionId(Long subscriptionId);
 }

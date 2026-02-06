@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
+import subport.application.admin.port.AdminPlanPort;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.subscription.port.out.DeletePlanPort;
@@ -17,7 +18,8 @@ import subport.domain.subscription.Plan;
 public class PlanPersistenceAdapter implements
 	SavePlanPort,
 	LoadPlanPort,
-	DeletePlanPort {
+	DeletePlanPort,
+	AdminPlanPort {
 
 	private final SpringDataPlanRepository planRepository;
 
@@ -45,5 +47,10 @@ public class PlanPersistenceAdapter implements
 	@Override
 	public void delete(Long subscriptionId) {
 		planRepository.deleteBySubscriptionId(subscriptionId);
+	}
+
+	@Override
+	public List<Plan> loadPlans(Long subscriptionId) {
+		return planRepository.findBySubscriptionId(subscriptionId);
 	}
 }
