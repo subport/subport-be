@@ -21,7 +21,7 @@ public record AdminPlanResponse(
 			plan.getId(),
 			plan.getName(),
 			plan.getAmount().setScale(0, RoundingMode.HALF_UP),
-			plan.getAmountUnit().getSymbol(),
+			plan.getAmountUnit().name(),
 			plan.getDurationMonths(),
 			plan.getCreatedAt().toLocalDate(),
 			plan.getLastModifiedAt().toLocalDate()
