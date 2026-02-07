@@ -25,6 +25,9 @@ import subport.domain.subscription.SubscriptionType;
 @RequiredArgsConstructor
 public class AdminSubscriptionService {
 
+	private static final String SUBSCRIPTION_DEFAULT_LOGO_IMAGE_URL =
+		"https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axnklumwzgke/b/subpport-bucket/o/subscription_default.png";
+
 	private final AdminSubscriptionPort adminSubscriptionPort;
 	private final SaveSubscriptionPort saveSubscriptionPort;
 	private final LoadSubscriptionPort loadSubscriptionPort;
@@ -37,7 +40,10 @@ public class AdminSubscriptionService {
 		AdminRegisterSubscriptionRequest request,
 		MultipartFile image
 	) {
-		String logoImageUrl = uploadSubscriptionImagePort.upload(image);
+		String logoImageUrl = SUBSCRIPTION_DEFAULT_LOGO_IMAGE_URL;
+		if (image != null) {
+			logoImageUrl = uploadSubscriptionImagePort.upload(image);
+		}
 
 		Subscription subscription = new Subscription(
 			request.name(),
