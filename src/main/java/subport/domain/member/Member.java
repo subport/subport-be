@@ -50,6 +50,10 @@ public class Member extends BaseTimeEntity {
 	}
 
 	public LocalDate calculatePaymentReminderDate(LocalDate nextPaymentDate) {
-		return nextPaymentDate.minusDays(reminderDaysBefore);
+		if (paymentReminderEnabled) {
+			return nextPaymentDate.minusDays(reminderDaysBefore);
+		}
+
+		return null;
 	}
 }
