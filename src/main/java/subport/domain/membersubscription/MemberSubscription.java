@@ -80,13 +80,13 @@ public class MemberSubscription extends BaseTimeEntity {
 		this.dutchPayAmount = dutchPayAmount;
 		this.exchangeRate = exchangeRate;
 		this.exchangeRateDate = exchangeRateDate;
-		this.active = true;
-		this.lastPaymentDate = startDate;
 		this.member = member;
 		this.subscription = subscription;
 		this.plan = plan;
-		this.nextPaymentDate = plan.calculateNextPaymentDate(startDate);
-		this.paymentReminderDate = member.calculatePaymentReminderDate(nextPaymentDate);
+		active = true;
+		lastPaymentDate = startDate;
+		nextPaymentDate = plan.calculateNextPaymentDate(startDate);
+		paymentReminderDate = member.calculatePaymentReminderDate(nextPaymentDate);
 	}
 
 	public void updateMemo(String memo) {
@@ -96,6 +96,7 @@ public class MemberSubscription extends BaseTimeEntity {
 	public void updatePlan(Plan plan) {
 		this.plan = plan;
 		nextPaymentDate = plan.calculateNextPaymentDate(lastPaymentDate);
+		paymentReminderDate = member.calculatePaymentReminderDate(nextPaymentDate);
 	}
 
 	public void updateDutchPay(boolean dutchPay, BigDecimal dutchPayAmount) {
@@ -111,6 +112,7 @@ public class MemberSubscription extends BaseTimeEntity {
 	public void updateLastPaymentDate() {
 		lastPaymentDate = nextPaymentDate;
 		nextPaymentDate = plan.calculateNextPaymentDate(nextPaymentDate);
+		paymentReminderDate = member.calculatePaymentReminderDate(nextPaymentDate);
 	}
 
 	public void deactivate() {
@@ -121,6 +123,7 @@ public class MemberSubscription extends BaseTimeEntity {
 		this.startDate = startDate;
 		lastPaymentDate = startDate;
 		nextPaymentDate = plan.calculateNextPaymentDate(startDate);
+		paymentReminderDate = member.calculatePaymentReminderDate(nextPaymentDate);
 	}
 
 	public BigDecimal calculateActualPaymentAmount() {
