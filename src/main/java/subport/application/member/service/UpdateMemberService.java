@@ -11,7 +11,9 @@ import subport.application.member.port.in.dto.GetReminderSettingsResponse;
 import subport.application.member.port.in.dto.UpdateMemberRequest;
 import subport.application.member.port.in.dto.UpdateReminderSettingsRequest;
 import subport.application.member.port.out.LoadMemberPort;
+import subport.application.membersubscription.port.out.LoadMemberSubscriptionPort;
 import subport.domain.member.Member;
+import subport.domain.membersubscription.MemberSubscription;
 
 @Service
 @Transactional
@@ -20,6 +22,7 @@ public class UpdateMemberService implements UpdateMemberUseCase {
 
 	private final LoadMemberPort loadMemberPort;
 	private final MemberQueryUseCase memberQueryUseCase;
+	private final LoadMemberSubscriptionPort loadMemberSubscriptionPort;
 
 	@Override
 	public GetMemberResponse updateMember(Long memberId, UpdateMemberRequest request) {
@@ -37,10 +40,16 @@ public class UpdateMemberService implements UpdateMemberUseCase {
 	public GetReminderSettingsResponse updateReminderSettings(Long memberId, UpdateReminderSettingsRequest request) {
 		Member member = loadMemberPort.load(memberId);
 
+		boolean isReminderEnabled = request.paymentReminderEnabled();
+		int reminderDaysBefore = request.reminderDaysBefore();
+
 		member.updateReminderSettings(
-			request.paymentReminderEnabled(),
-			request.reminderDaysBefore()
+			isReminderEnabled,
+			reminderDaysBefore
 		);
+
+		loadMemberSubscriptionPort.loadMemberSubscriptions(memberId)
+			.forEach(MemberSubscription::updatePaymentReminderDate);
 
 		return new GetReminderSettingsResponse(
 			member.isPaymentReminderEnabled(),
