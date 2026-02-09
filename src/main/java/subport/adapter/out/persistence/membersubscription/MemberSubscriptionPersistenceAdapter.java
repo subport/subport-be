@@ -38,6 +38,11 @@ public class MemberSubscriptionPersistenceAdapter implements
 	}
 
 	@Override
+	public List<MemberSubscription> loadMemberSubscriptions(Long memberId) {
+		return memberSubscriptionRepository.findByMemberIdAndActiveIsTrue(memberId);
+	}
+
+	@Override
 	public List<MemberSubscription> loadMemberSubscriptions(
 		Long memberId,
 		boolean active,

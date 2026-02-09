@@ -9,6 +9,8 @@ public interface LoadMemberSubscriptionPort {
 
 	MemberSubscription loadMemberSubscription(Long memberSubscriptionId);
 
+	List<MemberSubscription> loadMemberSubscriptions(Long memberId);
+
 	List<MemberSubscription> loadMemberSubscriptions(
 		Long memberId,
 		boolean active,

@@ -23,6 +23,8 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 		""")
 	Optional<MemberSubscription> findByIdWithFetch(Long id);
 
+	List<MemberSubscription> findByMemberIdAndActiveIsTrue(Long memberId);
+
 	@EntityGraph(attributePaths = {
 		"member",
 		"subscription",
