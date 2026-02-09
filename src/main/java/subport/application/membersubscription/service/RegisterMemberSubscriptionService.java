@@ -79,7 +79,6 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 		}
 
 		Member member = loadMemberPort.load(memberId);
-		LocalDate nextPaymentDate = startDate.plusMonths(plan.getDurationMonths());
 		MemberSubscription memberSubscription = new MemberSubscription(
 			startDate,
 			request.memo(),
@@ -87,8 +86,6 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 			dutchPayAmount,
 			rate,
 			exchangeRateDate,
-			startDate,
-			nextPaymentDate,
 			member,
 			subscription,
 			plan

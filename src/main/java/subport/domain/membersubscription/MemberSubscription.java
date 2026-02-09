@@ -68,8 +68,6 @@ public class MemberSubscription extends BaseTimeEntity {
 		BigDecimal dutchPayAmount,
 		BigDecimal exchangeRate,
 		LocalDate exchangeRateDate,
-		LocalDate lastPaymentDate,
-		LocalDate nextPaymentDate,
 		Member member,
 		Subscription subscription,
 		Plan plan
@@ -81,11 +79,11 @@ public class MemberSubscription extends BaseTimeEntity {
 		this.exchangeRate = exchangeRate;
 		this.exchangeRateDate = exchangeRateDate;
 		this.active = true;
-		this.lastPaymentDate = lastPaymentDate;
-		this.nextPaymentDate = nextPaymentDate;
+		this.lastPaymentDate = startDate;
 		this.member = member;
 		this.subscription = subscription;
 		this.plan = plan;
+		this.nextPaymentDate = plan.calculateNextPaymentDate(startDate);
 	}
 
 	public void updateMemo(String memo) {
