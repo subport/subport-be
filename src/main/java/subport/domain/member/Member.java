@@ -1,5 +1,7 @@
 package subport.domain.member;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -38,12 +40,16 @@ public class Member extends BaseTimeEntity {
 		this.providerId = providerId;
 		this.nickname = nickname;
 		this.email = email;
-		this.paymentReminderEnabled = false;
+		this.paymentReminderEnabled = true;
 		this.reminderDaysBefore = 1;
 	}
 
 	public void update(String nickname, String email) {
 		this.nickname = nickname;
 		this.email = email;
+	}
+
+	public LocalDate calculatePaymentReminderDate(LocalDate nextPaymentDate) {
+		return nextPaymentDate.minusDays(reminderDaysBefore);
 	}
 }
