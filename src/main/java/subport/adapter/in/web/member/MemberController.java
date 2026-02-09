@@ -16,6 +16,7 @@ import subport.adapter.in.security.oauth2.CustomOAuth2User;
 import subport.application.member.port.in.MemberQueryUseCase;
 import subport.application.member.port.in.UpdateMemberUseCase;
 import subport.application.member.port.in.dto.GetMemberProfileResponse;
+import subport.application.member.port.in.dto.GetMemberReminderSettingsResponse;
 import subport.application.member.port.in.dto.GetMemberResponse;
 import subport.application.member.port.in.dto.UpdateMemberRequest;
 
@@ -29,7 +30,8 @@ public class MemberController {
 
 	@GetMapping("/me/profile")
 	public ResponseEntity<GetMemberProfileResponse> getMemberProfile(
-		@AuthenticationPrincipal CustomOAuth2User oAuth2User) {
+		@AuthenticationPrincipal CustomOAuth2User oAuth2User
+	) {
 		return ResponseEntity.ok(memberQueryUseCase.getMemberProfile(
 			oAuth2User.getMemberId(), LocalDate.now()));
 	}
@@ -48,6 +50,15 @@ public class MemberController {
 	) {
 		return ResponseEntity.ok(
 			updateMemberUseCase.update(oAuth2User.getMemberId(), request)
+		);
+	}
+
+	@GetMapping("/me/reminder-settings")
+	public ResponseEntity<GetMemberReminderSettingsResponse> getReminderSettings(
+		@AuthenticationPrincipal CustomOAuth2User oAuth2User
+	) {
+		return ResponseEntity.ok(
+			memberQueryUseCase.getMemberReminderSettings(oAuth2User.getMemberId())
 		);
 	}
 }

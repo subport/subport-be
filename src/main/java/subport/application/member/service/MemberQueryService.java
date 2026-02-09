@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import subport.application.member.port.in.MemberQueryUseCase;
 import subport.application.member.port.in.dto.GetMemberProfileResponse;
+import subport.application.member.port.in.dto.GetMemberReminderSettingsResponse;
 import subport.application.member.port.in.dto.GetMemberResponse;
 import subport.application.member.port.out.LoadMemberPort;
 import subport.domain.member.Member;
@@ -37,6 +38,16 @@ public class MemberQueryService implements MemberQueryUseCase {
 				member.getCreatedAt().toLocalDate(),
 				currentDate
 			)
+		);
+	}
+
+	@Override
+	public GetMemberReminderSettingsResponse getMemberReminderSettings(Long memberId) {
+		Member member = loadMemberPort.load(memberId);
+
+		return new GetMemberReminderSettingsResponse(
+			member.isPaymentReminderEnabled(),
+			member.getReminderDaysBefore()
 		);
 	}
 }
