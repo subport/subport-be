@@ -42,6 +42,9 @@ public class UpdateMemberService implements UpdateMemberUseCase {
 			request.reminderDaysBefore()
 		);
 
-		return null;
+		return new GetReminderSettingsResponse(
+			member.isPaymentReminderEnabled(),
+			member.getReminderDaysBefore()
+		);
 	}
 }
