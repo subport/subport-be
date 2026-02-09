@@ -33,10 +33,6 @@ public class MemberSubscription extends BaseTimeEntity {
 
 	private LocalDate startDate;
 
-	private Integer reminderDaysBefore;
-
-	private LocalDate reminderDate;
-
 	private String memo;
 
 	private boolean dutchPay;
@@ -67,7 +63,6 @@ public class MemberSubscription extends BaseTimeEntity {
 
 	public MemberSubscription(
 		LocalDate startDate,
-		Integer reminderDaysBefore,
 		String memo,
 		boolean dutchPay,
 		BigDecimal dutchPayAmount,
@@ -80,8 +75,6 @@ public class MemberSubscription extends BaseTimeEntity {
 		Plan plan
 	) {
 		this.startDate = startDate;
-		this.reminderDaysBefore = reminderDaysBefore;
-		this.reminderDate = calculateReminderDate();
 		this.memo = memo;
 		this.dutchPay = dutchPay;
 		this.dutchPayAmount = dutchPayAmount;
@@ -95,11 +88,6 @@ public class MemberSubscription extends BaseTimeEntity {
 		this.plan = plan;
 	}
 
-	public void updateReminderDaysBefore(Integer reminderDaysBefore) {
-		this.reminderDaysBefore = reminderDaysBefore;
-		reminderDate = calculateReminderDate();
-	}
-
 	public void updateMemo(String memo) {
 		this.memo = memo;
 	}
@@ -107,7 +95,6 @@ public class MemberSubscription extends BaseTimeEntity {
 	public void updatePlan(Plan plan) {
 		this.plan = plan;
 		nextPaymentDate = plan.calculateNextPaymentDate(lastPaymentDate);
-		reminderDate = calculateReminderDate();
 	}
 
 	public void updateDutchPay(boolean dutchPay, BigDecimal dutchPayAmount) {
@@ -123,7 +110,6 @@ public class MemberSubscription extends BaseTimeEntity {
 	public void updateLastPaymentDate() {
 		lastPaymentDate = nextPaymentDate;
 		nextPaymentDate = plan.calculateNextPaymentDate(nextPaymentDate);
-		reminderDate = calculateReminderDate();
 	}
 
 	public void deactivate() {
@@ -134,7 +120,6 @@ public class MemberSubscription extends BaseTimeEntity {
 		this.startDate = startDate;
 		lastPaymentDate = startDate;
 		nextPaymentDate = plan.calculateNextPaymentDate(startDate);
-		reminderDate = calculateReminderDate();
 	}
 
 	public BigDecimal calculateActualPaymentAmount() {
@@ -156,12 +141,5 @@ public class MemberSubscription extends BaseTimeEntity {
 		return this.exchangeRate != null
 			&& this.exchangeRateDate != null
 			&& this.plan.isUsdBased();
-	}
-
-	private LocalDate calculateReminderDate() {
-		/*if (reminderDaysBefore == null) {
-			return null;
-		}*/
-		return null;
 	}
 }

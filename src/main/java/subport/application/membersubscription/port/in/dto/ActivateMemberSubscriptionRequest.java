@@ -10,7 +10,6 @@ public record ActivateMemberSubscriptionRequest(
 	Long planId,
 	Boolean dutchPay,
 	BigDecimal dutchPayAmount,
-	Integer reminderDaysBefore,
 	String memo,
 
 	@NotNull

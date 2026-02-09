@@ -10,8 +10,6 @@ public record RegisterMemberSubscriptionRequest(
 	@NotNull
 	LocalDate startDate,
 
-	Integer reminderDaysBefore,
-
 	@Size(max = 100)
 	String memo,
 

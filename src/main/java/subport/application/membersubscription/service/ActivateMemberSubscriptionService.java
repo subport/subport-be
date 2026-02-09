@@ -84,7 +84,6 @@ public class ActivateMemberSubscriptionService implements ActivateMemberSubscrip
 			request.dutchPayAmount()
 		);
 
-		memberSubscription.updateReminderDaysBefore(request.reminderDaysBefore());
 		memberSubscription.updateMemo(request.memo());
 
 		return memberSubscriptionQueryUseCase.getMemberSubscription(

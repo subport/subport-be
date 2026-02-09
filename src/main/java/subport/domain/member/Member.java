@@ -26,6 +26,10 @@ public class Member extends BaseTimeEntity {
 
 	private String email;
 
+	private boolean paymentReminderEnabled;
+
+	private int reminderDaysBefore;
+
 	public Member(
 		String providerId,
 		String nickname,
@@ -34,6 +38,8 @@ public class Member extends BaseTimeEntity {
 		this.providerId = providerId;
 		this.nickname = nickname;
 		this.email = email;
+		this.paymentReminderEnabled = false;
+		this.reminderDaysBefore = 1;
 	}
 
 	public void update(String nickname, String email) {

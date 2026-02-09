@@ -79,11 +79,9 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 		}
 
 		Member member = loadMemberPort.load(memberId);
-		Integer reminderDaysBefore = request.reminderDaysBefore();
 		LocalDate nextPaymentDate = startDate.plusMonths(plan.getDurationMonths());
 		MemberSubscription memberSubscription = new MemberSubscription(
 			startDate,
-			reminderDaysBefore,
 			request.memo(),
 			dutchPay,
 			dutchPayAmount,

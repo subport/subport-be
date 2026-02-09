@@ -15,12 +15,10 @@ import subport.application.membersubscription.port.in.MemberSubscriptionQueryUse
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionDutchPayUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionMemoUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionPlanUseCase;
-import subport.application.membersubscription.port.in.UpdateMemberSubscriptionReminderUseCase;
 import subport.application.membersubscription.port.in.dto.GetMemberSubscriptionResponse;
 import subport.application.membersubscription.port.in.dto.UpdateMemberSubscriptionDutchPayRequest;
 import subport.application.membersubscription.port.in.dto.UpdateMemberSubscriptionMemoRequest;
 import subport.application.membersubscription.port.in.dto.UpdateMemberSubscriptionPlanRequest;
-import subport.application.membersubscription.port.in.dto.UpdateMemberSubscriptionReminderRequest;
 import subport.application.membersubscription.port.out.LoadMemberSubscriptionPort;
 import subport.application.subscription.port.out.LoadPlanPort;
 import subport.domain.exchangeRate.ExchangeRate;
@@ -34,7 +32,6 @@ import subport.domain.subscription.Plan;
 public class UpdateMemberSubscriptionService implements
 	UpdateMemberSubscriptionPlanUseCase,
 	UpdateMemberSubscriptionDutchPayUseCase,
-	UpdateMemberSubscriptionReminderUseCase,
 	UpdateMemberSubscriptionMemoUseCase {
 
 	private final LoadMemberSubscriptionPort loadMemberSubscriptionPort;
@@ -119,28 +116,6 @@ public class UpdateMemberSubscriptionService implements
 		}
 
 		memberSubscription.updateDutchPay(dutchPay, dutchPayAmount);
-
-		return memberSubscriptionQueryUseCase.getMemberSubscription(
-			memberId,
-			memberSubscriptionId,
-			currentDate
-		);
-	}
-
-	@Override
-	public GetMemberSubscriptionResponse updateReminder(
-		Long memberId,
-		UpdateMemberSubscriptionReminderRequest request,
-		Long memberSubscriptionId,
-		LocalDate currentDate
-	) {
-		MemberSubscription memberSubscription = loadMemberSubscriptionPort.loadMemberSubscription(memberSubscriptionId);
-
-		if (!memberSubscription.getMember().getId().equals(memberId)) {
-			throw new CustomException(ErrorCode.MEMBER_SUBSCRIPTION_FORBIDDEN);
-		}
-
-		memberSubscription.updateReminderDaysBefore(request.reminderDaysBefore());
 
 		return memberSubscriptionQueryUseCase.getMemberSubscription(
 			memberId,

@@ -26,7 +26,6 @@ import subport.application.membersubscription.port.in.RegisterMemberSubscription
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionDutchPayUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionMemoUseCase;
 import subport.application.membersubscription.port.in.UpdateMemberSubscriptionPlanUseCase;
-import subport.application.membersubscription.port.in.UpdateMemberSubscriptionReminderUseCase;
 import subport.application.membersubscription.port.in.dto.ActivateMemberSubscriptionRequest;
 import subport.application.membersubscription.port.in.dto.GetMemberSubscriptionResponse;
 import subport.application.membersubscription.port.in.dto.GetMemberSubscriptionsResponse;
@@ -35,7 +34,6 @@ import subport.application.membersubscription.port.in.dto.RegisterMemberSubscrip
 import subport.application.membersubscription.port.in.dto.UpdateMemberSubscriptionDutchPayRequest;
 import subport.application.membersubscription.port.in.dto.UpdateMemberSubscriptionMemoRequest;
 import subport.application.membersubscription.port.in.dto.UpdateMemberSubscriptionPlanRequest;
-import subport.application.membersubscription.port.in.dto.UpdateMemberSubscriptionReminderRequest;
 
 @RestController
 @RequestMapping("/api/member-subscriptions")
@@ -45,7 +43,6 @@ public class MemberSubscriptionController {
 	private final RegisterMemberSubscriptionUseCase registerMemberSubscriptionUseCase;
 	private final UpdateMemberSubscriptionPlanUseCase updateMemberSubscriptionPlanUseCase;
 	private final UpdateMemberSubscriptionDutchPayUseCase updateMemberSubscriptionDutchPayUseCase;
-	private final UpdateMemberSubscriptionReminderUseCase updateMemberSubscriptionReminderUseCase;
 	private final UpdateMemberSubscriptionMemoUseCase updateMemberSubscriptionMemoUseCase;
 	private final DeactivateMemberSubscriptionUseCase deactivateMemberSubscriptionUseCase;
 	private final ActivateMemberSubscriptionUseCase activateMemberSubscriptionUseCase;
@@ -114,22 +111,6 @@ public class MemberSubscriptionController {
 	) {
 		return ResponseEntity.ok(
 			updateMemberSubscriptionDutchPayUseCase.updateDutchPay(
-				oAuth2User.getMemberId(),
-				request,
-				memberSubscriptionId,
-				LocalDate.now()
-			)
-		);
-	}
-
-	@PutMapping("/{id}/reminder")
-	public ResponseEntity<GetMemberSubscriptionResponse> updateMemberSubscriptionReminder(
-		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
-		@RequestBody UpdateMemberSubscriptionReminderRequest request,
-		@PathVariable("id") Long memberSubscriptionId
-	) {
-		return ResponseEntity.ok(
-			updateMemberSubscriptionReminderUseCase.updateReminder(
 				oAuth2User.getMemberId(),
 				request,
 				memberSubscriptionId,
