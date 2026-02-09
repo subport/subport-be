@@ -5,5 +5,5 @@ import subport.application.member.port.in.dto.UpdateMemberRequest;
 
 public interface UpdateMemberUseCase {
 
-	GetMemberResponse update(Long memberId, UpdateMemberRequest request);
+	GetMemberResponse updateMember(Long memberId, UpdateMemberRequest request);
 }

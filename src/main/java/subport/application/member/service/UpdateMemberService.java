@@ -20,7 +20,7 @@ public class UpdateMemberService implements UpdateMemberUseCase {
 	private final MemberQueryUseCase memberQueryUseCase;
 
 	@Override
-	public GetMemberResponse update(Long memberId, UpdateMemberRequest request) {
+	public GetMemberResponse updateMember(Long memberId, UpdateMemberRequest request) {
 		Member member = loadMemberPort.load(memberId);
 
 		member.update(

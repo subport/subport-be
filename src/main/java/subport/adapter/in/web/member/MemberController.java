@@ -49,7 +49,7 @@ public class MemberController {
 		@Valid @RequestBody UpdateMemberRequest request
 	) {
 		return ResponseEntity.ok(
-			updateMemberUseCase.update(oAuth2User.getMemberId(), request)
+			updateMemberUseCase.updateMember(oAuth2User.getMemberId(), request)
 		);
 	}
 
