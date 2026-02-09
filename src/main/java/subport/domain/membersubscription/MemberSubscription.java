@@ -49,6 +49,8 @@ public class MemberSubscription extends BaseTimeEntity {
 
 	private LocalDate nextPaymentDate;
 
+	private LocalDate paymentReminderDate;
+
 	@JoinColumn(name = "member_id", nullable = false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Member member;
@@ -84,6 +86,7 @@ public class MemberSubscription extends BaseTimeEntity {
 		this.subscription = subscription;
 		this.plan = plan;
 		this.nextPaymentDate = plan.calculateNextPaymentDate(startDate);
+		this.paymentReminderDate = member.calculatePaymentReminderDate(nextPaymentDate);
 	}
 
 	public void updateMemo(String memo) {
