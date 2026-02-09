@@ -78,8 +78,8 @@ public class Plan extends BaseTimeEntity {
 		this.durationMonths = durationMonths;
 	}
 
-	public LocalDate calculateNextPaymentDate(LocalDate date) {
-		return date.plusMonths(durationMonths);
+	public LocalDate calculateNextPaymentDate(LocalDate lastPaymentDate) {
+		return lastPaymentDate.plusMonths(durationMonths);
 	}
 
 	public boolean isUsdBased() {
