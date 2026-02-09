@@ -13,6 +13,7 @@ import subport.application.membersubscription.port.out.LoadMemberSubscriptionPor
 import subport.domain.emailnotification.EmailNotification;
 import subport.domain.emailnotification.SendingStatus;
 import subport.domain.member.Member;
+import subport.domain.subscription.Plan;
 import subport.domain.subscription.Subscription;
 
 @Service
@@ -30,15 +31,19 @@ public class CreateEmailNotificationsService implements CreateEmailNotifications
 			.map(memberSubscription -> {
 				Member member = memberSubscription.getMember();
 				Subscription subscription = memberSubscription.getSubscription();
+				Plan plan = memberSubscription.getPlan();
 
 				return new EmailNotification(
 					memberSubscription.getId(),
 					memberSubscription.getNextPaymentDate(),
-					memberSubscription.getReminderDaysBefore(),
+					member.getReminderDaysBefore(),
 					member.getId(),
 					member.getEmail(),
 					subscription.getName(),
 					subscription.getLogoImageUrl(),
+					plan.getAmount(),
+					plan.getAmountUnit().getDisplayName(),
+					plan.getDurationMonths(),
 					SendingStatus.PENDING,
 					null,
 					0

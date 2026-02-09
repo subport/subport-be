@@ -1,5 +1,6 @@
 package subport.domain.emailnotification;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -39,6 +40,12 @@ public class EmailNotification extends BaseTimeEntity {
 
 	private String subscriptionLogoImageUrl;
 
+	private BigDecimal amount;
+
+	private String amountUnit;
+
+	private int planDurationMonths;
+
 	@Enumerated(value = EnumType.STRING)
 	private SendingStatus status;
 
@@ -54,6 +61,9 @@ public class EmailNotification extends BaseTimeEntity {
 		String recipientEmail,
 		String subscriptionName,
 		String subscriptionLogoImageUrl,
+		BigDecimal amount,
+		String amountUnit,
+		int planDurationMonths,
 		SendingStatus status,
 		LocalDateTime sentAt,
 		int retryCount
@@ -65,6 +75,9 @@ public class EmailNotification extends BaseTimeEntity {
 		this.recipientEmail = recipientEmail;
 		this.subscriptionName = subscriptionName;
 		this.subscriptionLogoImageUrl = subscriptionLogoImageUrl;
+		this.amount = amount;
+		this.amountUnit = amountUnit;
+		this.planDurationMonths = planDurationMonths;
 		this.status = status;
 		this.sentAt = sentAt;
 		this.retryCount = retryCount;
