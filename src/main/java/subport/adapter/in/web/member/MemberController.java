@@ -16,8 +16,8 @@ import subport.adapter.in.security.oauth2.CustomOAuth2User;
 import subport.application.member.port.in.MemberQueryUseCase;
 import subport.application.member.port.in.UpdateMemberUseCase;
 import subport.application.member.port.in.dto.GetMemberProfileResponse;
-import subport.application.member.port.in.dto.GetMemberReminderSettingsResponse;
 import subport.application.member.port.in.dto.GetMemberResponse;
+import subport.application.member.port.in.dto.GetReminderSettingsResponse;
 import subport.application.member.port.in.dto.UpdateMemberRequest;
 
 @RestController
@@ -54,7 +54,7 @@ public class MemberController {
 	}
 
 	@GetMapping("/me/reminder-settings")
-	public ResponseEntity<GetMemberReminderSettingsResponse> getReminderSettings(
+	public ResponseEntity<GetReminderSettingsResponse> getReminderSettings(
 		@AuthenticationPrincipal CustomOAuth2User oAuth2User
 	) {
 		return ResponseEntity.ok(
