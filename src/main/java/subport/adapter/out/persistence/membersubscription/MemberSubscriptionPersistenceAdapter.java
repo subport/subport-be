@@ -55,7 +55,7 @@ public class MemberSubscriptionPersistenceAdapter implements
 
 	@Override
 	public List<MemberSubscription> loadMemberSubscriptionsForEmail(LocalDate currentDate) {
-		return memberSubscriptionRepository.findByReminderDateAndActiveTrue(currentDate);
+		return memberSubscriptionRepository.findByPaymentReminderDateAndActiveTrue(currentDate);
 	}
 
 	@Override

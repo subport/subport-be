@@ -45,7 +45,7 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 		"member",
 		"subscription"
 	})
-	List<MemberSubscription> findByReminderDateAndActiveTrue(LocalDate reminderDate);
+	List<MemberSubscription> findByPaymentReminderDateAndActiveTrue(LocalDate reminderDate);
 
 	List<MemberSubscription> findByMemberIdAndLastPaymentDateGreaterThanEqualAndLastPaymentDateLessThan(
 		Long memberId,
