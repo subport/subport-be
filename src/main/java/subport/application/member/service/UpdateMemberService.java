@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import subport.application.member.port.in.MemberQueryUseCase;
 import subport.application.member.port.in.UpdateMemberUseCase;
 import subport.application.member.port.in.dto.GetMemberResponse;
+import subport.application.member.port.in.dto.GetReminderSettingsResponse;
 import subport.application.member.port.in.dto.UpdateMemberRequest;
+import subport.application.member.port.in.dto.UpdateReminderSettingsRequest;
 import subport.application.member.port.out.LoadMemberPort;
 import subport.domain.member.Member;
 
@@ -29,5 +31,17 @@ public class UpdateMemberService implements UpdateMemberUseCase {
 		);
 
 		return memberQueryUseCase.getMember(memberId);
+	}
+
+	@Override
+	public GetReminderSettingsResponse updateReminderSettings(Long memberId, UpdateReminderSettingsRequest request) {
+		Member member = loadMemberPort.load(memberId);
+
+		member.updateReminderSettings(
+			request.paymentReminderEnabled(),
+			request.reminderDaysBefore()
+		);
+
+		return null;
 	}
 }

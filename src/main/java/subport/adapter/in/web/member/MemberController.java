@@ -19,6 +19,7 @@ import subport.application.member.port.in.dto.GetMemberProfileResponse;
 import subport.application.member.port.in.dto.GetMemberResponse;
 import subport.application.member.port.in.dto.GetReminderSettingsResponse;
 import subport.application.member.port.in.dto.UpdateMemberRequest;
+import subport.application.member.port.in.dto.UpdateReminderSettingsRequest;
 
 @RestController
 @RequestMapping("/api/members")
@@ -59,6 +60,16 @@ public class MemberController {
 	) {
 		return ResponseEntity.ok(
 			memberQueryUseCase.getMemberReminderSettings(oAuth2User.getMemberId())
+		);
+	}
+
+	@PutMapping("/me/reminder-settings")
+	public ResponseEntity<GetReminderSettingsResponse> updateReminderSettings(
+		@AuthenticationPrincipal CustomOAuth2User oAuth2User,
+		@RequestBody UpdateReminderSettingsRequest request
+	) {
+		return ResponseEntity.ok(
+			updateMemberUseCase.updateReminderSettings(oAuth2User.getMemberId(), request)
 		);
 	}
 }
