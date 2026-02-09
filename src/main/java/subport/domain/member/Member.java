@@ -56,4 +56,12 @@ public class Member extends BaseTimeEntity {
 
 		return null;
 	}
+
+	public void updateReminderSettings(boolean paymentReminderEnabled, int reminderDaysBefore) {
+		this.paymentReminderEnabled = paymentReminderEnabled;
+
+		if (paymentReminderEnabled) {
+			this.reminderDaysBefore = reminderDaysBefore;
+		}
+	}
 }
