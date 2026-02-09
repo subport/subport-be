@@ -1,20 +1,19 @@
 package subport.domain.subscription;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 
+@RequiredArgsConstructor
 @Getter
 public enum AmountUnit {
 
-	KRW("₩"),
-	USD("$");
+	KRW("₩", "원"),
+	USD("$", "달러");
 
 	private final String symbol;
-
-	AmountUnit(String symbol) {
-		this.symbol = symbol;
-	}
+	private final String displayName;
 
 	public static AmountUnit fromString(String amountUnit) {
 		try {
