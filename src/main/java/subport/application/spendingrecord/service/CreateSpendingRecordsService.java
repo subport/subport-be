@@ -67,7 +67,9 @@ public class CreateSpendingRecordsService implements CreateSpendingRecordsUseCas
 			nextPaymentDate = memberSubscription.getNextPaymentDate();
 		}
 
-		saveSpendingRecordPort.save(spendingRecords);
+		if (!spendingRecords.isEmpty()) {
+			saveSpendingRecordPort.save(spendingRecords);
+		}
 	}
 
 	private SpendingRecord createSpendingRecord(MemberSubscription memberSubscription) {
