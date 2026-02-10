@@ -51,6 +51,7 @@ public enum ErrorCode {
 	DUTCH_PAY_AMOUNT_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "더치페이를 선택하지 않았으면 금액을 입력할 수 없습니다."),
 	INVALID_START_DATE_FUTURE(HttpStatus.BAD_REQUEST, "시작 날짜는 미래일 수 없습니다."),
 	INVALID_START_DATE_TOO_OLD(HttpStatus.BAD_REQUEST, "시작 날짜는 최근 1년 이내로만 설정 가능합니다."),
+	INVALID_REACTIVATION_START_DATE(HttpStatus.BAD_REQUEST, "재활성화 시 시작 날짜는 최근 결제일 이후여야 합니다."),
 
 	// 플랜 관련
 	PLAN_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 플랜입니다."),
