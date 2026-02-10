@@ -2,6 +2,7 @@ package subport.adapter.out.persistence.subscription;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import subport.application.subscription.port.out.DeleteSubscriptionPort;
 import subport.application.subscription.port.out.LoadSubscriptionPort;
 import subport.application.subscription.port.out.SaveSubscriptionPort;
 import subport.domain.subscription.Subscription;
+import subport.domain.subscription.SubscriptionType;
 
 @Component
 @RequiredArgsConstructor
@@ -35,6 +37,15 @@ public class SubscriptionPersistenceAdapter implements
 	}
 
 	@Override
+	public List<Subscription> searchSubscriptions(
+		SubscriptionType type,
+		String name,
+		Pageable pageable
+	) {
+		return subscriptionRepository.findByTypeContainingAndNameContaining(type, name, pageable);
+	}
+
+	@Override
 	public List<Subscription> searchSubscriptions(Long memberId, String name) {
 		return subscriptionRepository.findByMemberIdAndNameContaining(memberId, name);
 	}
@@ -42,10 +53,5 @@ public class SubscriptionPersistenceAdapter implements
 	@Override
 	public void delete(Subscription subscription) {
 		subscriptionRepository.delete(subscription);
-	}
-
-	@Override
-	public List<Subscription> loadSubscriptions() {
-		return subscriptionRepository.findAll();
 	}
 }

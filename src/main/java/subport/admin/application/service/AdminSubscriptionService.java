@@ -1,5 +1,6 @@
 package subport.admin.application.service;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,9 +52,22 @@ public class AdminSubscriptionService {
 		return adminSubscriptionPort.save(subscription);
 	}
 
-	public AdminSubscriptionsResponse searchSubscriptions() {
+	public AdminSubscriptionsResponse searchSubscriptions(
+		String type,
+		String name,
+		Pageable pageable
+	) {
+		SubscriptionType subscriptionType = null;
+		if (type != null) {
+			subscriptionType = SubscriptionType.fromDisplayName(type);
+		}
+
 		return new AdminSubscriptionsResponse(
-			adminSubscriptionPort.loadSubscriptions().stream()
+			adminSubscriptionPort.searchSubscriptions(
+					subscriptionType,
+					name,
+					pageable
+				).stream()
 				.map(AdminSubscriptionResponse::from)
 				.toList()
 		);
