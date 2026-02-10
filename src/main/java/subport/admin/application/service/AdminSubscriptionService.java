@@ -1,5 +1,8 @@
 package subport.admin.application.service;
 
+import java.util.List;
+
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,14 +65,21 @@ public class AdminSubscriptionService {
 			subscriptionType = SubscriptionType.fromDisplayName(type);
 		}
 
+		Page<Subscription> subscriptionsPage = adminSubscriptionPort.searchSubscriptions(
+			subscriptionType,
+			name,
+			pageable
+		);
+
+		List<AdminSubscriptionResponse> subscriptions = subscriptionsPage.getContent().stream()
+			.map(AdminSubscriptionResponse::from)
+			.toList();
+
 		return new AdminSubscriptionsResponse(
-			adminSubscriptionPort.searchSubscriptions(
-					subscriptionType,
-					name,
-					pageable
-				).stream()
-				.map(AdminSubscriptionResponse::from)
-				.toList()
+			subscriptions,
+			subscriptionsPage.getNumber() + 1,
+			subscriptionsPage.getSize(),
+			subscriptionsPage.getTotalPages()
 		);
 	}
 
