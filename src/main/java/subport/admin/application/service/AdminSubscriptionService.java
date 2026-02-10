@@ -13,9 +13,6 @@ import subport.admin.application.port.AdminMemberSubscriptionPort;
 import subport.admin.application.port.AdminSubscriptionPort;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
-import subport.application.subscription.port.out.DeleteSubscriptionPort;
-import subport.application.subscription.port.out.LoadSubscriptionPort;
-import subport.application.subscription.port.out.SaveSubscriptionPort;
 import subport.application.subscription.port.out.UploadSubscriptionImagePort;
 import subport.domain.subscription.Subscription;
 import subport.domain.subscription.SubscriptionType;
@@ -29,10 +26,7 @@ public class AdminSubscriptionService {
 		"https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axnklumwzgke/b/subpport-bucket/o/subscription_default.png";
 
 	private final AdminSubscriptionPort adminSubscriptionPort;
-	private final SaveSubscriptionPort saveSubscriptionPort;
-	private final LoadSubscriptionPort loadSubscriptionPort;
 	private final UploadSubscriptionImagePort uploadSubscriptionImagePort;
-	private final DeleteSubscriptionPort deleteSubscriptionPort;
 	private final AdminMemberSubscriptionPort memberSubscriptionPort;
 
 	@Transactional
@@ -54,7 +48,7 @@ public class AdminSubscriptionService {
 			null
 		);
 
-		return saveSubscriptionPort.save(subscription);
+		return adminSubscriptionPort.save(subscription);
 	}
 
 	public AdminSubscriptionsResponse searchSubscriptions() {
@@ -67,7 +61,7 @@ public class AdminSubscriptionService {
 
 	public AdminSubscriptionResponse getSubscription(Long subscriptionId) {
 		return AdminSubscriptionResponse.from(
-			loadSubscriptionPort.loadSubscription(subscriptionId)
+			adminSubscriptionPort.loadSubscription(subscriptionId)
 		);
 	}
 
@@ -77,7 +71,7 @@ public class AdminSubscriptionService {
 		AdminUpdateSubscriptionRequest request,
 		MultipartFile image
 	) {
-		Subscription subscription = loadSubscriptionPort.loadSubscription(subscriptionId);
+		Subscription subscription = adminSubscriptionPort.loadSubscription(subscriptionId);
 
 		String logoImageUrl = subscription.getLogoImageUrl();
 		if (image != null) {
@@ -98,7 +92,7 @@ public class AdminSubscriptionService {
 			throw new CustomException(ErrorCode.SUBSCRIPTION_IN_USE);
 		}
 
-		Subscription subscription = loadSubscriptionPort.loadSubscription(subscriptionId);
-		deleteSubscriptionPort.delete(subscription);
+		Subscription subscription = adminSubscriptionPort.loadSubscription(subscriptionId);
+		adminSubscriptionPort.delete(subscription);
 	}
 }

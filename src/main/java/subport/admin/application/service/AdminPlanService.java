@@ -10,12 +10,9 @@ import subport.admin.application.dto.AdminRegisterPlanRequest;
 import subport.admin.application.dto.AdminUpdatePlanRequest;
 import subport.admin.application.port.AdminMemberSubscriptionPort;
 import subport.admin.application.port.AdminPlanPort;
+import subport.admin.application.port.AdminSubscriptionPort;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
-import subport.application.subscription.port.out.DeletePlanPort;
-import subport.application.subscription.port.out.LoadPlanPort;
-import subport.application.subscription.port.out.LoadSubscriptionPort;
-import subport.application.subscription.port.out.SavePlanPort;
 import subport.domain.subscription.AmountUnit;
 import subport.domain.subscription.Plan;
 import subport.domain.subscription.Subscription;
@@ -26,15 +23,12 @@ import subport.domain.subscription.Subscription;
 public class AdminPlanService {
 
 	private final AdminPlanPort planPort;
-	private final LoadPlanPort loadPlanPort;
-	private final DeletePlanPort deletePlanPort;
 	private final AdminMemberSubscriptionPort memberSubscriptionPort;
-	private final LoadSubscriptionPort loadSubscriptionPort;
-	private final SavePlanPort savePlanPort;
+	private final AdminSubscriptionPort subscriptionPort;
 
 	@Transactional
 	public void registerPlan(Long subscriptionId, AdminRegisterPlanRequest request) {
-		Subscription subscription = loadSubscriptionPort.loadSubscription(subscriptionId);
+		Subscription subscription = subscriptionPort.loadSubscription(subscriptionId);
 
 		Plan plan = new Plan(
 			request.name(),
@@ -46,7 +40,7 @@ public class AdminPlanService {
 			subscription
 		);
 
-		savePlanPort.save(plan);
+		planPort.save(plan);
 	}
 
 	public AdminPlansResponse getPlans(Long subscriptionId) {
@@ -59,7 +53,7 @@ public class AdminPlanService {
 
 	@Transactional
 	public void updatePlan(Long planId, AdminUpdatePlanRequest request) {
-		Plan plan = loadPlanPort.loadPlan(planId);
+		Plan plan = planPort.loadPlan(planId);
 
 		plan.update(
 			request.name(),
@@ -75,7 +69,7 @@ public class AdminPlanService {
 			throw new CustomException(ErrorCode.PLAN_IN_USE);
 		}
 
-		Plan plan = loadPlanPort.loadPlan(planId);
-		deletePlanPort.delete(plan);
+		Plan plan = planPort.loadPlan(planId);
+		planPort.delete(plan);
 	}
 }

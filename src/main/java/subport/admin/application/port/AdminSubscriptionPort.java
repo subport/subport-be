@@ -6,5 +6,11 @@ import subport.domain.subscription.Subscription;
 
 public interface AdminSubscriptionPort {
 
+	Long save(Subscription subscription);
+
+	Subscription loadSubscription(Long subscriptionId);
+
 	List<Subscription> loadSubscriptions();
+
+	void delete(Subscription subscription);
 }

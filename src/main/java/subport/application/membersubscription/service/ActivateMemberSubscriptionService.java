@@ -19,7 +19,6 @@ import subport.application.spendingrecord.port.in.CreateSpendingRecordsUseCase;
 import subport.application.subscription.port.out.LoadPlanPort;
 import subport.domain.exchangeRate.ExchangeRate;
 import subport.domain.membersubscription.MemberSubscription;
-import subport.domain.subscription.AmountUnit;
 import subport.domain.subscription.Plan;
 
 @Service
@@ -75,7 +74,7 @@ public class ActivateMemberSubscriptionService implements ActivateMemberSubscrip
 			// 플랜 검증 로직 추가
 		}
 
-		if (plan.getAmountUnit().equals(AmountUnit.USD)) {
+		if (plan.isUsdBased()) {
 			ExchangeRate exchangeRate = exchangeRateService.getExchangeRate(startDate, currentDateTime);
 			memberSubscription.updateExchangeRate(
 				exchangeRate.getRate(),
