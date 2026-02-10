@@ -10,7 +10,7 @@ import subport.application.subscription.port.in.RegisterCustomSubscriptionUseCas
 import subport.application.subscription.port.in.dto.RegisterCustomSubscriptionRequest;
 import subport.application.subscription.port.in.dto.RegisterCustomSubscriptionResponse;
 import subport.application.subscription.port.out.SaveSubscriptionPort;
-import subport.application.subscription.port.out.UploadSubscriptionImagePort;
+import subport.application.subscription.port.out.UploadCustomSubscriptionImagePort;
 import subport.domain.member.Member;
 import subport.domain.subscription.Subscription;
 import subport.domain.subscription.SubscriptionType;
@@ -25,7 +25,7 @@ public class RegisterCustomSubscriptionService implements RegisterCustomSubscrip
 
 	private final SaveSubscriptionPort saveSubscriptionPort;
 	private final LoadMemberPort loadMemberPort;
-	private final UploadSubscriptionImagePort uploadSubscriptionImagePort;
+	private final UploadCustomSubscriptionImagePort uploadSubscriptionImagePort;
 
 	@Override
 	public RegisterCustomSubscriptionResponse register(

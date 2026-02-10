@@ -11,7 +11,7 @@ import subport.application.subscription.port.in.UpdateCustomSubscriptionUseCase;
 import subport.application.subscription.port.in.dto.GetSubscriptionResponse;
 import subport.application.subscription.port.in.dto.UpdateCustomSubscriptionRequest;
 import subport.application.subscription.port.out.LoadSubscriptionPort;
-import subport.application.subscription.port.out.UploadSubscriptionImagePort;
+import subport.application.subscription.port.out.UploadCustomSubscriptionImagePort;
 import subport.domain.subscription.Subscription;
 import subport.domain.subscription.SubscriptionType;
 
@@ -21,7 +21,7 @@ import subport.domain.subscription.SubscriptionType;
 public class UpdateCustomSubscriptionService implements UpdateCustomSubscriptionUseCase {
 
 	private final LoadSubscriptionPort loadSubscriptionPort;
-	private final UploadSubscriptionImagePort uploadSubscriptionImagePort;
+	private final UploadCustomSubscriptionImagePort uploadSubscriptionImagePort;
 	private final SubscriptionQueryService subscriptionQueryService;
 
 	@Override

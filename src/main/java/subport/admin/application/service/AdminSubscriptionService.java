@@ -11,9 +11,9 @@ import subport.admin.application.dto.AdminSubscriptionsResponse;
 import subport.admin.application.dto.AdminUpdateSubscriptionRequest;
 import subport.admin.application.port.AdminMemberSubscriptionPort;
 import subport.admin.application.port.AdminSubscriptionPort;
+import subport.admin.application.port.UploadAdminSubscriptionImagePort;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
-import subport.application.subscription.port.out.UploadSubscriptionImagePort;
 import subport.domain.subscription.Subscription;
 import subport.domain.subscription.SubscriptionType;
 
@@ -26,7 +26,7 @@ public class AdminSubscriptionService {
 		"https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axnklumwzgke/b/subpport-bucket/o/subscription_default.png";
 
 	private final AdminSubscriptionPort adminSubscriptionPort;
-	private final UploadSubscriptionImagePort uploadSubscriptionImagePort;
+	private final UploadAdminSubscriptionImagePort uploadSubscriptionImagePort;
 	private final AdminMemberSubscriptionPort memberSubscriptionPort;
 
 	@Transactional

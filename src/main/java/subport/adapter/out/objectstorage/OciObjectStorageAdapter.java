@@ -11,13 +11,16 @@ import lombok.RequiredArgsConstructor;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import subport.admin.application.port.UploadAdminSubscriptionImagePort;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
-import subport.application.subscription.port.out.UploadSubscriptionImagePort;
+import subport.application.subscription.port.out.UploadCustomSubscriptionImagePort;
 
 @Component
 @RequiredArgsConstructor
-public class OciObjectStorageAdapter implements UploadSubscriptionImagePort {
+public class OciObjectStorageAdapter implements
+	UploadCustomSubscriptionImagePort,
+	UploadAdminSubscriptionImagePort {
 
 	private static final String IMAGE_TYPE_PREFIX = "image/";
 	private static final int MAX_FILE_SIZE = 5 * 1024 * 1024;
