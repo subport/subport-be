@@ -1,16 +1,16 @@
-package subport.application.admin.service;
+package subport.admin.application.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
-import subport.application.admin.dto.AdminRegisterSubscriptionRequest;
-import subport.application.admin.dto.AdminSubscriptionResponse;
-import subport.application.admin.dto.AdminSubscriptionsResponse;
-import subport.application.admin.dto.AdminUpdateSubscriptionRequest;
-import subport.application.admin.port.AdminMemberSubscriptionPort;
-import subport.application.admin.port.AdminSubscriptionPort;
+import subport.admin.application.dto.AdminRegisterSubscriptionRequest;
+import subport.admin.application.dto.AdminSubscriptionResponse;
+import subport.admin.application.dto.AdminSubscriptionsResponse;
+import subport.admin.application.dto.AdminUpdateSubscriptionRequest;
+import subport.admin.application.port.AdminMemberSubscriptionPort;
+import subport.admin.application.port.AdminSubscriptionPort;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.subscription.port.out.DeleteSubscriptionPort;

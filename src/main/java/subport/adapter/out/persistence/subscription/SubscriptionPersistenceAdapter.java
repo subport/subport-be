@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import subport.application.admin.port.AdminSubscriptionPort;
+import subport.admin.application.port.AdminSubscriptionPort;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.subscription.port.out.DeleteSubscriptionPort;

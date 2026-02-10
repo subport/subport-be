@@ -1,4 +1,4 @@
-package subport.application.admin.port;
+package subport.admin.application.port;
 
 public interface AdminMemberSubscriptionPort {
 

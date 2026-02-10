@@ -1,4 +1,4 @@
-package subport.adapter.in.admin;
+package subport.admin.adapter;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import subport.application.admin.dto.AdminUpdatePlanRequest;
-import subport.application.admin.service.AdminPlanService;
+import subport.admin.application.dto.AdminUpdatePlanRequest;
+import subport.admin.application.service.AdminPlanService;
 
 @RestController
 @RequestMapping("/admin/plans")

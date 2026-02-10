@@ -1,4 +1,4 @@
-package subport.application.admin.dto;
+package subport.admin.application.dto;
 
 import java.time.LocalDate;
 

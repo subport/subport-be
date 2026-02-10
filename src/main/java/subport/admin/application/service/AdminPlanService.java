@@ -1,15 +1,15 @@
-package subport.application.admin.service;
+package subport.admin.application.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import subport.application.admin.dto.AdminPlanResponse;
-import subport.application.admin.dto.AdminPlansResponse;
-import subport.application.admin.dto.AdminRegisterPlanRequest;
-import subport.application.admin.dto.AdminUpdatePlanRequest;
-import subport.application.admin.port.AdminMemberSubscriptionPort;
-import subport.application.admin.port.AdminPlanPort;
+import subport.admin.application.dto.AdminPlanResponse;
+import subport.admin.application.dto.AdminPlansResponse;
+import subport.admin.application.dto.AdminRegisterPlanRequest;
+import subport.admin.application.dto.AdminUpdatePlanRequest;
+import subport.admin.application.port.AdminMemberSubscriptionPort;
+import subport.admin.application.port.AdminPlanPort;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.subscription.port.out.DeletePlanPort;

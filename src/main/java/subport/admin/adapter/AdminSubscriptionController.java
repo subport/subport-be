@@ -1,4 +1,4 @@
-package subport.adapter.in.admin;
+package subport.admin.adapter;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
-import subport.application.admin.dto.AdminPlansResponse;
-import subport.application.admin.dto.AdminRegisterPlanRequest;
-import subport.application.admin.dto.AdminRegisterSubscriptionRequest;
-import subport.application.admin.dto.AdminSubscriptionResponse;
-import subport.application.admin.dto.AdminSubscriptionsResponse;
-import subport.application.admin.dto.AdminUpdateSubscriptionRequest;
-import subport.application.admin.service.AdminPlanService;
-import subport.application.admin.service.AdminSubscriptionService;
+import subport.admin.application.dto.AdminPlansResponse;
+import subport.admin.application.dto.AdminRegisterPlanRequest;
+import subport.admin.application.dto.AdminRegisterSubscriptionRequest;
+import subport.admin.application.dto.AdminSubscriptionResponse;
+import subport.admin.application.dto.AdminSubscriptionsResponse;
+import subport.admin.application.dto.AdminUpdateSubscriptionRequest;
+import subport.admin.application.service.AdminPlanService;
+import subport.admin.application.service.AdminSubscriptionService;
 
 @RestController
 @RequestMapping("/admin/subscriptions")

@@ -7,7 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import subport.application.admin.port.AdminMemberSubscriptionPort;
+import subport.admin.application.port.AdminMemberSubscriptionPort;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.membersubscription.port.out.DeleteMemberSubscriptionPort;
