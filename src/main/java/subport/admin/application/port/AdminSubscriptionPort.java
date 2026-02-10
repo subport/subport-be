@@ -1,7 +1,6 @@
 package subport.admin.application.port;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import subport.domain.subscription.Subscription;
@@ -13,7 +12,7 @@ public interface AdminSubscriptionPort {
 
 	Subscription loadSubscription(Long subscriptionId);
 
-	List<Subscription> searchSubscriptions(
+	Page<Subscription> searchSubscriptions(
 		SubscriptionType type,
 		String name,
 		Pageable pageable

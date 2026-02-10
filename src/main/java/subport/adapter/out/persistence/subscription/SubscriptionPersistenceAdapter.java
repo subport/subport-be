@@ -2,6 +2,7 @@ package subport.adapter.out.persistence.subscription;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
@@ -37,7 +38,7 @@ public class SubscriptionPersistenceAdapter implements
 	}
 
 	@Override
-	public List<Subscription> searchSubscriptions(
+	public Page<Subscription> searchSubscriptions(
 		SubscriptionType type,
 		String name,
 		Pageable pageable

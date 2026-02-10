@@ -2,6 +2,7 @@ package subport.adapter.out.persistence.subscription;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -31,7 +32,7 @@ public interface SpringDataSubscriptionRepository extends JpaRepository<Subscrip
 		AND (:type IS NULL OR s.type = :type)
 		AND (:name IS NULL OR s.name LIKE %:name%)
 		""")
-	List<Subscription> findByTypeContainingAndNameContaining(
+	Page<Subscription> findByTypeContainingAndNameContaining(
 		SubscriptionType type,
 		String name,
 		Pageable pageable
