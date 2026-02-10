@@ -15,6 +15,7 @@ import subport.application.membersubscription.port.in.MemberSubscriptionQueryUse
 import subport.application.membersubscription.port.in.dto.ActivateMemberSubscriptionRequest;
 import subport.application.membersubscription.port.in.dto.GetMemberSubscriptionResponse;
 import subport.application.membersubscription.port.out.LoadMemberSubscriptionPort;
+import subport.application.spendingrecord.port.in.CreateSpendingRecordsUseCase;
 import subport.application.subscription.port.out.LoadPlanPort;
 import subport.domain.exchangeRate.ExchangeRate;
 import subport.domain.membersubscription.MemberSubscription;
@@ -30,6 +31,7 @@ public class ActivateMemberSubscriptionService implements ActivateMemberSubscrip
 	private final LoadPlanPort loadPlanPort;
 	private final ExchangeRateService exchangeRateService;
 	private final MemberSubscriptionQueryUseCase memberSubscriptionQueryUseCase;
+	private final CreateSpendingRecordsUseCase createSpendingRecordsUseCase;
 
 	@Override
 	public GetMemberSubscriptionResponse activate(
@@ -39,6 +41,17 @@ public class ActivateMemberSubscriptionService implements ActivateMemberSubscrip
 		LocalDateTime currentDateTime
 	) {
 		MemberSubscription memberSubscription = loadMemberSubscriptionPort.loadMemberSubscription(memberSubscriptionId);
+
+		LocalDate startDate = request.startDate();
+		if (startDate.isBefore(memberSubscription.getLastPaymentDate())) {
+			throw new CustomException(ErrorCode.INVALID_REACTIVATION_START_DATE);
+		}
+		if (startDate.isAfter(currentDateTime.toLocalDate())) {
+			throw new CustomException(ErrorCode.INVALID_START_DATE_FUTURE);
+		}
+		if (startDate.isBefore(currentDateTime.toLocalDate().minusYears(1))) {
+			throw new CustomException(ErrorCode.INVALID_START_DATE_TOO_OLD);
+		}
 
 		if (!memberSubscription.getMember().getId().equals(memberId)) {
 			throw new CustomException(ErrorCode.MEMBER_SUBSCRIPTION_FORBIDDEN);
@@ -51,7 +64,6 @@ public class ActivateMemberSubscriptionService implements ActivateMemberSubscrip
 			);
 		}
 
-		LocalDate startDate = request.startDate();
 		memberSubscription.activate(startDate);
 
 		Plan plan = memberSubscription.getPlan();
@@ -72,6 +84,8 @@ public class ActivateMemberSubscriptionService implements ActivateMemberSubscrip
 		}
 
 		if (request.reusePreviousInfo()) {
+			createSpendingRecordsUseCase.createMissing(memberSubscription, currentDateTime);
+
 			return memberSubscriptionQueryUseCase.getMemberSubscription(
 				memberId,
 				memberSubscriptionId,
@@ -85,6 +99,8 @@ public class ActivateMemberSubscriptionService implements ActivateMemberSubscrip
 		);
 
 		memberSubscription.updateMemo(request.memo());
+
+		createSpendingRecordsUseCase.createMissing(memberSubscription, currentDateTime);
 
 		return memberSubscriptionQueryUseCase.getMemberSubscription(
 			memberId,
