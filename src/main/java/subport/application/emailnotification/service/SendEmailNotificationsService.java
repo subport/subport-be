@@ -2,6 +2,8 @@ package subport.application.emailnotification.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -23,8 +25,15 @@ public class SendEmailNotificationsService implements SendEmailNotificationsUseC
 		List<EmailNotification> emailNotifications =
 			loadEmailNotificationPort.loadEmailNotifications(currentDateTime.toLocalDate(), SendingStatus.PENDING);
 
-		for (EmailNotification emailNotification : emailNotifications) {
-			emailSender.sendAsync(emailNotification, false, currentDateTime);
+		if (emailNotifications.isEmpty()) {
+			return;
+		}
+
+		Map<String, List<EmailNotification>> groupedEmailNotifications = emailNotifications.stream()
+			.collect(Collectors.groupingBy(EmailNotification::getRecipientEmail));
+
+		for (Map.Entry<String, List<EmailNotification>> entry : groupedEmailNotifications.entrySet()) {
+			emailSender.sendAsync(entry.getValue(), false, currentDateTime);
 		}
 	}
 }

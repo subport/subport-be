@@ -2,6 +2,8 @@ package subport.application.emailnotification.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -27,8 +29,11 @@ public class RetryFailedEmailNotificationsService implements RetryFailedEmailNot
 			return;
 		}
 
-		for (EmailNotification emailNotification : emailNotifications) {
-			emailSender.sendAsync(emailNotification, true, currentDateTime);
+		Map<String, List<EmailNotification>> groupedEmailNotifications = emailNotifications.stream()
+			.collect(Collectors.groupingBy(EmailNotification::getRecipientEmail));
+
+		for (Map.Entry<String, List<EmailNotification>> entry : groupedEmailNotifications.entrySet()) {
+			emailSender.sendAsync(entry.getValue(), true, currentDateTime);
 		}
 	}
 }

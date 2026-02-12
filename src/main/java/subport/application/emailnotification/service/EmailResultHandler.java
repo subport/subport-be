@@ -1,6 +1,7 @@
 package subport.application.emailnotification.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,23 +13,30 @@ import subport.domain.emailnotification.EmailNotification;
 public class EmailResultHandler {
 
 	public void handleSuccess(
-		EmailNotification emailNotification,
+		List<EmailNotification> emailNotifications,
 		LocalDateTime currentDateTime,
 		boolean isRetry
 	) {
 		if (isRetry) {
-			emailNotification.increaseRetryCount();
+			emailNotifications.forEach(EmailNotification::increaseRetryCount);
 		}
-		emailNotification.markSent();
-		emailNotification.updateSentAt(currentDateTime);
+
+		emailNotifications.forEach(notification -> {
+			if (isRetry) {
+				notification.increaseRetryCount();
+			}
+			notification.markSent();
+			notification.updateSentAt(currentDateTime);
+		});
 	}
 
-	public void handleFailure(EmailNotification emailNotification, boolean isRetry) {
-		if (isRetry) {
-			emailNotification.increaseRetryCount();
-		}
-		if (!isRetry) {
-			emailNotification.markFailed();
-		}
+	public void handleFailure(List<EmailNotification> emailNotifications, boolean isRetry) {
+		emailNotifications.forEach(notification -> {
+			if (isRetry) {
+				notification.increaseRetryCount();
+			} else {
+				notification.markFailed();
+			}
+		});
 	}
 }
