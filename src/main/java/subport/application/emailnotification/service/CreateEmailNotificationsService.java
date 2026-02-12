@@ -1,5 +1,6 @@
 package subport.application.emailnotification.service;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class CreateEmailNotificationsService implements CreateEmailNotifications
 					member.getEmail(),
 					subscription.getName(),
 					subscription.getLogoImageUrl(),
-					plan.getAmount(),
+					new DecimalFormat("#,###").format(plan.getAmount()),
 					plan.getAmountUnit().getDisplayName(),
 					plan.getDurationMonths(),
 					SendingStatus.PENDING,
