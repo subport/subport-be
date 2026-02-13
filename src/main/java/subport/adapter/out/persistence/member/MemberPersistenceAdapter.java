@@ -1,6 +1,7 @@
 package subport.adapter.out.persistence.member;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.stereotype.Component;
 
@@ -32,6 +33,11 @@ public class MemberPersistenceAdapter implements
 		return memberRepository.findByProviderId(member.getProviderId())
 			.map(Member::getId)
 			.orElseGet(() -> memberRepository.save(member).getId());
+	}
+
+	@Override
+	public List<Member> loadMembers(LocalDateTime start, LocalDateTime end) {
+		return memberRepository.getMembers(start, end);
 	}
 
 	@Override
