@@ -1,6 +1,7 @@
 package subport.domain.member;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,16 +33,26 @@ public class Member extends BaseTimeEntity {
 
 	private int reminderDaysBefore;
 
+	private LocalDateTime lastLoginAt;
+
+	private boolean deleted;
+
+	private boolean firstLogin;
+
 	public Member(
 		String providerId,
 		String nickname,
-		String email
+		String email,
+		LocalDateTime now
 	) {
 		this.providerId = providerId;
 		this.nickname = nickname;
 		this.email = email;
-		this.paymentReminderEnabled = true;
-		this.reminderDaysBefore = 1;
+		this.paymentReminderEnabled = false;
+		this.reminderDaysBefore = 3;
+		this.lastLoginAt = now;
+		this.deleted = false;
+		this.firstLogin = true;
 	}
 
 	public void update(String nickname, String email) {
@@ -63,5 +74,21 @@ public class Member extends BaseTimeEntity {
 		if (paymentReminderEnabled) {
 			this.reminderDaysBefore = reminderDaysBefore;
 		}
+	}
+
+	public void updateLastLoginAt(LocalDateTime now) {
+		this.lastLoginAt = now;
+	}
+
+	public void deactivate() {
+		this.deleted = true;
+	}
+
+	public void activate() {
+		this.deleted = false;
+	}
+
+	public void completeFirstLogin() {
+		this.firstLogin = false;
 	}
 }
