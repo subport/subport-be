@@ -1,0 +1,89 @@
+package subport.admin.application.service;
+
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
+import subport.admin.application.dto.DashboardStatsResponse;
+import subport.admin.application.port.AdminMemberPort;
+import subport.admin.application.port.AdminMemberSubscriptionPort;
+
+@Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
+public class AdminDashboardService {
+
+	private final AdminMemberPort memberPort;
+	private final AdminMemberSubscriptionPort memberSubscriptionPort;
+
+	public DashboardStatsResponse getStats(LocalDate today) {
+		long totalMemberCount = memberPort.countMembers();
+
+		DateTimeRange thisWeekRange = weekRange(today);
+		long weeklyNewMemberCount = memberPort.countMembers(
+			thisWeekRange.start,
+			thisWeekRange.end
+		);
+
+		DateTimeRange todayRange = dayRange(today);
+		long todayNewMemberCount = memberPort.countMembers(
+			todayRange.start,
+			todayRange.end
+		);
+
+		DateTimeRange yesterdayRange = dayRange(today.minusDays(1));
+		long yesterdayNewMemberCount = memberPort.countMembers(
+			yesterdayRange.start,
+			yesterdayRange.end
+		);
+
+		long totalMemberSubscriptionCount = memberSubscriptionPort.countActiveMemberSubscriptions();
+
+		long weeklyNewMemberSubscriptionCount = memberSubscriptionPort.countActiveMemberSubscriptions(
+			thisWeekRange.start,
+			thisWeekRange.end
+		);
+
+		DateTimeRange lastMonthRange = monthRange(today);
+		long currentActiveMemberCount = memberPort.countActiveMembers(
+			lastMonthRange.start,
+			lastMonthRange.end
+		);
+
+		return new DashboardStatsResponse(
+			totalMemberCount,
+			weeklyNewMemberCount,
+			todayNewMemberCount,
+			yesterdayNewMemberCount,
+			totalMemberSubscriptionCount,
+			weeklyNewMemberSubscriptionCount,
+			currentActiveMemberCount
+		);
+	}
+
+	private DateTimeRange dayRange(LocalDate date) {
+		LocalDateTime start = date.atStartOfDay();
+		LocalDateTime end = start.plusDays(1);
+		return new DateTimeRange(start, end);
+	}
+
+	private DateTimeRange weekRange(LocalDate date) {
+		LocalDate startOfWeek = date.with(DayOfWeek.MONDAY);
+		LocalDateTime start = startOfWeek.atStartOfDay();
+		LocalDateTime end = date.plusDays(1).atStartOfDay();
+		return new DateTimeRange(start, end);
+	}
+
+	private DateTimeRange monthRange(LocalDate date) {
+		LocalDateTime start = date.minusMonths(1).atStartOfDay();
+		LocalDateTime end = date.plusDays(1).atStartOfDay();
+		return new DateTimeRange(start, end);
+	}
+
+	private record DateTimeRange(LocalDateTime start, LocalDateTime end) {
+	}
+}
