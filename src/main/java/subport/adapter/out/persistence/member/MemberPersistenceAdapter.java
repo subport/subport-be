@@ -1,8 +1,11 @@
 package subport.adapter.out.persistence.member;
 
+import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
+import subport.admin.application.port.AdminMemberPort;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.member.port.out.LoadMemberPort;
@@ -13,7 +16,8 @@ import subport.domain.member.Member;
 @RequiredArgsConstructor
 public class MemberPersistenceAdapter implements
 	LoadMemberPort,
-	SyncMemberPort {
+	SyncMemberPort,
+	AdminMemberPort {
 
 	private final SpringDataMemberRepository memberRepository;
 
@@ -28,5 +32,20 @@ public class MemberPersistenceAdapter implements
 		return memberRepository.findByProviderId(member.getProviderId())
 			.map(Member::getId)
 			.orElseGet(() -> memberRepository.save(member).getId());
+	}
+
+	@Override
+	public long countMembers() {
+		return memberRepository.countMembers();
+	}
+
+	@Override
+	public long countMembers(LocalDateTime start, LocalDateTime end) {
+		return memberRepository.countMembers(start, end);
+	}
+
+	@Override
+	public long countActiveMembers(LocalDateTime start, LocalDateTime end) {
+		return memberRepository.countActiveMembers(start, end);
 	}
 }
