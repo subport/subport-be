@@ -1,6 +1,7 @@
 package subport.adapter.out.persistence.membersubscription;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Sort;
@@ -113,5 +114,15 @@ public class MemberSubscriptionPersistenceAdapter implements
 	@Override
 	public boolean existsByPlanId(Long planId) {
 		return memberSubscriptionRepository.existsByPlanId(planId);
+	}
+
+	@Override
+	public long countActiveMemberSubscriptions() {
+		return memberSubscriptionRepository.countActiveMemberSubscriptions();
+	}
+
+	@Override
+	public long countActiveMemberSubscriptions(LocalDateTime start, LocalDateTime end) {
+		return memberSubscriptionRepository.countActiveMemberSubscriptions(start, end);
 	}
 }

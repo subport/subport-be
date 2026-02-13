@@ -1,6 +1,7 @@
 package subport.adapter.out.persistence.membersubscription;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,4 +61,19 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 	boolean existsBySubscriptionId(Long subscriptionId);
 
 	boolean existsByPlanId(Long planId);
+
+	@Query("""
+		SELECT count(ms)
+		FROM MemberSubscription ms
+		WHERE ms.active = true
+		""")
+	long countActiveMemberSubscriptions();
+
+	@Query("""
+		SELECT count(ms)
+		FROM MemberSubscription ms
+		WHERE (ms.createdAt >= :start AND ms.createdAt < :end)
+		AND ms.active = true
+		""")
+	long countActiveMemberSubscriptions(LocalDateTime start, LocalDateTime end);
 }
