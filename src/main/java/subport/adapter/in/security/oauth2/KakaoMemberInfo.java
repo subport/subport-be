@@ -1,5 +1,6 @@
 package subport.adapter.in.security.oauth2;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import subport.application.member.port.in.dto.LoginMemberInfo;
@@ -7,17 +8,19 @@ import subport.application.member.port.in.dto.LoginMemberInfo;
 public record KakaoMemberInfo(
 	Map<String, Object> attributes,
 	Map<String, Object> account,
-	Map<String, String> profile
+	Map<String, String> profile,
+	LocalDateTime loginAt
 ) {
 
-	public static KakaoMemberInfo from(Map<String, Object> attributes) {
+	public static KakaoMemberInfo from(Map<String, Object> attributes, LocalDateTime now) {
 		Map<String, Object> account = (Map<String, Object>)attributes.get("kakao_account");
 		Map<String, String> profile = (Map<String, String>)account.get("profile");
 
 		return new KakaoMemberInfo(
 			attributes,
 			account,
-			profile
+			profile,
+			now
 		);
 	}
 
@@ -37,7 +40,8 @@ public record KakaoMemberInfo(
 		return new LoginMemberInfo(
 			getProviderId(),
 			getNickname(),
-			getEmail()
+			getEmail(),
+			loginAt
 		);
 	}
 }

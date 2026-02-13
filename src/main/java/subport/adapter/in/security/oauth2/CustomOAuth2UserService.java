@@ -1,5 +1,7 @@
 package subport.adapter.in.security.oauth2;
 
+import java.time.LocalDateTime;
+
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -20,7 +22,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 		OAuth2User oAuth2User = super.loadUser(userRequest);
 
-		KakaoMemberInfo kakaoMemberInfo = KakaoMemberInfo.from(oAuth2User.getAttributes());
+		KakaoMemberInfo kakaoMemberInfo = KakaoMemberInfo.from(oAuth2User.getAttributes(), LocalDateTime.now());
 		LoginMemberInfo loginMemberInfo = kakaoMemberInfo.toLoginMemberInfo();
 
 		Long memberId = syncMemberUseCase.sync(loginMemberInfo);
