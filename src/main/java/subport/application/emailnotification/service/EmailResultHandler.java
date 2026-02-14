@@ -25,17 +25,20 @@ public class EmailResultHandler {
 			if (isRetry) {
 				notification.increaseRetryCount();
 			}
-			notification.markSent();
-			notification.updateSentAt(currentDateTime);
+			notification.markSent(currentDateTime);
 		});
 	}
 
-	public void handleFailure(List<EmailNotification> emailNotifications, boolean isRetry) {
+	public void handleFailure(
+		List<EmailNotification> emailNotifications,
+		LocalDateTime currentDateTime,
+		boolean isRetry
+	) {
 		emailNotifications.forEach(notification -> {
 			if (isRetry) {
 				notification.increaseRetryCount();
 			} else {
-				notification.markFailed();
+				notification.markFailed(currentDateTime);
 			}
 		});
 	}

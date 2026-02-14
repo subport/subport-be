@@ -75,7 +75,11 @@ public class EmailSender {
 				subscriptionCount,
 				e.getMessage()
 			);
-			emailResultHandler.handleFailure(emailNotifications, isRetry);
+			emailResultHandler.handleFailure(
+				emailNotifications,
+				currentDateTime,
+				isRetry
+			);
 		}
 	}
 }

@@ -82,15 +82,13 @@ public class EmailNotification extends BaseTimeEntity {
 		this.retryCount = retryCount;
 	}
 
-	public void markSent() {
-		status = SendingStatus.SENT;
+	public void markSent(LocalDateTime sentAt) {
+		this.status = SendingStatus.SENT;
+		this.sentAt = sentAt;
 	}
 
-	public void markFailed() {
-		status = SendingStatus.FAILED;
-	}
-
-	public void updateSentAt(LocalDateTime sentAt) {
+	public void markFailed(LocalDateTime sentAt) {
+		this.status = SendingStatus.FAILED;
 		this.sentAt = sentAt;
 	}
 
