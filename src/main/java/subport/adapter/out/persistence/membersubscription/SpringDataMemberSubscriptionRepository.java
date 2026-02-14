@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import subport.admin.application.query.MemberSubscriptionCount;
 import subport.domain.membersubscription.MemberSubscription;
 
 public interface SpringDataMemberSubscriptionRepository extends JpaRepository<MemberSubscription, Long> {
@@ -76,4 +77,16 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 		AND ms.active = true
 		""")
 	long countActiveMemberSubscriptions(LocalDateTime start, LocalDateTime end);
+
+	@Query("""
+		SELECT new subport.admin.application.query.MemberSubscriptionCount(
+		    ms.member.id,
+		    count(ms)
+		)
+		FROM MemberSubscription ms
+		WHERE ms.member.id in :memberIds
+		AND ms.active = true
+		GROUP BY ms.member.id
+		""")
+	List<MemberSubscriptionCount> countActiveMemberSubscriptions(List<Long> memberIds);
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import subport.admin.application.port.AdminMemberSubscriptionPort;
+import subport.admin.application.query.MemberSubscriptionCount;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.membersubscription.port.out.DeleteMemberSubscriptionPort;
@@ -124,5 +125,10 @@ public class MemberSubscriptionPersistenceAdapter implements
 	@Override
 	public long countActiveMemberSubscriptions(LocalDateTime start, LocalDateTime end) {
 		return memberSubscriptionRepository.countActiveMemberSubscriptions(start, end);
+	}
+
+	@Override
+	public List<MemberSubscriptionCount> countActiveMemberSubscriptions(List<Long> memberIds) {
+		return memberSubscriptionRepository.countActiveMemberSubscriptions(memberIds);
 	}
 }
