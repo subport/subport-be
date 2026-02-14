@@ -5,11 +5,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import subport.admin.application.dto.DashboardTopServiceResponse;
 import subport.admin.application.query.MemberSubscriptionCount;
 import subport.domain.membersubscription.MemberSubscription;
 
@@ -89,4 +91,16 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 		GROUP BY ms.member.id
 		""")
 	List<MemberSubscriptionCount> countActiveMemberSubscriptions(List<Long> memberIds);
+
+	@Query("""
+		SELECT new subport.admin.application.dto.DashboardTopServiceResponse(
+			ms.subscription.name,
+			COUNT(ms)
+		)
+		FROM MemberSubscription ms
+		WHERE ms.active = true
+		GROUP BY ms.subscription.name
+		ORDER BY COUNT(ms) DESC, ms.subscription.name ASC
+		""")
+	List<DashboardTopServiceResponse> countActiveMemberSubscriptionsBySubscription(Pageable top5);
 }

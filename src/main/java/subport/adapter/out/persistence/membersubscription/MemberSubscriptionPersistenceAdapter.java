@@ -4,10 +4,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
+import subport.admin.application.dto.DashboardTopServiceResponse;
 import subport.admin.application.port.AdminMemberSubscriptionPort;
 import subport.admin.application.query.MemberSubscriptionCount;
 import subport.application.exception.CustomException;
@@ -130,5 +132,12 @@ public class MemberSubscriptionPersistenceAdapter implements
 	@Override
 	public List<MemberSubscriptionCount> countActiveMemberSubscriptions(List<Long> memberIds) {
 		return memberSubscriptionRepository.countActiveMemberSubscriptions(memberIds);
+	}
+
+	@Override
+	public List<DashboardTopServiceResponse> loadTopSubscriptions() {
+		return memberSubscriptionRepository.countActiveMemberSubscriptionsBySubscription(
+			PageRequest.of(0, 5)
+		);
 	}
 }
