@@ -17,6 +17,7 @@ import subport.admin.application.dto.DashboardRecentMemberResponse;
 import subport.admin.application.dto.DashboardRecentMembersResponse;
 import subport.admin.application.dto.DashboardSignupTrend;
 import subport.admin.application.dto.DashboardStatsResponse;
+import subport.admin.application.dto.DashboardTopServicesResponse;
 import subport.admin.application.port.AdminMemberPort;
 import subport.admin.application.port.AdminMemberSubscriptionPort;
 import subport.admin.application.query.MemberSubscriptionCount;
@@ -123,6 +124,12 @@ public class AdminDashboardService {
 					member.getCreatedAt()
 				))
 				.toList()
+		);
+	}
+
+	public DashboardTopServicesResponse getTopServices() {
+		return new DashboardTopServicesResponse(
+			memberSubscriptionPort.loadTopSubscriptions()
 		);
 	}
 
