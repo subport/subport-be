@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import subport.admin.application.dto.DashboardTopServiceResponse;
+import subport.admin.application.query.CustomMemberSubscriptionCount;
 import subport.admin.application.query.MemberSubscriptionCount;
 import subport.domain.membersubscription.MemberSubscription;
 
@@ -103,4 +104,17 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 		ORDER BY COUNT(ms) DESC, ms.subscription.name ASC
 		""")
 	List<DashboardTopServiceResponse> countActiveMemberSubscriptionsBySubscription(Pageable top5);
+
+	@Query("""
+		SELECT new subport.admin.application.query.CustomMemberSubscriptionCount(
+		    ms.subscription.normalizedName,
+		    ms.subscription.name,
+		    COUNT(ms)
+		)
+		FROM MemberSubscription ms
+		WHERE ms.active = true
+		AND ms.subscription.systemProvided = false
+		GROUP BY ms.subscription.normalizedName, ms.subscription.name
+		""")
+	List<CustomMemberSubscriptionCount> countActiveCustomMemberSubscriptions();
 }
