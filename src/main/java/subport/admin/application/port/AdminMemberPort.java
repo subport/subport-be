@@ -9,6 +9,8 @@ public interface AdminMemberPort {
 
 	List<Member> loadMembers(LocalDateTime start, LocalDateTime end);
 
+	List<Member> loadLatestMembers();
+
 	long countMembers();
 
 	long countMembers(LocalDateTime start, LocalDateTime end);

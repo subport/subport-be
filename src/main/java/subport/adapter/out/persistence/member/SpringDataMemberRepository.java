@@ -47,4 +47,6 @@ public interface SpringDataMemberRepository extends JpaRepository<Member, Long> 
 		AND m.deleted = false
 		""")
 	long countActiveMembers(LocalDateTime start, LocalDateTime end);
+
+	List<Member> findTop5ByOrderByCreatedAtDesc();
 }
