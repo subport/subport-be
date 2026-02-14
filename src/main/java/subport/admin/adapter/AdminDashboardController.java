@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import subport.admin.application.dto.DashboardRecentMembersResponse;
-import subport.admin.application.dto.DashboardSignupTrend;
+import subport.admin.application.dto.DashboardSignupTrendsResponse;
 import subport.admin.application.dto.DashboardStatsResponse;
 import subport.admin.application.dto.DashboardTopServicesResponse;
 import subport.admin.application.service.AdminDashboardService;
@@ -29,7 +29,7 @@ public class AdminDashboardController {
 	}
 
 	@GetMapping("/signup-trend")
-	public ResponseEntity<DashboardSignupTrend> getSignUpTrend() {
+	public ResponseEntity<DashboardSignupTrendsResponse> getSignUpTrend() {
 		return ResponseEntity.ok(
 			dashboardService.getSignUpTrend(LocalDate.now())
 		);

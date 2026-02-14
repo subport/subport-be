@@ -3,8 +3,7 @@ package subport.admin.application.service;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -15,7 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import subport.admin.application.dto.DashboardRecentMemberResponse;
 import subport.admin.application.dto.DashboardRecentMembersResponse;
-import subport.admin.application.dto.DashboardSignupTrend;
+import subport.admin.application.dto.DashboardSignupTrendResponse;
+import subport.admin.application.dto.DashboardSignupTrendsResponse;
 import subport.admin.application.dto.DashboardStatsResponse;
 import subport.admin.application.dto.DashboardTopServicesResponse;
 import subport.admin.application.port.AdminMemberPort;
@@ -76,7 +76,7 @@ public class AdminDashboardService {
 		);
 	}
 
-	public DashboardSignupTrend getSignUpTrend(LocalDate today) {
+	public DashboardSignupTrendsResponse getSignUpTrend(LocalDate today) {
 		DateTimeRange lastTwoWeeks = lastTwoWeeksRange(today);
 		Map<LocalDate, Long> grouped = memberPort.loadMembers(
 				lastTwoWeeks.start,
@@ -86,19 +86,20 @@ public class AdminDashboardService {
 				Collectors.counting()
 			));
 
-		Map<String, Long> dailyCounts = new LinkedHashMap<>();
+		List<DashboardSignupTrendResponse> signupTrends = new ArrayList<>();
 
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d");
 		LocalDate startDate = lastTwoWeeks.start.toLocalDate();
 		LocalDate endDate = lastTwoWeeks.end.toLocalDate().minusDays(1);
 		for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
-			dailyCounts.put(
-				date.format(formatter),
-				grouped.getOrDefault(date, 0L)
+			signupTrends.add(
+				new DashboardSignupTrendResponse(
+					date,
+					grouped.getOrDefault(date, 0L)
+				)
 			);
 		}
 
-		return new DashboardSignupTrend(dailyCounts);
+		return new DashboardSignupTrendsResponse(signupTrends);
 	}
 
 	public DashboardRecentMembersResponse getRecentMembers() {
