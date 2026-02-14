@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -12,10 +13,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import subport.admin.application.dto.DashboardRecentMemberResponse;
+import subport.admin.application.dto.DashboardRecentMembersResponse;
 import subport.admin.application.dto.DashboardSignupTrend;
 import subport.admin.application.dto.DashboardStatsResponse;
 import subport.admin.application.port.AdminMemberPort;
 import subport.admin.application.port.AdminMemberSubscriptionPort;
+import subport.admin.application.query.MemberSubscriptionCount;
+import subport.domain.member.Member;
 
 @Service
 @Transactional(readOnly = true)
@@ -93,6 +98,32 @@ public class AdminDashboardService {
 		}
 
 		return new DashboardSignupTrend(dailyCounts);
+	}
+
+	public DashboardRecentMembersResponse getRecentMembers() {
+		List<Member> members = memberPort.loadLatestMembers();
+
+		List<Long> memberIds = members.stream()
+			.map(Member::getId)
+			.toList();
+
+		Map<Long, Long> memberSubscriptionCountMap =
+			memberSubscriptionPort.countActiveMemberSubscriptions(memberIds).stream()
+				.collect(Collectors.toMap(
+					MemberSubscriptionCount::memberId,
+					MemberSubscriptionCount::memberSubscriptionCount
+				));
+
+		return new DashboardRecentMembersResponse(
+			members.stream()
+				.map(member -> new DashboardRecentMemberResponse(
+					member.getNickname(),
+					member.getEmail(),
+					memberSubscriptionCountMap.getOrDefault(member.getId(), 0L),
+					member.getCreatedAt()
+				))
+				.toList()
+		);
 	}
 
 	private DateTimeRange dayRange(LocalDate date) {
