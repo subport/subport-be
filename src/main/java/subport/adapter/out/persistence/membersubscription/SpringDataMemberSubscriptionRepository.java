@@ -90,7 +90,7 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 		AND ms.active = true
 		GROUP BY ms.member.id
 		""")
-	List<MemberSubscriptionCount> countActiveMemberSubscriptions(List<Long> memberIds);
+	List<MemberSubscriptionCount> countActiveMemberSubscriptionsByMember(List<Long> memberIds);
 
 	@Query("""
 		SELECT new subport.admin.application.dto.DashboardTopServiceResponse(
