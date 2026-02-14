@@ -4,6 +4,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -17,9 +18,12 @@ import subport.admin.application.dto.DashboardRecentMembersResponse;
 import subport.admin.application.dto.DashboardSignupTrendResponse;
 import subport.admin.application.dto.DashboardSignupTrendsResponse;
 import subport.admin.application.dto.DashboardStatsResponse;
+import subport.admin.application.dto.DashboardTopCustomSubscriptionResponse;
+import subport.admin.application.dto.DashboardTopCustomSubscriptionsResponse;
 import subport.admin.application.dto.DashboardTopServicesResponse;
 import subport.admin.application.port.AdminMemberPort;
 import subport.admin.application.port.AdminMemberSubscriptionPort;
+import subport.admin.application.query.CustomMemberSubscriptionCount;
 import subport.admin.application.query.MemberSubscriptionCount;
 import subport.domain.member.Member;
 
@@ -132,6 +136,38 @@ public class AdminDashboardService {
 		return new DashboardTopServicesResponse(
 			memberSubscriptionPort.loadTopSubscriptions()
 		);
+	}
+
+	public DashboardTopCustomSubscriptionsResponse getTopCustomSubscriptions() {
+		List<CustomMemberSubscriptionCount> subscriptions = memberSubscriptionPort.loadTopCustomSubscriptions();
+
+		if (subscriptions.isEmpty()) {
+			return new DashboardTopCustomSubscriptionsResponse(List.of());
+		}
+
+		Map<String, List<CustomMemberSubscriptionCount>> grouped = subscriptions.stream()
+			.collect(Collectors.groupingBy(
+				CustomMemberSubscriptionCount::normalizedSubscriptionName
+			));
+
+		List<DashboardTopCustomSubscriptionResponse> result = grouped.values().stream()
+			.map(value -> {
+				String representativeName = value.stream()
+					.max(Comparator.comparing(CustomMemberSubscriptionCount::memberSubscriptionCount))
+					.get()
+					.subscriptionName();
+
+				long totalCount = value.stream()
+					.mapToLong(CustomMemberSubscriptionCount::memberSubscriptionCount)
+					.sum();
+
+				return new DashboardTopCustomSubscriptionResponse(representativeName, totalCount);
+			})
+			.sorted(Comparator.comparing(DashboardTopCustomSubscriptionResponse::memberSubscriptionCount).reversed())
+			.limit(5)
+			.toList();
+
+		return new DashboardTopCustomSubscriptionsResponse(result);
 	}
 
 	private DateTimeRange dayRange(LocalDate date) {
