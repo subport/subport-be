@@ -115,6 +115,7 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 		WHERE ms.active = true
 		AND ms.subscription.systemProvided = false
 		GROUP BY ms.subscription.normalizedName, ms.subscription.name
+		HAVING COUNT(ms) >= 2
 		""")
 	List<CustomMemberSubscriptionCount> countActiveCustomMemberSubscriptions();
 }
