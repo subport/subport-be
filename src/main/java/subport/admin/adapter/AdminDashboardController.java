@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import subport.admin.application.dto.DashboardRecentMembersResponse;
 import subport.admin.application.dto.DashboardSignupTrend;
 import subport.admin.application.dto.DashboardStatsResponse;
+import subport.admin.application.dto.DashboardTopServicesResponse;
 import subport.admin.application.service.AdminDashboardService;
 
 @RestController
@@ -38,6 +39,13 @@ public class AdminDashboardController {
 	public ResponseEntity<DashboardRecentMembersResponse> getRecentMembers() {
 		return ResponseEntity.ok(
 			dashboardService.getRecentMembers()
+		);
+	}
+
+	@GetMapping("/top-services")
+	public ResponseEntity<DashboardTopServicesResponse> getTopServices() {
+		return ResponseEntity.ok(
+			dashboardService.getTopServices()
 		);
 	}
 }
