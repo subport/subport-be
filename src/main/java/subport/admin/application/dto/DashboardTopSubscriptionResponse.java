@@ -1,6 +1,6 @@
 package subport.admin.application.dto;
 
-public record DashboardTopServiceResponse(
+public record DashboardTopSubscriptionResponse(
 	String subscriptionName,
 	long memberSubscriptionCount
 ) {

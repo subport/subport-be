@@ -12,7 +12,7 @@ import subport.admin.application.dto.DashboardRecentMembersResponse;
 import subport.admin.application.dto.DashboardSignupTrendsResponse;
 import subport.admin.application.dto.DashboardStatsResponse;
 import subport.admin.application.dto.DashboardTopCustomSubscriptionsResponse;
-import subport.admin.application.dto.DashboardTopServicesResponse;
+import subport.admin.application.dto.DashboardTopSubscriptionsResponse;
 import subport.admin.application.service.AdminDashboardService;
 
 @RestController
@@ -43,10 +43,10 @@ public class AdminDashboardController {
 		);
 	}
 
-	@GetMapping("/top-services")
-	public ResponseEntity<DashboardTopServicesResponse> getTopServices() {
+	@GetMapping("/top-subscriptions")
+	public ResponseEntity<DashboardTopSubscriptionsResponse> getTopSubscriptions() {
 		return ResponseEntity.ok(
-			dashboardService.getTopServices()
+			dashboardService.getTopSubscriptions()
 		);
 	}
 

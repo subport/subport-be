@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import subport.admin.application.dto.DashboardTopServiceResponse;
+import subport.admin.application.dto.DashboardTopSubscriptionResponse;
 import subport.admin.application.query.CustomMemberSubscriptionCount;
 import subport.admin.application.query.MemberSubscriptionCount;
 import subport.domain.membersubscription.MemberSubscription;
@@ -94,7 +94,7 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 	List<MemberSubscriptionCount> countActiveMemberSubscriptionsByMember(List<Long> memberIds);
 
 	@Query("""
-		SELECT new subport.admin.application.dto.DashboardTopServiceResponse(
+		SELECT new subport.admin.application.dto.DashboardTopSubscriptionResponse(
 			ms.subscription.name,
 			COUNT(ms)
 		)
@@ -103,7 +103,7 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 		GROUP BY ms.subscription.name
 		ORDER BY COUNT(ms) DESC, ms.subscription.name ASC
 		""")
-	List<DashboardTopServiceResponse> countActiveMemberSubscriptionsBySubscription(Pageable top5);
+	List<DashboardTopSubscriptionResponse> countActiveMemberSubscriptionsBySubscription(Pageable top5);
 
 	@Query("""
 		SELECT new subport.admin.application.query.CustomMemberSubscriptionCount(

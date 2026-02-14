@@ -20,7 +20,7 @@ import subport.admin.application.dto.DashboardSignupTrendsResponse;
 import subport.admin.application.dto.DashboardStatsResponse;
 import subport.admin.application.dto.DashboardTopCustomSubscriptionResponse;
 import subport.admin.application.dto.DashboardTopCustomSubscriptionsResponse;
-import subport.admin.application.dto.DashboardTopServicesResponse;
+import subport.admin.application.dto.DashboardTopSubscriptionsResponse;
 import subport.admin.application.port.AdminMemberPort;
 import subport.admin.application.port.AdminMemberSubscriptionPort;
 import subport.admin.application.query.CustomMemberSubscriptionCount;
@@ -132,8 +132,8 @@ public class AdminDashboardService {
 		);
 	}
 
-	public DashboardTopServicesResponse getTopServices() {
-		return new DashboardTopServicesResponse(
+	public DashboardTopSubscriptionsResponse getTopSubscriptions() {
+		return new DashboardTopSubscriptionsResponse(
 			memberSubscriptionPort.loadTopSubscriptions()
 		);
 	}
