@@ -2,5 +2,5 @@ package subport.admin.application.dto;
 
 import java.util.List;
 
-public record DashboardTopSubscriptionsResponse(List<DashboardTopSubscriptionResponse> dashboardTopServices) {
+public record DashboardTopSubscriptionsResponse(List<DashboardTopSubscriptionResponse> topSubscriptions) {
 }
