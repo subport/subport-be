@@ -117,5 +117,5 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 		GROUP BY ms.subscription.normalizedName, ms.subscription.name
 		HAVING COUNT(ms) >= 2
 		""")
-	List<CustomMemberSubscriptionCount> countActiveCustomMemberSubscriptions();
+	List<CustomMemberSubscriptionCount> countActiveCustomMemberSubscriptions(Pageable top5);
 }

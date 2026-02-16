@@ -144,6 +144,8 @@ public class MemberSubscriptionPersistenceAdapter implements
 
 	@Override
 	public List<CustomMemberSubscriptionCount> loadTopCustomSubscriptions() {
-		return memberSubscriptionRepository.countActiveCustomMemberSubscriptions();
+		return memberSubscriptionRepository.countActiveCustomMemberSubscriptions(
+			PageRequest.of(0, 5)
+		);
 	}
 }
