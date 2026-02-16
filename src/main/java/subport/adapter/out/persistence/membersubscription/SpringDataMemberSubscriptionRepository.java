@@ -101,6 +101,7 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 		)
 		FROM MemberSubscription ms
 		WHERE ms.active = true
+		AND ms.subscription.systemProvided = true
 		GROUP BY ms.subscription.name
 		ORDER BY COUNT(ms) DESC, ms.subscription.name ASC
 		""")
