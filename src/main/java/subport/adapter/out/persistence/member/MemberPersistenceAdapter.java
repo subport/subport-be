@@ -42,7 +42,7 @@ public class MemberPersistenceAdapter implements
 
 	@Override
 	public List<Member> loadLatestMembers() {
-		return memberRepository.findTop5ByOrderByCreatedAtDesc();
+		return memberRepository.findTop4ByOrderByCreatedAtDesc();
 	}
 
 	@Override

@@ -48,5 +48,5 @@ public interface SpringDataMemberRepository extends JpaRepository<Member, Long> 
 		""")
 	long countActiveMembers(LocalDateTime start, LocalDateTime end);
 
-	List<Member> findTop5ByOrderByCreatedAtDesc();
+	List<Member> findTop4ByOrderByCreatedAtDesc();
 }
