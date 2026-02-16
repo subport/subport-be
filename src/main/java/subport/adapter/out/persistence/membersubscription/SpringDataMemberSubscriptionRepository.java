@@ -96,6 +96,7 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 	@Query("""
 		SELECT new subport.admin.application.dto.DashboardTopSubscriptionResponse(
 			ms.subscription.name,
+			ms.subscription.logoImageUrl,
 			COUNT(ms)
 		)
 		FROM MemberSubscription ms
