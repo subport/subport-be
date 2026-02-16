@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import subport.admin.application.dto.DashboardRecentMembersResponse;
 import subport.admin.application.dto.DashboardSignupTrendsResponse;
 import subport.admin.application.dto.DashboardStatsResponse;
+import subport.admin.application.dto.DashboardTodayEmailNotificationsResponse;
 import subport.admin.application.dto.DashboardTopCustomSubscriptionsResponse;
 import subport.admin.application.dto.DashboardTopSubscriptionsResponse;
 import subport.admin.application.service.AdminDashboardService;
@@ -54,6 +55,13 @@ public class AdminDashboardController {
 	public ResponseEntity<DashboardTopCustomSubscriptionsResponse> getTopCustomSubscriptions() {
 		return ResponseEntity.ok(
 			dashboardService.getTopCustomSubscriptions()
+		);
+	}
+
+	@GetMapping("/today-email-notifications")
+	public ResponseEntity<DashboardTodayEmailNotificationsResponse> getTodayEmailNotifications() {
+		return ResponseEntity.ok(
+			dashboardService.getTodayEmailNotifications(LocalDate.now())
 		);
 	}
 }
