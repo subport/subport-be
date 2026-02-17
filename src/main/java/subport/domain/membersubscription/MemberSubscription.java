@@ -124,6 +124,7 @@ public class MemberSubscription extends BaseTimeEntity {
 		lastPaymentDate = startDate;
 		nextPaymentDate = plan.calculateNextPaymentDate(startDate);
 		updatePaymentReminderDate();
+		active = true;
 	}
 
 	public BigDecimal calculateActualPaymentAmount() {
