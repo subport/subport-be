@@ -88,7 +88,7 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 		)
 		FROM MemberSubscription ms
 		WHERE ms.member.id in :memberIds
-		AND (:systemProvied IS NULL OR ms.subscription.systemProvided = :systemProvided)
+		AND (:systemProvided IS NULL OR ms.subscription.systemProvided = :systemProvided)
 		AND ms.active = true
 		GROUP BY ms.member.id
 		""")
