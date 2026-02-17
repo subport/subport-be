@@ -153,9 +153,9 @@ public class AdminDashboardService {
 				EmailStatusCount::count
 			));
 
-		Long successCount = map.get(SendingStatus.SENT);
-		Long failedCount = map.get(SendingStatus.FAILED);
-		Long pendingCount = map.get(SendingStatus.PENDING);
+		Long successCount = map.getOrDefault(SendingStatus.SENT, 0L);
+		Long failedCount = map.getOrDefault(SendingStatus.FAILED, 0L);
+		Long pendingCount = map.getOrDefault(SendingStatus.PENDING, 0L);
 
 		Map<String, List<EmailNotification>> grouped = emailNotificationPort.loadEmailNotifications(today).stream()
 			.collect(Collectors.groupingBy(EmailNotification::getRecipientEmail));
