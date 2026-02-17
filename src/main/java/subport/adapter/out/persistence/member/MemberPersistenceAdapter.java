@@ -3,6 +3,8 @@ package subport.adapter.out.persistence.member;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -58,5 +60,20 @@ public class MemberPersistenceAdapter implements
 	@Override
 	public long countActiveMembers(LocalDateTime start, LocalDateTime end) {
 		return memberRepository.countActiveMembers(start, end);
+	}
+
+	@Override
+	public Page<Member> searchMembers(
+		Boolean deleted,
+		Boolean reminderEnabled,
+		String email,
+		Pageable pageable
+	) {
+		return memberRepository.findByDeletedAndReminderEnabledAndEmailContaining(
+			deleted,
+			reminderEnabled,
+			email,
+			pageable
+		);
 	}
 }
