@@ -3,8 +3,8 @@ package subport.admin.application.port;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import subport.admin.application.dto.DashboardTopCustomSubscriptionResponse;
 import subport.admin.application.dto.DashboardTopSubscriptionResponse;
-import subport.admin.application.query.CustomMemberSubscriptionCount;
 import subport.admin.application.query.MemberSubscriptionCount;
 
 public interface AdminMemberSubscriptionPort {
@@ -21,5 +21,5 @@ public interface AdminMemberSubscriptionPort {
 
 	List<DashboardTopSubscriptionResponse> loadTopSubscriptions();
 
-	List<CustomMemberSubscriptionCount> loadTopCustomSubscriptions();
+	List<DashboardTopCustomSubscriptionResponse> loadTopCustomSubscriptions();
 }

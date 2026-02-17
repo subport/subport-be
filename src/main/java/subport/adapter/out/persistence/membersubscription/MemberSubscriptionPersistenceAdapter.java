@@ -9,9 +9,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
+import subport.admin.application.dto.DashboardTopCustomSubscriptionResponse;
 import subport.admin.application.dto.DashboardTopSubscriptionResponse;
 import subport.admin.application.port.AdminMemberSubscriptionPort;
-import subport.admin.application.query.CustomMemberSubscriptionCount;
 import subport.admin.application.query.MemberSubscriptionCount;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
@@ -143,7 +143,7 @@ public class MemberSubscriptionPersistenceAdapter implements
 	}
 
 	@Override
-	public List<CustomMemberSubscriptionCount> loadTopCustomSubscriptions() {
+	public List<DashboardTopCustomSubscriptionResponse> loadTopCustomSubscriptions() {
 		return memberSubscriptionRepository.countActiveCustomMemberSubscriptions(
 			PageRequest.of(0, 5)
 		);

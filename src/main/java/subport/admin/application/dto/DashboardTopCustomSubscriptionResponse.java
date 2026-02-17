@@ -1,7 +1,7 @@
 package subport.admin.application.dto;
 
 public record DashboardTopCustomSubscriptionResponse(
-	String subscriptionName,
+	String normalizedSubscriptionName,
 	long memberSubscriptionCount
 ) {
 }
