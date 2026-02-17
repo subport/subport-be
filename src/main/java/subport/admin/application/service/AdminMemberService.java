@@ -74,7 +74,7 @@ public class AdminMemberService {
 		return new AdminMembersResponse(
 			items,
 			membersPage.getNumber() + 1,
-			membersPage.getSize(),
+			membersPage.getTotalElements(),
 			membersPage.getTotalPages()
 		);
 	}

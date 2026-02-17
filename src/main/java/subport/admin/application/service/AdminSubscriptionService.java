@@ -78,7 +78,7 @@ public class AdminSubscriptionService {
 		return new AdminSubscriptionsResponse(
 			subscriptions,
 			subscriptionsPage.getNumber() + 1,
-			subscriptionsPage.getSize(),
+			subscriptionsPage.getTotalElements(),
 			subscriptionsPage.getTotalPages()
 		);
 	}
