@@ -88,10 +88,11 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 		)
 		FROM MemberSubscription ms
 		WHERE ms.member.id in :memberIds
+		AND (:systemProvied IS NULL OR ms.subscription.systemProvided = :systemProvided)
 		AND ms.active = true
 		GROUP BY ms.member.id
 		""")
-	List<MemberSubscriptionCount> countActiveMemberSubscriptionsByMember(List<Long> memberIds);
+	List<MemberSubscriptionCount> countActiveMemberSubscriptionsByMember(List<Long> memberIds, Boolean systemProvided);
 
 	@Query("""
 		SELECT new subport.admin.application.dto.DashboardTopSubscriptionResponse(

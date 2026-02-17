@@ -17,7 +17,7 @@ public interface AdminMemberSubscriptionPort {
 
 	long countActiveMemberSubscriptions(LocalDateTime start, LocalDateTime end);
 
-	List<MemberSubscriptionCount> countActiveMemberSubscriptions(List<Long> memberIds);
+	List<MemberSubscriptionCount> countActiveMemberSubscriptions(List<Long> memberIds, Boolean systemProvided);
 
 	List<DashboardTopSubscriptionResponse> loadTopSubscriptions();
 

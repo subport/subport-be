@@ -118,7 +118,7 @@ public class AdminDashboardService {
 			.toList();
 
 		Map<Long, Long> memberSubscriptionCountMap =
-			memberSubscriptionPort.countActiveMemberSubscriptions(memberIds).stream()
+			memberSubscriptionPort.countActiveMemberSubscriptions(memberIds, null).stream()
 				.collect(Collectors.toMap(
 					MemberSubscriptionCount::memberId,
 					MemberSubscriptionCount::memberSubscriptionCount

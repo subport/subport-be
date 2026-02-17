@@ -131,8 +131,8 @@ public class MemberSubscriptionPersistenceAdapter implements
 	}
 
 	@Override
-	public List<MemberSubscriptionCount> countActiveMemberSubscriptions(List<Long> memberIds) {
-		return memberSubscriptionRepository.countActiveMemberSubscriptionsByMember(memberIds);
+	public List<MemberSubscriptionCount> countActiveMemberSubscriptions(List<Long> memberIds, Boolean systemProvided) {
+		return memberSubscriptionRepository.countActiveMemberSubscriptionsByMember(memberIds, systemProvided);
 	}
 
 	@Override
