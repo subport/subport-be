@@ -11,6 +11,7 @@ public record AdminEmailNotificationResponse(
 	LocalDate paymentDate,
 	Integer daysBeforePayment,
 	SendingStatus status,
+	int retryCount,
 	LocalDateTime sentAt,
 	List<AdminSubscriptionInNotificationResponse> subscriptions
 ) {
