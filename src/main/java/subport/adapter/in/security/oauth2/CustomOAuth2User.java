@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class CustomOAuth2User implements OAuth2User {
 
 	private final Long memberId;
+	private final boolean firstLogin;
 
 	@Override
 	public Map<String, Object> getAttributes() {

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 import subport.application.member.port.in.SyncMemberUseCase;
 import subport.application.member.port.in.dto.LoginMemberInfo;
+import subport.application.member.port.in.dto.SyncMemberInfo;
 
 @Component
 @RequiredArgsConstructor
@@ -25,8 +26,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 		KakaoMemberInfo kakaoMemberInfo = KakaoMemberInfo.from(oAuth2User.getAttributes(), LocalDateTime.now());
 		LoginMemberInfo loginMemberInfo = kakaoMemberInfo.toLoginMemberInfo();
 
-		Long memberId = syncMemberUseCase.sync(loginMemberInfo);
+		SyncMemberInfo syncMemberInfo = syncMemberUseCase.sync(loginMemberInfo);
 
-		return new CustomOAuth2User(memberId);
+		return new CustomOAuth2User(
+			syncMemberInfo.id(),
+			syncMemberInfo.firstLogin()
+		);
 	}
 }

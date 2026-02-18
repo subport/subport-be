@@ -16,6 +16,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import subport.adapter.in.security.oauth2.CustomOAuth2User;
 import subport.application.exception.CustomException;
@@ -32,9 +33,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
 	@Override
 	protected void doFilterInternal(
-		HttpServletRequest request,
-		HttpServletResponse response,
-		FilterChain filterChain
+		@NonNull HttpServletRequest request,
+		@NonNull HttpServletResponse response,
+		@NonNull FilterChain filterChain
 	) throws ServletException, IOException {
 		Long memberId;
 		try {
@@ -47,7 +48,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		CustomOAuth2User oAuth2User = new CustomOAuth2User(memberId);
+		CustomOAuth2User oAuth2User = new CustomOAuth2User(memberId, false);
 		SecurityContextHolder.getContext().setAuthentication(
 			new UsernamePasswordAuthenticationToken(
 				oAuth2User,
@@ -60,7 +61,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	}
 
 	@Override
-	protected boolean shouldNotFilter(HttpServletRequest request) {
+	protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {
 		return EXCLUDE_PATTERNS.stream()
 			.anyMatch(pattern -> pathMatcher.match(pattern, request.getServletPath()));
 	}
