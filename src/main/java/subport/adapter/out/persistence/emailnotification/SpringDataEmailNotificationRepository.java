@@ -1,8 +1,11 @@
 package subport.adapter.out.persistence.emailnotification;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -40,5 +43,21 @@ public interface SpringDataEmailNotificationRepository extends JpaRepository<Ema
 	List<EmailStatusCount> countTodayByStatus(
 		LocalDateTime start,
 		LocalDateTime end
+	);
+
+	@Query("""
+		SELECT e
+		FROM EmailNotification e
+		WHERE (:date IS NULL OR e.paymentDate = :date)
+		AND (:status IS NULL OR e.status = :status)
+		AND (:daysBeforePayment IS NULL OR e.daysBeforePayment = :daysBeforePayment)
+		AND (:email IS NULL OR e.recipientEmail LIKE %:email%)
+		""")
+	Page<EmailNotification> findEmailNotifications(
+		LocalDate date,
+		SendingStatus status,
+		Integer daysBeforePayment,
+		String email,
+		Pageable pageable
 	);
 }

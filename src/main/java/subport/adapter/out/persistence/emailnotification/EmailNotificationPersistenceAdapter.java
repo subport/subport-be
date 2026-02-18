@@ -3,6 +3,8 @@ package subport.adapter.out.persistence.emailnotification;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -49,6 +51,23 @@ public class EmailNotificationPersistenceAdapter implements
 		return emailNotificationRepository.countTodayByStatus(
 			date.atStartOfDay(),
 			date.plusDays(1).atStartOfDay()
+		);
+	}
+
+	@Override
+	public Page<EmailNotification> searchEmailNotifications(
+		LocalDate date,
+		SendingStatus status,
+		Integer daysBeforePayment,
+		String email,
+		Pageable pageable
+	) {
+		return emailNotificationRepository.findEmailNotifications(
+			date,
+			status,
+			daysBeforePayment,
+			email,
+			pageable
 		);
 	}
 }
