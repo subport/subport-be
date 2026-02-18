@@ -37,8 +37,6 @@ public class Member extends BaseTimeEntity {
 
 	private boolean deleted;
 
-	private boolean firstLogin;
-
 	public Member(
 		String providerId,
 		String nickname,
@@ -52,7 +50,6 @@ public class Member extends BaseTimeEntity {
 		this.reminderDaysBefore = 3;
 		this.lastLoginAt = now;
 		this.deleted = false;
-		this.firstLogin = true;
 	}
 
 	public void update(String nickname, String email) {
@@ -86,9 +83,5 @@ public class Member extends BaseTimeEntity {
 
 	public void activate() {
 		this.deleted = false;
-	}
-
-	public void completeFirstLogin() {
-		this.firstLogin = false;
 	}
 }
