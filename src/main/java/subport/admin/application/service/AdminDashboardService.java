@@ -4,6 +4,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,7 +25,6 @@ import subport.admin.application.dto.DashboardTopSubscriptionsResponse;
 import subport.admin.application.port.AdminEmailNotificationPort;
 import subport.admin.application.port.AdminMemberPort;
 import subport.admin.application.port.AdminMemberSubscriptionPort;
-import subport.admin.application.query.EmailStatusCount;
 import subport.admin.application.query.MemberSubscriptionCount;
 import subport.domain.emailnotification.EmailNotification;
 import subport.domain.emailnotification.SendingStatus;
@@ -147,43 +147,38 @@ public class AdminDashboardService {
 	}
 
 	public DashboardTodayEmailNotificationsResponse getTodayEmailNotifications(LocalDate today) {
-		Map<SendingStatus, Long> map = emailNotificationPort.countTodayByStatus(today).stream()
-			.collect(Collectors.toMap(
-				EmailStatusCount::status,
-				EmailStatusCount::count
-			));
-
-		Long successCount = map.getOrDefault(SendingStatus.SENT, 0L);
-		Long failedCount = map.getOrDefault(SendingStatus.FAILED, 0L);
-		Long pendingCount = map.getOrDefault(SendingStatus.PENDING, 0L);
-
 		Map<String, List<EmailNotification>> grouped = emailNotificationPort.loadEmailNotifications(today).stream()
 			.collect(Collectors.groupingBy(EmailNotification::getRecipientEmail));
 
-		List<DashboardTodayEmailNotificationResponse> notifications = grouped.entrySet().stream()
+		List<DashboardTodayEmailNotificationResponse> items = grouped.entrySet().stream()
 			.map(entry -> {
 				String recipientEmail = entry.getKey();
-
-				List<EmailNotification> value = entry.getValue();
-				int subscriptionCount = value.size();
-
-				EmailNotification emailNotification = value.get(0);
-				Integer daysBeforePayment = emailNotification.getDaysBeforePayment();
-				SendingStatus status = emailNotification.getStatus();
-				LocalDateTime sentAt = emailNotification.getSentAt();
+				List<EmailNotification> notifications = entry.getValue();
+				EmailNotification notification = notifications.get(0);
 
 				return new DashboardTodayEmailNotificationResponse(
 					recipientEmail,
-					subscriptionCount,
-					daysBeforePayment,
-					status,
-					sentAt
+					notifications.size(),
+					notification.getDaysBeforePayment(),
+					notification.getStatus(),
+					notification.getSentAt()
 				);
 			})
+			.sorted(Comparator.comparing(DashboardTodayEmailNotificationResponse::sentAt).reversed())
 			.toList();
 
+		Map<SendingStatus, Long> statusCountMap = items.stream()
+			.collect(Collectors.groupingBy(
+				DashboardTodayEmailNotificationResponse::status,
+				Collectors.counting()
+			));
+
+		long successCount = statusCountMap.getOrDefault(SendingStatus.SENT, 0L);
+		long failedCount = statusCountMap.getOrDefault(SendingStatus.FAILED, 0L);
+		long pendingCount = statusCountMap.getOrDefault(SendingStatus.PENDING, 0L);
+
 		return new DashboardTodayEmailNotificationsResponse(
-			notifications,
+			items.subList(0, Math.min(7, items.size())),
 			successCount,
 			failedCount,
 			pendingCount

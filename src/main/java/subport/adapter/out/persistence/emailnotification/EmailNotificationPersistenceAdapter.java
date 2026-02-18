@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import subport.admin.application.port.AdminEmailNotificationPort;
-import subport.admin.application.query.EmailStatusCount;
 import subport.application.emailnotification.port.out.LoadEmailNotificationPort;
 import subport.application.emailnotification.port.out.SaveEmailNotificationsPort;
 import subport.domain.emailnotification.EmailNotification;
@@ -41,14 +40,6 @@ public class EmailNotificationPersistenceAdapter implements
 	@Override
 	public List<EmailNotification> loadEmailNotifications(LocalDate date) {
 		return emailNotificationRepository.findByCreatedAt(
-			date.atStartOfDay(),
-			date.plusDays(1).atStartOfDay()
-		);
-	}
-
-	@Override
-	public List<EmailStatusCount> countTodayByStatus(LocalDate date) {
-		return emailNotificationRepository.countTodayByStatus(
 			date.atStartOfDay(),
 			date.plusDays(1).atStartOfDay()
 		);
