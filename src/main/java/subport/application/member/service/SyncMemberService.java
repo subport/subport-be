@@ -6,7 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import subport.application.member.port.in.SyncMemberUseCase;
 import subport.application.member.port.in.dto.LoginMemberInfo;
-import subport.application.member.port.out.SyncMemberPort;
+import subport.application.member.port.in.dto.SyncMemberInfo;
+import subport.application.member.port.out.LoadMemberPort;
+import subport.application.member.port.out.SaveMemberPort;
 import subport.domain.member.Member;
 
 @Service
@@ -14,12 +16,18 @@ import subport.domain.member.Member;
 @RequiredArgsConstructor
 public class SyncMemberService implements SyncMemberUseCase {
 
-	private final SyncMemberPort syncMemberPort;
+	private final LoadMemberPort loadMemberPort;
+	private final SaveMemberPort saveMemberPort;
 
 	@Override
-	public Long sync(LoginMemberInfo loginMemberInfo) {
-		Member member = loginMemberInfo.toMember();
+	public SyncMemberInfo sync(LoginMemberInfo loginMemberInfo) {
+		Member member = loadMemberPort.load(loginMemberInfo.providerId());
 
-		return syncMemberPort.sync(member);
+		if (member == null) {
+			Long newMemberId = saveMemberPort.save(loginMemberInfo.toMember());
+			return new SyncMemberInfo(newMemberId, true);
+		}
+
+		return new SyncMemberInfo(member.getId(), false);
 	}
 }

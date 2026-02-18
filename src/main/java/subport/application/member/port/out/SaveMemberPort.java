@@ -2,7 +2,7 @@ package subport.application.member.port.out;
 
 import subport.domain.member.Member;
 
-public interface SyncMemberPort {
+public interface SaveMemberPort {
 
-	Long sync(Member member);
+	Long save(Member member);
 }

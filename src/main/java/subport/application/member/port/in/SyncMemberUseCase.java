@@ -1,8 +1,9 @@
 package subport.application.member.port.in;
 
 import subport.application.member.port.in.dto.LoginMemberInfo;
+import subport.application.member.port.in.dto.SyncMemberInfo;
 
 public interface SyncMemberUseCase {
 
-	Long sync(LoginMemberInfo loginMemberInfo);
+	SyncMemberInfo sync(LoginMemberInfo loginMemberInfo);
 }

@@ -12,14 +12,14 @@ import subport.admin.application.port.AdminMemberPort;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.member.port.out.LoadMemberPort;
-import subport.application.member.port.out.SyncMemberPort;
+import subport.application.member.port.out.SaveMemberPort;
 import subport.domain.member.Member;
 
 @Component
 @RequiredArgsConstructor
 public class MemberPersistenceAdapter implements
 	LoadMemberPort,
-	SyncMemberPort,
+	SaveMemberPort,
 	AdminMemberPort {
 
 	private final SpringDataMemberRepository memberRepository;
@@ -31,10 +31,14 @@ public class MemberPersistenceAdapter implements
 	}
 
 	@Override
-	public Long sync(Member member) {
-		return memberRepository.findByProviderId(member.getProviderId())
-			.map(Member::getId)
-			.orElseGet(() -> memberRepository.save(member).getId());
+	public Member load(String providerId) {
+		return memberRepository.findByProviderId(providerId)
+			.orElse(null);
+	}
+
+	@Override
+	public Long save(Member member) {
+		return memberRepository.save(member).getId();
 	}
 
 	@Override
