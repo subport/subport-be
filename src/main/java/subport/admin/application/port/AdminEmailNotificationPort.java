@@ -16,11 +16,19 @@ public interface AdminEmailNotificationPort {
 
 	List<EmailStatusCount> countTodayByStatus(LocalDate date);
 
-	Page<EmailNotification> searchEmailNotifications(
+	Page<String> searchDistinctRecipientEmails(
 		LocalDate date,
 		SendingStatus status,
 		Integer daysBeforePayment,
 		String email,
 		Pageable pageable
+	);
+
+	List<EmailNotification> searchEmailNotifications(
+		List<String> emails,
+		LocalDate date,
+		SendingStatus status,
+		Integer daysBeforePayment,
+		String email
 	);
 }

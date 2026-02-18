@@ -46,18 +46,35 @@ public interface SpringDataEmailNotificationRepository extends JpaRepository<Ema
 	);
 
 	@Query("""
-		SELECT e
+		SELECT distinct e.recipientEmail
 		FROM EmailNotification e
 		WHERE (:date IS NULL OR e.paymentDate = :date)
 		AND (:status IS NULL OR e.status = :status)
 		AND (:daysBeforePayment IS NULL OR e.daysBeforePayment = :daysBeforePayment)
 		AND (:email IS NULL OR e.recipientEmail LIKE %:email%)
 		""")
-	Page<EmailNotification> findEmailNotifications(
+	Page<String> findDistinctRecipientEmails(
 		LocalDate date,
 		SendingStatus status,
 		Integer daysBeforePayment,
 		String email,
 		Pageable pageable
+	);
+
+	@Query("""
+		SELECT e
+		FROM EmailNotification e
+		WHERE e.recipientEmail in :emails
+		AND (:date IS NULL OR e.paymentDate = :date)
+		AND (:status IS NULL OR e.status = :status)
+		AND (:daysBeforePayment IS NULL OR e.daysBeforePayment = :daysBeforePayment)
+		AND (:email IS NULL OR e.recipientEmail LIKE %:email%)
+		""")
+	List<EmailNotification> findEmailNotifications(
+		List<String> emails,
+		LocalDate date,
+		SendingStatus status,
+		Integer daysBeforePayment,
+		String email
 	);
 }

@@ -55,19 +55,36 @@ public class EmailNotificationPersistenceAdapter implements
 	}
 
 	@Override
-	public Page<EmailNotification> searchEmailNotifications(
+	public Page<String> searchDistinctRecipientEmails(
 		LocalDate date,
 		SendingStatus status,
 		Integer daysBeforePayment,
 		String email,
 		Pageable pageable
 	) {
-		return emailNotificationRepository.findEmailNotifications(
+		return emailNotificationRepository.findDistinctRecipientEmails(
 			date,
 			status,
 			daysBeforePayment,
 			email,
 			pageable
+		);
+	}
+
+	@Override
+	public List<EmailNotification> searchEmailNotifications(
+		List<String> emails,
+		LocalDate date,
+		SendingStatus status,
+		Integer daysBeforePayment,
+		String email
+	) {
+		return emailNotificationRepository.findEmailNotifications(
+			emails,
+			date,
+			status,
+			daysBeforePayment,
+			email
 		);
 	}
 }

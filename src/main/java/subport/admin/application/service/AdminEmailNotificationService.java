@@ -1,6 +1,7 @@
 package subport.admin.application.service;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -32,12 +33,20 @@ public class AdminEmailNotificationService {
 		String email,
 		Pageable pageable
 	) {
-		Page<EmailNotification> emailNotifications = adminEmailNotificationPort.searchEmailNotifications(
+		Page<String> emailsPage = adminEmailNotificationPort.searchDistinctRecipientEmails(
 			date,
 			status,
 			daysBeforePayment,
 			email,
 			pageable
+		);
+
+		List<EmailNotification> emailNotifications = adminEmailNotificationPort.searchEmailNotifications(
+			emailsPage.getContent(),
+			date,
+			status,
+			daysBeforePayment,
+			email
 		);
 
 		Map<String, List<EmailNotification>> grouped = emailNotifications.stream()
@@ -66,17 +75,19 @@ public class AdminEmailNotificationService {
 					notification.getPaymentDate(),
 					notification.getDaysBeforePayment(),
 					notification.getStatus(),
+					notification.getRetryCount(),
 					notification.getSentAt(),
 					subscriptions
 				);
 			})
+			.sorted(Comparator.comparing(AdminEmailNotificationResponse::sentAt).reversed())
 			.toList();
 
 		return new AdminEmailNotificationsResponse(
 			items,
-			emailNotifications.getNumber() + 1,
-			emailNotifications.getTotalElements(),
-			emailNotifications.getTotalPages()
+			emailsPage.getNumber() + 1,
+			emailsPage.getTotalElements(),
+			emailsPage.getTotalPages()
 		);
 	}
 }

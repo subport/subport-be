@@ -3,7 +3,6 @@ package subport.admin.adapter;
 import java.time.LocalDate;
 
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,12 +28,7 @@ public class AdminEmailNotificationController {
 		@RequestParam(required = false) SendingStatus status,
 		@RequestParam(required = false) Integer daysBeforePayment,
 		@RequestParam(required = false) String email,
-		@PageableDefault(
-			page = 0,
-			size = 15,
-			sort = "paymentDate",
-			direction = Sort.Direction.DESC
-		) Pageable pageable
+		@PageableDefault(size = 15) Pageable pageable
 	) {
 		return ResponseEntity.ok(
 			emailNotificationService.searchEmailNotifications(
