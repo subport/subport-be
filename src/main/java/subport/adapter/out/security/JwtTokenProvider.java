@@ -18,6 +18,7 @@ import subport.application.token.port.out.CreateAccessTokenPort;
 import subport.application.token.port.out.CreateRefreshTokenPort;
 import subport.application.token.port.out.ExtractMemberIdPort;
 import subport.domain.token.RefreshToken;
+import subport.domain.token.Role;
 
 @Component
 public class JwtTokenProvider implements
@@ -41,20 +42,30 @@ public class JwtTokenProvider implements
 	}
 
 	@Override
-	public String createAccessToken(Long memberId, Instant now) {
+	public String createAccessToken(
+		Long memberId,
+		Instant now,
+		Role role
+	) {
 		return createToken(
 			memberId,
 			now,
-			ACCESS_TOKEN_EXPIRATION_TIME
+			ACCESS_TOKEN_EXPIRATION_TIME,
+			role
 		);
 	}
 
 	@Override
-	public RefreshToken createRefreshToken(Long memberId, Instant now) {
+	public RefreshToken createRefreshToken(
+		Long memberId,
+		Instant now,
+		Role role
+	) {
 		String refreshToken = createToken(
 			memberId,
 			now,
-			REFRESH_TOKEN_EXPIRATION_TIME
+			REFRESH_TOKEN_EXPIRATION_TIME,
+			role
 		);
 		Claims claims = parseClaims(refreshToken);
 
@@ -76,12 +87,14 @@ public class JwtTokenProvider implements
 	private String createToken(
 		Long memberId,
 		Instant now,
-		Duration ttl
+		Duration ttl,
+		Role role
 	) {
 		return Jwts.builder()
 			.subject(memberId.toString())
 			.issuedAt(Date.from(now))
 			.expiration(Date.from(now.plus(ttl)))
+			.claim("role", role.name())
 			.signWith(secretKey)
 			.compact();
 	}

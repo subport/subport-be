@@ -17,6 +17,7 @@ import subport.application.token.port.out.DeleteRefreshTokenPort;
 import subport.application.token.port.out.LoadRefreshTokenPort;
 import subport.application.token.port.out.SaveRefreshTokenPort;
 import subport.domain.token.RefreshToken;
+import subport.domain.token.Role;
 
 @Service
 @Transactional
@@ -42,10 +43,10 @@ public class ReissueTokenService implements ReissueTokenUseCase {
 		}
 
 		Long memberId = refreshToken.getMemberId();
-		String accessToken = createAccessTokenPort.createAccessToken(memberId, currentInstant);
+		String accessToken = createAccessTokenPort.createAccessToken(memberId, currentInstant, Role.USER);
 
 		deleteRefreshTokenPort.delete(refreshToken);
-		refreshToken = createRefreshTokenPort.createRefreshToken(memberId, currentInstant);
+		refreshToken = createRefreshTokenPort.createRefreshToken(memberId, currentInstant, Role.USER);
 		saveRefreshTokenPort.save(refreshToken);
 
 		return new TokenPair(accessToken, refreshToken.getTokenValue());

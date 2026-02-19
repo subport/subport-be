@@ -12,6 +12,7 @@ import subport.application.token.port.out.CreateAccessTokenPort;
 import subport.application.token.port.out.CreateRefreshTokenPort;
 import subport.application.token.port.out.SaveRefreshTokenPort;
 import subport.domain.token.RefreshToken;
+import subport.domain.token.Role;
 
 @Service
 @Transactional
@@ -24,9 +25,9 @@ public class IssueTokenService implements IssueTokenUseCase {
 
 	@Override
 	public TokenPair issue(Long memberId, Instant currentInstant) {
-		String accessToken = createAccessTokenPort.createAccessToken(memberId, currentInstant);
+		String accessToken = createAccessTokenPort.createAccessToken(memberId, currentInstant, Role.USER);
 
-		RefreshToken refreshToken = createRefreshTokenPort.createRefreshToken(memberId, currentInstant);
+		RefreshToken refreshToken = createRefreshTokenPort.createRefreshToken(memberId, currentInstant, Role.USER);
 		saveRefreshTokenPort.save(refreshToken);
 
 		return new TokenPair(accessToken, refreshToken.getTokenValue());
