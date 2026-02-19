@@ -35,4 +35,8 @@ public class Admin extends BaseTimeEntity {
 		this.password = password;
 		this.nickname = nickname;
 	}
+
+	public void updatePassword(String newPassword) {
+		this.password = newPassword;
+	}
 }

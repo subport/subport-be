@@ -70,7 +70,9 @@ public enum ErrorCode {
 	SUBSCRIPTION_IN_USE(HttpStatus.CONFLICT, "회원이 사용 중인 구독은 삭제할 수 없습니다."),
 	PLAN_IN_USE(HttpStatus.CONFLICT, "회원이 사용 중인 플랜은 삭제할 수 없습니다."),
 	ADMIN_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 관리자입니다."),
-	ADMIN_PASSWORD_MISMATCH(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
+	ADMIN_PASSWORD_MISMATCH(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
+	ADMIN_CURRENT_PASSWORD_MISMATCH(HttpStatus.UNAUTHORIZED, "현재 비밀번호가 일치하지 않습니다."),
+	ADMIN_NEW_PASSWORD_CONFIRM_MISMATCH(HttpStatus.BAD_REQUEST, "새 비밀번호와 비밀번호 확인이 일치하지 않습니다.");
 
 	private final HttpStatus httpStatus;
 	private final String message;
