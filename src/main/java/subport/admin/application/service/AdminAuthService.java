@@ -41,6 +41,8 @@ public class AdminAuthService {
 		String accessToken = createAccessTokenPort.createAccessToken(admin.getId(), now, Role.ADMIN);
 		RefreshToken refreshToken = createRefreshTokenPort.createRefreshToken(admin.getId(), now, Role.ADMIN);
 
+		refreshTokenPort.save(refreshToken);
+
 		return new TokenPair(
 			accessToken,
 			refreshToken.getTokenValue()
