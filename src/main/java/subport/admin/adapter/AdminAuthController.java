@@ -4,6 +4,7 @@ import java.time.Instant;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,20 @@ public class AdminAuthController {
 	@PostMapping("/login")
 	public ResponseEntity<TokenResponse> login(@RequestBody AdminLoginRequest request) {
 		TokenPair tokenPair = adminAuthService.login(request, Instant.now());
+
+		return ResponseEntity.ok()
+			.header(
+				HttpHeaders.SET_COOKIE,
+				AuthCookieProvider.createRefreshTokenCookie(tokenPair.refreshToken()).toString()
+			)
+			.body(
+				new TokenResponse(tokenPair.accessToken())
+			);
+	}
+
+	@PostMapping("/refresh")
+	public ResponseEntity<TokenResponse> refresh(@CookieValue(required = false) String refreshToken) {
+		TokenPair tokenPair = adminAuthService.reissue(refreshToken, Instant.now());
 
 		return ResponseEntity.ok()
 			.header(

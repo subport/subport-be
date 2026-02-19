@@ -3,6 +3,7 @@ package subport.adapter.out.persistence.token;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
+import subport.admin.application.port.AdminRefreshTokenPort;
 import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.token.port.out.DeleteRefreshTokenPort;
@@ -15,7 +16,8 @@ import subport.domain.token.RefreshToken;
 public class RefreshTokenPersistenceAdapter implements
 	SaveRefreshTokenPort,
 	LoadRefreshTokenPort,
-	DeleteRefreshTokenPort {
+	DeleteRefreshTokenPort,
+	AdminRefreshTokenPort {
 
 	private final SpringDataRefreshTokenRepository refreshTokenRepository;
 
