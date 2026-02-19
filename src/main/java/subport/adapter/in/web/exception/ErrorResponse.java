@@ -11,6 +11,7 @@ import subport.application.exception.ErrorCode;
 public record ErrorResponse(
 	int status,
 	String error,
+	String code,
 	String message,
 	Map<String, String> fieldErrors
 ) {
@@ -19,6 +20,7 @@ public record ErrorResponse(
 		this(
 			errorCode.getHttpStatus().value(),
 			errorCode.getHttpStatus().name(),
+			errorCode.name(),
 			errorCode.getMessage(),
 			fieldErrors
 		);
