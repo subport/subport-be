@@ -35,7 +35,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 		TokenPair tokenPair = issueTokenUseCase.issue(memberId, Instant.now());
 
-		String accessToken = URLEncoder.encode(tokenPair.AccessToken(), StandardCharsets.UTF_8);
+		String accessToken = URLEncoder.encode(tokenPair.accessToken(), StandardCharsets.UTF_8);
 		String redirectUrl = UriComponentsBuilder
 			.fromUriString("https://localhost:5173/login-success")
 			.queryParam("access", accessToken)
@@ -45,7 +45,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 		response.addHeader(
 			HttpHeaders.SET_COOKIE,
-			AuthCookieProvider.createRefreshTokenCookie(tokenPair.RefreshToken()).toString()
+			AuthCookieProvider.createRefreshTokenCookie(tokenPair.refreshToken()).toString()
 		);
 		response.sendRedirect(redirectUrl);
 	}

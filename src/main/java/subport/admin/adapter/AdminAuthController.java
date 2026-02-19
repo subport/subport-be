@@ -30,10 +30,10 @@ public class AdminAuthController {
 		return ResponseEntity.ok()
 			.header(
 				HttpHeaders.SET_COOKIE,
-				AuthCookieProvider.createRefreshTokenCookie(tokenPair.RefreshToken()).toString()
+				AuthCookieProvider.createRefreshTokenCookie(tokenPair.refreshToken()).toString()
 			)
 			.body(
-				new TokenResponse(tokenPair.AccessToken())
+				new TokenResponse(tokenPair.accessToken())
 			);
 	}
 }

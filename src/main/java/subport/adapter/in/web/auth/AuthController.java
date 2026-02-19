@@ -31,10 +31,10 @@ public class AuthController {
 		return ResponseEntity.ok()
 			.header(
 				HttpHeaders.SET_COOKIE,
-				AuthCookieProvider.createRefreshTokenCookie(tokenPair.RefreshToken()).toString()
+				AuthCookieProvider.createRefreshTokenCookie(tokenPair.refreshToken()).toString()
 			)
 			.body(
-				new ReissueTokenResponse(tokenPair.AccessToken())
+				new ReissueTokenResponse(tokenPair.accessToken())
 			);
 	}
 
