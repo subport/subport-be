@@ -16,6 +16,12 @@ public class AdminPersistenceAdapter implements
 	private final SpringDataAdminRepository adminRepository;
 
 	@Override
+	public Admin loadAdmin(Long adminId) {
+		return adminRepository.findById(adminId)
+			.orElseThrow(() -> new CustomException(ErrorCode.ADMIN_NOT_FOUND));
+	}
+
+	@Override
 	public Admin loadAdmin(String email) {
 		return adminRepository.findByEmail(email)
 			.orElseThrow(() -> new CustomException(ErrorCode.ADMIN_NOT_FOUND));
