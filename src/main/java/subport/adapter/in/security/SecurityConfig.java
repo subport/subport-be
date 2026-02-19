@@ -20,6 +20,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import lombok.RequiredArgsConstructor;
 import subport.adapter.in.security.oauth2.CustomOAuth2UserService;
 import subport.adapter.in.security.oauth2.CustomSuccessHandler;
+import subport.admin.adapter.security.AdminJwtAuthFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -30,6 +31,7 @@ public class SecurityConfig {
 	private final CustomSuccessHandler successHandler;
 	private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 	private final JwtAuthFilter jwtAuthFilter;
+	private final AdminJwtAuthFilter adminJwtAuthFilter;
 
 	@Bean
 	@Order(1)
@@ -37,11 +39,12 @@ public class SecurityConfig {
 		return http
 			.securityMatcher("/admin/**")
 			.csrf(AbstractHttpConfigurer::disable)
-			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+			.cors(cors -> cors.configurationSource(corsConfigurationSource())) // 임시
 			.formLogin(AbstractHttpConfigurer::disable)
 			.httpBasic(AbstractHttpConfigurer::disable)
 			.authorizeHttpRequests(auth -> auth
-				.anyRequest().authenticated())
+				.anyRequest().permitAll())
+			.addFilterAt(adminJwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 			.sessionManagement(s -> s
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.build();
