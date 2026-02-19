@@ -16,6 +16,7 @@ public enum ErrorCode {
 	REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "기한이 만료된 Refresh 토큰입니다."),
 	REFRESH_TOKEN_NOT_NULL(HttpStatus.UNAUTHORIZED, "Refresh 토큰 값은 필수입니다."),
 	INVALID_TOKEN_FORMAT(HttpStatus.UNAUTHORIZED, "토큰 형식이 올바르지 않습니다."),
+	FORBIDDEN_ACCESS(HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),
 
 	// 요청 데이터 검증 관련
 	INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "입력값이 올바르지 않습니다."),
