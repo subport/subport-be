@@ -31,7 +31,7 @@ import subport.application.exception.ErrorCode;
 @RequiredArgsConstructor
 public class AdminJwtAuthFilter extends OncePerRequestFilter {
 
-	private static final List<String> EXCLUDE_PATTERNS = List.of("/admin/auth/refresh");
+	private static final List<String> EXCLUDE_PATTERNS = List.of("/admin/auth/login", "/admin/auth/refresh");
 	private static final AntPathMatcher pathMatcher = new AntPathMatcher();
 
 	private final AuthenticateAdminTokenService authenticateAdminTokenService;
