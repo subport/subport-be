@@ -70,4 +70,12 @@ public class AdminAuthService {
 
 		return new TokenPair(accessToken, newRefreshToken.getTokenValue());
 	}
+
+	public void logout(String refreshTokenValue) {
+		if (refreshTokenValue == null) {
+			throw new CustomException(ErrorCode.REFRESH_TOKEN_NOT_NULL);
+		}
+
+		refreshTokenPort.delete(refreshTokenValue);
+	}
 }

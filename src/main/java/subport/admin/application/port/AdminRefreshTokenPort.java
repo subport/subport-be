@@ -8,5 +8,7 @@ public interface AdminRefreshTokenPort {
 
 	RefreshToken load(String refreshToken);
 
+	void delete(String refreshTokenValue);
+
 	void delete(RefreshToken refreshToken);
 }

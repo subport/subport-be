@@ -51,4 +51,16 @@ public class AdminAuthController {
 				new TokenResponse(tokenPair.accessToken())
 			);
 	}
+
+	@PostMapping("/logout")
+	public ResponseEntity<Void> logout(@CookieValue(required = false) String refreshToken) {
+		adminAuthService.logout(refreshToken);
+
+		return ResponseEntity.ok()
+			.header(
+				HttpHeaders.SET_COOKIE,
+				AuthCookieProvider.deleteRefreshTokenCookie().toString()
+			)
+			.build();
+	}
 }
