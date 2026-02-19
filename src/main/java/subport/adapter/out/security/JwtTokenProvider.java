@@ -14,9 +14,10 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import subport.admin.application.port.TokenClaims;
 import subport.application.token.port.out.CreateAccessTokenPort;
 import subport.application.token.port.out.CreateRefreshTokenPort;
-import subport.application.token.port.out.ExtractSubjectIdPort;
+import subport.application.token.port.out.ExtractTokenClaimsPort;
 import subport.domain.token.RefreshToken;
 import subport.domain.token.Role;
 
@@ -24,7 +25,7 @@ import subport.domain.token.Role;
 public class JwtTokenProvider implements
 	CreateAccessTokenPort,
 	CreateRefreshTokenPort,
-	ExtractSubjectIdPort {
+	ExtractTokenClaimsPort {
 
 	private static final Duration ACCESS_TOKEN_EXPIRATION_TIME = Duration.ofHours(1);
 	private static final Duration REFRESH_TOKEN_EXPIRATION_TIME = Duration.ofDays(30);
@@ -78,9 +79,14 @@ public class JwtTokenProvider implements
 	}
 
 	@Override
-	public Long extractSubjectId(String token) {
-		return Long.valueOf(
-			parseClaims(token).getSubject()
+	public TokenClaims extract(String token) {
+		Claims claims = parseClaims(token);
+		String subjectId = claims.getSubject();
+		String role = String.valueOf(claims.get("role"));
+
+		return new TokenClaims(
+			Long.valueOf(subjectId),
+			Role.valueOf(role)
 		);
 	}
 
