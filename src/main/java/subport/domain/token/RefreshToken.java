@@ -23,7 +23,7 @@ public class RefreshToken {
 
 	private String tokenValue;
 
-	private Long memberId;
+	private Long subjectId;
 
 	private Instant issuedAt;
 
@@ -31,12 +31,12 @@ public class RefreshToken {
 
 	public RefreshToken(
 		String tokenValue,
-		Long memberId,
+		Long subjectId,
 		Instant issuedAt,
 		Instant expiration
 	) {
 		this.tokenValue = tokenValue;
-		this.memberId = memberId;
+		this.subjectId = subjectId;
 		this.issuedAt = issuedAt;
 		this.expiration = expiration;
 	}

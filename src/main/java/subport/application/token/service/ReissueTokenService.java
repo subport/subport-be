@@ -42,7 +42,7 @@ public class ReissueTokenService implements ReissueTokenUseCase {
 			throw new RefreshTokenExpiredException();
 		}
 
-		Long memberId = refreshToken.getMemberId();
+		Long memberId = refreshToken.getSubjectId();
 		String accessToken = createAccessTokenPort.createAccessToken(memberId, currentInstant, Role.USER);
 
 		deleteRefreshTokenPort.delete(refreshToken);
