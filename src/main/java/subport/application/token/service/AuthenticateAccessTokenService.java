@@ -7,13 +7,11 @@ import subport.application.exception.CustomException;
 import subport.application.exception.ErrorCode;
 import subport.application.token.port.in.AuthenticateAccessTokenUseCase;
 import subport.application.token.port.out.ExtractMemberIdPort;
-import subport.application.token.port.out.ValidateTokenPort;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticateAccessTokenService implements AuthenticateAccessTokenUseCase {
 
-	private final ValidateTokenPort validateTokenPort;
 	private final ExtractMemberIdPort extractMemberIdPort;
 
 	private static final String BEARER_PREFIX = "Bearer ";
@@ -25,7 +23,6 @@ public class AuthenticateAccessTokenService implements AuthenticateAccessTokenUs
 		}
 
 		String accessToken = authorizationHeader.split(" ")[1];
-		validateTokenPort.validate(accessToken);
 
 		return extractMemberIdPort.extractMemberId(accessToken);
 	}
