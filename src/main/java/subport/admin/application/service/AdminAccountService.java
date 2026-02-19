@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import subport.admin.application.dto.AdminProfileResponse;
 import subport.admin.application.dto.AdminUpdatePasswordRequest;
 import subport.admin.application.port.LoadAdminPort;
 import subport.admin.application.port.PasswordEncoderPort;
@@ -36,5 +37,15 @@ public class AdminAccountService {
 
 		String encoded = passwordEncoderPort.encode(newPassword);
 		admin.updatePassword(encoded);
+	}
+
+	@Transactional(readOnly = true)
+	public AdminProfileResponse getProfile(Long adminId) {
+		Admin admin = loadAdminPort.loadAdmin(adminId);
+
+		return new AdminProfileResponse(
+			admin.getNickname(),
+			admin.getEmail()
+		);
 	}
 }
