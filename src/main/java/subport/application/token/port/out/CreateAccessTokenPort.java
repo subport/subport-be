@@ -7,7 +7,7 @@ import subport.domain.token.Role;
 public interface CreateAccessTokenPort {
 
 	String createAccessToken(
-		Long memberId,
+		Long subjectId,
 		Instant now,
 		Role role
 	);

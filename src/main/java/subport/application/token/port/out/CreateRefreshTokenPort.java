@@ -8,7 +8,7 @@ import subport.domain.token.Role;
 public interface CreateRefreshTokenPort {
 
 	RefreshToken createRefreshToken(
-		Long memberId,
+		Long subjectId,
 		Instant now,
 		Role role
 	);

@@ -16,7 +16,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import subport.application.token.port.out.CreateAccessTokenPort;
 import subport.application.token.port.out.CreateRefreshTokenPort;
-import subport.application.token.port.out.ExtractMemberIdPort;
+import subport.application.token.port.out.ExtractSubjectIdPort;
 import subport.domain.token.RefreshToken;
 import subport.domain.token.Role;
 
@@ -24,7 +24,7 @@ import subport.domain.token.Role;
 public class JwtTokenProvider implements
 	CreateAccessTokenPort,
 	CreateRefreshTokenPort,
-	ExtractMemberIdPort {
+	ExtractSubjectIdPort {
 
 	private static final Duration ACCESS_TOKEN_EXPIRATION_TIME = Duration.ofHours(1);
 	private static final Duration REFRESH_TOKEN_EXPIRATION_TIME = Duration.ofDays(30);
@@ -43,12 +43,12 @@ public class JwtTokenProvider implements
 
 	@Override
 	public String createAccessToken(
-		Long memberId,
+		Long subjectId,
 		Instant now,
 		Role role
 	) {
 		return createToken(
-			memberId,
+			subjectId,
 			now,
 			ACCESS_TOKEN_EXPIRATION_TIME,
 			role
@@ -57,12 +57,12 @@ public class JwtTokenProvider implements
 
 	@Override
 	public RefreshToken createRefreshToken(
-		Long memberId,
+		Long subjectId,
 		Instant now,
 		Role role
 	) {
 		String refreshToken = createToken(
-			memberId,
+			subjectId,
 			now,
 			REFRESH_TOKEN_EXPIRATION_TIME,
 			role
@@ -71,27 +71,27 @@ public class JwtTokenProvider implements
 
 		return new RefreshToken(
 			refreshToken,
-			memberId,
+			subjectId,
 			claims.getIssuedAt().toInstant(),
 			claims.getExpiration().toInstant()
 		);
 	}
 
 	@Override
-	public Long extractMemberId(String token) {
+	public Long extractSubjectId(String token) {
 		return Long.valueOf(
 			parseClaims(token).getSubject()
 		);
 	}
 
 	private String createToken(
-		Long memberId,
+		Long subjectId,
 		Instant now,
 		Duration ttl,
 		Role role
 	) {
 		return Jwts.builder()
-			.subject(memberId.toString())
+			.subject(subjectId.toString())
 			.issuedAt(Date.from(now))
 			.expiration(Date.from(now.plus(ttl)))
 			.claim("role", role.name())
