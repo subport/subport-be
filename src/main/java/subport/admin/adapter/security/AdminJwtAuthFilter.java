@@ -73,6 +73,11 @@ public class AdminJwtAuthFilter extends OncePerRequestFilter {
 
 	@Override
 	protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {
+		// 임시 설정
+		if (!request.getRequestURI().startsWith("/admin")) {
+			return true;
+		}
+
 		return EXCLUDE_PATTERNS.stream()
 			.anyMatch(pattern -> pathMatcher.match(pattern, request.getServletPath()));
 	}
