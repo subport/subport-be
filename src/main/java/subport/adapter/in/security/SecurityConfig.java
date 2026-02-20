@@ -43,7 +43,8 @@ public class SecurityConfig {
 			.formLogin(AbstractHttpConfigurer::disable)
 			.httpBasic(AbstractHttpConfigurer::disable)
 			.authorizeHttpRequests(auth -> auth
-				.anyRequest().permitAll())
+				.requestMatchers("/admin/auth/login", "/admin/auth/refresh").permitAll()
+				.anyRequest().authenticated())
 			.addFilterAt(adminJwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 			.sessionManagement(s -> s
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
