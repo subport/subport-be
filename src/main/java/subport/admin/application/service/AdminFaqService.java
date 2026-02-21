@@ -7,13 +7,24 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import subport.admin.application.dto.AdminFaqResponse;
 import subport.admin.application.dto.AdminFaqsResponse;
+import subport.admin.application.dto.AdminWriteFaqRequest;
 import subport.admin.application.port.AdminFaqPort;
+import subport.domain.faq.Faq;
 
 @Service
 @RequiredArgsConstructor
 public class AdminFaqService {
 
 	private final AdminFaqPort faqPort;
+
+	public void writeFaq(AdminWriteFaqRequest request) {
+		faqPort.saveFaq(
+			new Faq(
+				request.question(),
+				request.answer()
+			)
+		);
+	}
 
 	@Transactional(readOnly = true)
 	public AdminFaqsResponse getFaqs() {

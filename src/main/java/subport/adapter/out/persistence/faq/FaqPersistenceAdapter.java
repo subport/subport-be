@@ -19,6 +19,11 @@ public class FaqPersistenceAdapter implements
 	private final SpringDataFaqRepository faqRepository;
 
 	@Override
+	public void saveFaq(Faq faq) {
+		faqRepository.save(faq);
+	}
+
+	@Override
 	public List<Faq> load(Sort sort) {
 		return faqRepository.findAll(sort);
 	}

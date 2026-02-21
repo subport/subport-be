@@ -8,5 +8,7 @@ import subport.domain.faq.Faq;
 
 public interface AdminFaqPort {
 
+	void saveFaq(Faq faq);
+
 	List<Faq> load(Sort sort);
 }
