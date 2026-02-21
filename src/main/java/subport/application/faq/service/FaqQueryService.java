@@ -1,5 +1,6 @@
 package subport.application.faq.service;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,10 @@ public class FaqQueryService implements FaqQueryUseCase {
 
 	@Override
 	public GetFaqsResponse getFaqs() {
+		Sort sort = Sort.by(Sort.Direction.ASC, "id");
+
 		return new GetFaqsResponse(
-			loadFaqPort.load().stream()
+			loadFaqPort.load(sort).stream()
 				.map(GetFaqResponse::from)
 				.toList()
 		);
