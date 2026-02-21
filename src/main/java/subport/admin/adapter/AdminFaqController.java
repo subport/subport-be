@@ -1,6 +1,7 @@
 package subport.admin.adapter;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,6 +44,14 @@ public class AdminFaqController {
 		@PathVariable("id") Long faqId
 	) {
 		faqService.updateFaq(request, faqId);
+
+		return ResponseEntity.noContent()
+			.build();
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deleteFaq(@PathVariable("id") Long faqId) {
+		faqService.deleteFaq(faqId);
 
 		return ResponseEntity.noContent()
 			.build();

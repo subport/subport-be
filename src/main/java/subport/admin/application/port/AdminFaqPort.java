@@ -13,4 +13,6 @@ public interface AdminFaqPort {
 	Faq load(Long id);
 
 	List<Faq> load(Sort sort);
+
+	void deleteFaq(Long id);
 }

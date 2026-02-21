@@ -52,4 +52,8 @@ public class AdminFaqService {
 			request.answer()
 		);
 	}
+
+	public void deleteFaq(Long faqId) {
+		faqPort.deleteFaq(faqId);
+	}
 }

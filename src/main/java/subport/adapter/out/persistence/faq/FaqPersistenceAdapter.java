@@ -33,4 +33,9 @@ public class FaqPersistenceAdapter implements
 	public List<Faq> load(Sort sort) {
 		return faqRepository.findAll(sort);
 	}
+
+	@Override
+	public void deleteFaq(Long id) {
+		faqRepository.deleteById(id);
+	}
 }
