@@ -7,11 +7,13 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import subport.admin.application.dto.AdminFaqResponse;
 import subport.admin.application.dto.AdminFaqsResponse;
+import subport.admin.application.dto.AdminUpdateFaqRequest;
 import subport.admin.application.dto.AdminWriteFaqRequest;
 import subport.admin.application.port.AdminFaqPort;
 import subport.domain.faq.Faq;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class AdminFaqService {
 
@@ -35,6 +37,19 @@ public class AdminFaqService {
 			faqPort.load(sort).stream()
 				.map(AdminFaqResponse::from)
 				.toList()
+		);
+	}
+
+	public void updateFaq(AdminUpdateFaqRequest request, Long faqId) {
+		Faq faq = faqPort.load(faqId);
+
+		if (faq == null) {
+			return;
+		}
+
+		faq.update(
+			request.question(),
+			request.answer()
 		);
 	}
 }

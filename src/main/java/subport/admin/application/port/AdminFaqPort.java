@@ -10,5 +10,7 @@ public interface AdminFaqPort {
 
 	void saveFaq(Faq faq);
 
+	Faq load(Long id);
+
 	List<Faq> load(Sort sort);
 }

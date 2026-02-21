@@ -31,4 +31,9 @@ public class Faq extends BaseTimeEntity {
 		this.question = question;
 		this.answer = answer;
 	}
+
+	public void update(String question, String answer) {
+		this.question = question;
+		this.answer = answer;
+	}
 }

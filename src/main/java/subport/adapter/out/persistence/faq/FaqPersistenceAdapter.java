@@ -24,6 +24,12 @@ public class FaqPersistenceAdapter implements
 	}
 
 	@Override
+	public Faq load(Long id) {
+		return faqRepository.findById(id)
+			.orElse(null);
+	}
+
+	@Override
 	public List<Faq> load(Sort sort) {
 		return faqRepository.findAll(sort);
 	}
