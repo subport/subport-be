@@ -30,8 +30,7 @@ public class AdminFaqService {
 
 	@Transactional(readOnly = true)
 	public AdminFaqsResponse getFaqs() {
-		Sort sort = Sort.by(Sort.Direction.DESC, "lastModifiedAt")
-			.and(Sort.by(Sort.Direction.ASC, "id"));
+		Sort sort = Sort.by(Sort.Direction.ASC, "id");
 
 		return new AdminFaqsResponse(
 			faqPort.load(sort).stream()
