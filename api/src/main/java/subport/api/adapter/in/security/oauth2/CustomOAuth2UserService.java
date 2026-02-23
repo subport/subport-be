@@ -1,0 +1,36 @@
+package subport.api.adapter.in.security.oauth2;
+
+import java.time.LocalDateTime;
+
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Component;
+
+import lombok.RequiredArgsConstructor;
+import subport.api.application.member.port.in.SyncMemberUseCase;
+import subport.api.application.member.port.in.dto.LoginMemberInfo;
+import subport.api.application.member.port.in.dto.SyncMemberInfo;
+
+@Component
+@RequiredArgsConstructor
+public class CustomOAuth2UserService extends DefaultOAuth2UserService {
+
+	private final SyncMemberUseCase syncMemberUseCase;
+
+	@Override
+	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+		OAuth2User oAuth2User = super.loadUser(userRequest);
+
+		KakaoMemberInfo kakaoMemberInfo = KakaoMemberInfo.from(oAuth2User.getAttributes(), LocalDateTime.now());
+		LoginMemberInfo loginMemberInfo = kakaoMemberInfo.toLoginMemberInfo();
+
+		SyncMemberInfo syncMemberInfo = syncMemberUseCase.sync(loginMemberInfo);
+
+		return new CustomOAuth2User(
+			syncMemberInfo.id(),
+			syncMemberInfo.firstLogin()
+		);
+	}
+}

@@ -1,0 +1,30 @@
+package subport.api.adapter.out.persistence.exchangeRate;
+
+import java.time.LocalDate;
+
+import org.springframework.stereotype.Component;
+
+import lombok.RequiredArgsConstructor;
+import subport.api.application.exchangeRate.port.out.LoadExchangeRatePort;
+import subport.api.application.exchangeRate.port.out.SaveExchangeRatePort;
+import subport.domain.exchangeRate.ExchangeRate;
+
+@Component
+@RequiredArgsConstructor
+public class ExchangeRatePersistenceAdapter implements
+	SaveExchangeRatePort,
+	LoadExchangeRatePort {
+
+	private final SpringDataExchangeRateRepository exchangeRateRepository;
+
+	@Override
+	public void save(ExchangeRate exchangeRate) {
+		exchangeRateRepository.save(exchangeRate);
+	}
+
+	@Override
+	public ExchangeRate load(LocalDate requestDate) {
+		return exchangeRateRepository.findByRequestDate(requestDate)
+			.orElse(null);
+	}
+}

@@ -1,0 +1,38 @@
+package subport.admin.adapter.out.persistence.faq;
+
+import java.util.List;
+
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Component;
+
+import lombok.RequiredArgsConstructor;
+import subport.admin.application.faq.FaqPort;
+import subport.domain.faq.Faq;
+
+@Component
+@RequiredArgsConstructor
+public class FaqPersistenceAdapter implements FaqPort {
+
+	private final SpringDataFaqRepository faqRepository;
+
+	@Override
+	public void saveFaq(Faq faq) {
+		faqRepository.save(faq);
+	}
+
+	@Override
+	public Faq load(Long id) {
+		return faqRepository.findById(id)
+			.orElse(null);
+	}
+
+	@Override
+	public List<Faq> load(Sort sort) {
+		return faqRepository.findAll(sort);
+	}
+
+	@Override
+	public void deleteFaq(Long id) {
+		faqRepository.deleteById(id);
+	}
+}

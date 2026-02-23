@@ -1,0 +1,7 @@
+package subport.api.application.member.port.in.dto;
+
+public record GetReminderSettingsResponse(
+	boolean paymentReminderEnabled,
+	int reminderDaysBefore
+) {
+}

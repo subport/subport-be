@@ -1,0 +1,8 @@
+package subport.api.application.member.port.out;
+
+import subport.domain.member.Member;
+
+public interface SaveMemberPort {
+
+	Long save(Member member);
+}
