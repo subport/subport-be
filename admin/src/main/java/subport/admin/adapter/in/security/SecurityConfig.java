@@ -33,7 +33,7 @@ public class SecurityConfig {
 			.formLogin(AbstractHttpConfigurer::disable)
 			.httpBasic(AbstractHttpConfigurer::disable)
 			.authorizeHttpRequests(auth -> auth
-				.requestMatchers("/admin/auth/login", "/admin/auth/refresh").permitAll()
+				.requestMatchers("/admin/auth/login", "/admin/auth/refresh", "/h2-console/**").permitAll()
 				.anyRequest().authenticated())
 			.addFilterAt(adminJwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 			.sessionManagement(s -> s
