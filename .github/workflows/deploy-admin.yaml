@@ -60,6 +60,7 @@ jobs:
           key: ${{ secrets.ORACLE_SSH_KEY }}
           script: |
             cd ~/subport
+            echo ${{ secrets.DOCKER_HUB_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
             docker compose pull admin
             docker compose up -d --no-deps admin
             docker image prune -f
