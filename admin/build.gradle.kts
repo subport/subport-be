@@ -19,3 +19,7 @@ dependencies {
 
     testImplementation("org.springframework.security:spring-security-test")
 }
+
+tasks.bootJar {
+    archiveFileName = "admin.jar"
+}
