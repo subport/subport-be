@@ -4,6 +4,6 @@ ENV TZ=Asia/Seoul
 
 WORKDIR /app
 
-COPY build/libs/admin.jar admin.jar
+COPY admin/build/libs/admin.jar admin.jar
 
 ENTRYPOINT ["java", "-jar", "admin.jar"]
