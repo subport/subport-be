@@ -55,7 +55,7 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 		FROM MemberSubscription ms
 		WHERE ms.active = true
 		AND ms.subscription.systemProvided = true
-		GROUP BY ms.subscription.name
+		GROUP BY ms.subscription.name, ms.subscription.logoImageUrl
 		ORDER BY COUNT(ms) DESC, ms.subscription.name ASC
 		""")
 	List<DashboardTopSubscriptionResponse> countActiveMemberSubscriptionsBySubscription(Pageable top5);
