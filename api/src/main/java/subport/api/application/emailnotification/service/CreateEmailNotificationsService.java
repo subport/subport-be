@@ -1,5 +1,6 @@
 package subport.api.application.emailnotification.service;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.List;
@@ -34,6 +35,11 @@ public class CreateEmailNotificationsService implements CreateEmailNotifications
 				Subscription subscription = memberSubscription.getSubscription();
 				Plan plan = memberSubscription.getPlan();
 
+				BigDecimal amount = plan.getAmount();
+				if (memberSubscription.isDutchPay()) {
+					amount = memberSubscription.getDutchPayAmount();
+				}
+
 				return new EmailNotification(
 					memberSubscription.getId(),
 					memberSubscription.getNextPaymentDate(),
@@ -42,7 +48,7 @@ public class CreateEmailNotificationsService implements CreateEmailNotifications
 					member.getEmail(),
 					subscription.getName(),
 					subscription.getLogoImageUrl(),
-					new DecimalFormat("#,###").format(plan.getAmount()),
+					new DecimalFormat("#,###").format(amount),
 					plan.getAmountUnit().getDisplayName(),
 					plan.getDurationMonths(),
 					SendingStatus.PENDING,
