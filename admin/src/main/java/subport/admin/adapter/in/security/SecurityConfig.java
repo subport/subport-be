@@ -53,6 +53,7 @@ public class SecurityConfig {
 		configuration.setAllowedHeaders(List.of("*"));
 		configuration.setExposedHeaders(List.of("Authorization"));
 		configuration.setAllowCredentials(true);
+		configuration.setMaxAge(3600L); // preflight 캐싱
 
 		UrlBasedCorsConfigurationSource configurationSource = new UrlBasedCorsConfigurationSource();
 		configurationSource.registerCorsConfiguration("/**", configuration);
