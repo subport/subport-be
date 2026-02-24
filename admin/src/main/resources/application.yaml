@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: subport
+
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+    open-in-view: false
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+oci:
+  bucket-name: ${OCI_BUCKET_NAME}
+  namespace: ${OCI_NAMESPACE}
+  region: ${OCI_REGION}
+  secret-key: ${OCI_SECRET_KEY}
+  access-key: ${OCI_ACCESS_KEY}
+
+jwt:
+  secret: ${ADMIN_JWT_SECRET}
