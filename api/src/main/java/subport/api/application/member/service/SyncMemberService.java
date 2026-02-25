@@ -28,6 +28,8 @@ public class SyncMemberService implements SyncMemberUseCase {
 			return new SyncMemberInfo(newMemberId, true);
 		}
 
+		member.updateLastActiveAt(loginMemberInfo.loginAt());
+
 		return new SyncMemberInfo(member.getId(), false);
 	}
 }

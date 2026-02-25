@@ -1,6 +1,7 @@
 package subport.api.application.auth.service;
 
 import java.time.Instant;
+import java.time.ZoneId;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,9 +14,11 @@ import subport.api.application.auth.port.out.DeleteRefreshTokenPort;
 import subport.api.application.auth.port.out.LoadRefreshTokenPort;
 import subport.api.application.auth.port.out.SaveRefreshTokenPort;
 import subport.api.application.exception.ApiErrorCode;
+import subport.api.application.member.port.out.LoadMemberPort;
 import subport.common.exception.CustomException;
 import subport.common.exception.RefreshTokenExpiredException;
 import subport.common.jwt.dto.TokenPair;
+import subport.domain.member.Member;
 import subport.domain.token.RefreshToken;
 import subport.domain.token.Role;
 
@@ -29,6 +32,7 @@ public class ReissueTokenService implements ReissueTokenUseCase {
 	private final CreateAccessTokenPort createAccessTokenPort;
 	private final CreateRefreshTokenPort createRefreshTokenPort;
 	private final SaveRefreshTokenPort saveRefreshTokenPort;
+	private final LoadMemberPort loadMemberPort;
 
 	@Override
 	public TokenPair reissue(String refreshTokenValue, Instant currentInstant) {
@@ -48,6 +52,11 @@ public class ReissueTokenService implements ReissueTokenUseCase {
 		deleteRefreshTokenPort.delete(refreshToken);
 		refreshToken = createRefreshTokenPort.createRefreshToken(memberId, currentInstant, Role.USER);
 		saveRefreshTokenPort.save(refreshToken);
+
+		Member member = loadMemberPort.load(memberId);
+		member.updateLastActiveAt(
+			currentInstant.atZone(ZoneId.of("Asia/Seoul")).toLocalDateTime()
+		);
 
 		return new TokenPair(accessToken, refreshToken.getTokenValue());
 	}
