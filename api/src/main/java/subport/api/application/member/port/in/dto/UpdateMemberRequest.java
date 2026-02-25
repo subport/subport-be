@@ -9,6 +9,7 @@ public record UpdateMemberRequest(
 	@Size(max = 10)
 	String nickname,
 
+	@NotBlank
 	@Email
 	String email
 ) {
