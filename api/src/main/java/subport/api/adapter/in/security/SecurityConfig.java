@@ -16,14 +16,17 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import lombok.RequiredArgsConstructor;
+import subport.api.adapter.in.security.oauth2.CustomAuthorizationRequestResolver;
 import subport.api.adapter.in.security.oauth2.CustomOAuth2UserService;
 import subport.api.adapter.in.security.oauth2.CustomSuccessHandler;
+import subport.common.constants.ClientUrlConstants;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+	private final CustomAuthorizationRequestResolver authorizationRequestResolver;
 	private final CustomOAuth2UserService oAuth2UserService;
 	private final CustomSuccessHandler successHandler;
 	private final CustomAuthenticationEntryPoint authenticationEntryPoint;
@@ -37,6 +40,8 @@ public class SecurityConfig {
 			.formLogin(AbstractHttpConfigurer::disable)
 			.httpBasic(AbstractHttpConfigurer::disable)
 			.oauth2Login(oauth2 -> oauth2
+				.authorizationEndpoint(auth -> auth
+					.authorizationRequestResolver(authorizationRequestResolver))
 				.userInfoEndpoint(userInfo -> userInfo
 					.userService(oAuth2UserService))
 				.successHandler(successHandler))
@@ -56,7 +61,11 @@ public class SecurityConfig {
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(List.of("https://localhost:5173", "http://localhost:5173"));
+		configuration.setAllowedOrigins(List.of(
+			ClientUrlConstants.LOCAL_HTTP_ORIGIN,
+			ClientUrlConstants.LOCAL_HTTPS_ORIGIN,
+			ClientUrlConstants.PROD_ORIGIN
+		));
 		configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 		configuration.setAllowedHeaders(List.of("*"));
 		configuration.setExposedHeaders(List.of("Authorization"));
