@@ -16,11 +16,14 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import lombok.RequiredArgsConstructor;
+import subport.common.constants.ClientUrlConstants;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+	private static final String ADMIN_PROD_ORIGIN = "https://admin.subport.site";
 
 	private final AdminJwtAuthFilter adminJwtAuthFilter;
 
@@ -45,9 +48,9 @@ public class SecurityConfig {
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(List.of(
-			"https://localhost:5173",
-			"http://localhost:5173",
-			"https://admin.subport.site"
+			ClientUrlConstants.LOCAL_HTTP_ORIGIN,
+			ClientUrlConstants.LOCAL_HTTPS_ORIGIN,
+			ADMIN_PROD_ORIGIN
 		));
 		configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 		configuration.setAllowedHeaders(List.of("*"));
