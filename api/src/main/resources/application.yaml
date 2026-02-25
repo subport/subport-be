@@ -48,11 +48,6 @@ spring:
             enable: true
             required: true
 
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-
 oci:
   bucket-name: ${OCI_BUCKET_NAME}
   namespace: ${OCI_NAMESPACE}
