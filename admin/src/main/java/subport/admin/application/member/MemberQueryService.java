@@ -64,7 +64,7 @@ public class MemberQueryService {
 				memberSubscriptionCountMap.getOrDefault(member.getId(), 0L),
 				CustommemberSubscriptionCountMap.getOrDefault(member.getId(), 0L),
 				member.getReminderDaysBefore(),
-				member.getLastLoginAt(),
+				member.getLastActiveAt(),
 				member.getCreatedAt(),
 				member.isDeleted()
 			))

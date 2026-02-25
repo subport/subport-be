@@ -41,7 +41,7 @@ public interface SpringDataMemberRepository extends JpaRepository<Member, Long> 
 		SELECT count(m)
 		FROM Member m
 		WHERE (
-			(m.lastLoginAt >= :start AND m.lastLoginAt < :end)
+			(m.lastActiveAt >= :start AND m.lastActiveAt < :end)
 			OR
 			(m.lastModifiedAt >= :start AND m.lastModifiedAt < :end)
 		)

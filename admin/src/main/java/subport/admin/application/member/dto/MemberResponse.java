@@ -9,7 +9,7 @@ public record MemberResponse(
 	Long memberSubscriptionCount,
 	Long customSubscriptionCount,
 	Integer reminderDaysBefore,
-	LocalDateTime lastLoginAt,
+	LocalDateTime lastActiveAt,
 	LocalDateTime createdAt,
 	boolean deleted
 ) {

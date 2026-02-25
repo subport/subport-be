@@ -33,7 +33,7 @@ public class Member extends BaseTimeEntity {
 
 	private int reminderDaysBefore;
 
-	private LocalDateTime lastLoginAt;
+	private LocalDateTime lastActiveAt;
 
 	private boolean deleted;
 
@@ -48,7 +48,7 @@ public class Member extends BaseTimeEntity {
 		this.email = email;
 		this.paymentReminderEnabled = false;
 		this.reminderDaysBefore = 3;
-		this.lastLoginAt = now;
+		this.lastActiveAt = now;
 		this.deleted = false;
 	}
 
@@ -73,8 +73,8 @@ public class Member extends BaseTimeEntity {
 		}
 	}
 
-	public void updateLastLoginAt(LocalDateTime now) {
-		this.lastLoginAt = now;
+	public void updateLastActiveAt(LocalDateTime now) {
+		this.lastActiveAt = now;
 	}
 
 	public void deactivate() {
