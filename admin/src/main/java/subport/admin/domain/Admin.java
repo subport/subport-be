@@ -1,5 +1,7 @@
 package subport.admin.domain;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,7 +28,13 @@ public class Admin extends BaseTimeEntity {
 
 	private String nickname;
 
+	private LocalDateTime lastActiveAt;
+
 	public void updatePassword(String newPassword) {
 		this.password = newPassword;
+	}
+
+	public void updateLastActiveAt(LocalDateTime now) {
+		this.lastActiveAt = now;
 	}
 }

@@ -1,6 +1,7 @@
 package subport.admin.application.auth;
 
 import java.time.Instant;
+import java.time.ZoneId;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +41,10 @@ public class AuthService {
 
 		refreshTokenPort.save(refreshToken);
 
+		admin.updateLastActiveAt(
+			now.atZone(ZoneId.of("Asia/Seoul")).toLocalDateTime()
+		);
+
 		return new TokenPair(
 			accessToken,
 			refreshToken.getTokenValue()
@@ -64,6 +69,11 @@ public class AuthService {
 		refreshTokenPort.save(newRefreshToken);
 
 		refreshTokenPort.delete(refreshToken);
+
+		Admin admin = loadAdminPort.loadAdmin(adminId);
+		admin.updateLastActiveAt(
+			now.atZone(ZoneId.of("Asia/Seoul")).toLocalDateTime()
+		);
 
 		return new TokenPair(accessToken, newRefreshToken.getTokenValue());
 	}
