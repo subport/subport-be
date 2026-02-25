@@ -50,7 +50,7 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 		SELECT new subport.admin.application.dashboard.dto.DashboardTopSubscriptionResponse(
 			ms.subscription.name,
 			ms.subscription.logoImageUrl,
-			COUNT(ms)
+			COUNT(DISTINCT ms.member.id)
 		)
 		FROM MemberSubscription ms
 		WHERE ms.active = true
@@ -63,7 +63,7 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 	@Query("""
 		SELECT new subport.admin.application.dashboard.dto.DashboardTopCustomSubscriptionResponse(
 		    ms.subscription.normalizedName,
-		    COUNT(ms)
+		    COUNT(DISTINCT ms.member.id)
 		)
 		FROM MemberSubscription ms
 		WHERE ms.active = true
