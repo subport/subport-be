@@ -40,8 +40,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 		@NonNull FilterChain filterChain
 	) throws ServletException, IOException {
 		log.info("In doFilterInternal : {}", request.getRequestURI());
+		log.error("In doFilterInternal : {}", request.getRequestURI());
+		System.out.println("In doFilterInternal : " + request.getRequestURI());
 		Long memberId;
 		try {
+			System.out.println(request.getRequestURI());
 			memberId = authenticateAccessTokenUseCase.authenticateAndGetMemberId(
 				request.getHeader("Authorization")
 			);

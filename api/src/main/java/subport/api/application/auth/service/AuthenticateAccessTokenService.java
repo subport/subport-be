@@ -24,6 +24,8 @@ public class AuthenticateAccessTokenService implements AuthenticateAccessTokenUs
 	public Long authenticateAndGetMemberId(String authorizationHeader) {
 		if (authorizationHeader == null || !authorizationHeader.startsWith(BEARER_PREFIX)) {
 			log.info("Authorization header is invalid {}", authorizationHeader);
+			log.error("Authorization header is invalid {}", authorizationHeader);
+			System.out.println(authorizationHeader);
 			throw new CustomException(ApiErrorCode.INVALID_AUTHORIZATION_HEADER);
 		}
 
