@@ -18,12 +18,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import subport.api.adapter.in.security.oauth2.CustomOAuth2User;
 import subport.api.application.auth.port.in.AuthenticateAccessTokenUseCase;
 import subport.common.exception.CustomException;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthFilter extends OncePerRequestFilter {
 
 	private static final List<String> EXCLUDE_PATTERNS = List.of("/api/auth/refresh", "/h2-console/**");
@@ -37,6 +39,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 		@NonNull HttpServletResponse response,
 		@NonNull FilterChain filterChain
 	) throws ServletException, IOException {
+		log.info("In doFilterInternal : {}", request.getRequestURI());
 		Long memberId;
 		try {
 			memberId = authenticateAccessTokenUseCase.authenticateAndGetMemberId(

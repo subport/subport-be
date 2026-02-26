@@ -13,6 +13,7 @@ import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import subport.api.application.exception.ApiErrorCode;
 import subport.common.exception.CustomException;
 import subport.common.exception.ErrorCode;
@@ -20,6 +21,7 @@ import subport.common.exception.ErrorResponse;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
 	private final ObjectMapper objectMapper;
@@ -39,6 +41,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
 		// ExpiredJwtException을 제외한 나머지 JwtException 처리
 		if (exception instanceof JwtException) {
+			log.info("etc JwtException", ((JwtException)exception).getCause());
 			setErrorResponse(response, ApiErrorCode.INVALID_TOKEN_FORMAT);
 			return;
 		}

@@ -3,6 +3,7 @@ package subport.api.application.auth.service;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import subport.api.application.auth.port.in.AuthenticateAccessTokenUseCase;
 import subport.api.application.auth.port.out.ExtractTokenClaimsPort;
 import subport.api.application.exception.ApiErrorCode;
@@ -12,6 +13,7 @@ import subport.domain.token.Role;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticateAccessTokenService implements AuthenticateAccessTokenUseCase {
 
 	private final ExtractTokenClaimsPort extractTokenClaimsPort;
@@ -21,6 +23,7 @@ public class AuthenticateAccessTokenService implements AuthenticateAccessTokenUs
 	@Override
 	public Long authenticateAndGetMemberId(String authorizationHeader) {
 		if (authorizationHeader == null || !authorizationHeader.startsWith(BEARER_PREFIX)) {
+			log.info("Authorization header is invalid {}", authorizationHeader);
 			throw new CustomException(ApiErrorCode.INVALID_AUTHORIZATION_HEADER);
 		}
 
