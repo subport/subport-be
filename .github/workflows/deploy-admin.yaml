@@ -63,4 +63,4 @@ jobs:
             echo ${{ secrets.DOCKER_HUB_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
             docker compose pull admin
             docker compose up -d --no-deps admin
-            docker image prune -f
+            docker image prune -f || true
