@@ -41,9 +41,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
 		// ExpiredJwtException을 제외한 나머지 JwtException 처리
 		if (exception instanceof JwtException) {
-			log.info("etc JwtException", ((JwtException)exception).getCause());
-			log.error(String.valueOf(((JwtException)exception).getCause()));
-			System.out.println(((JwtException)exception).getCause());
 			setErrorResponse(response, ApiErrorCode.INVALID_TOKEN_FORMAT);
 			return;
 		}

@@ -19,9 +19,6 @@ public class AuthenticateTokenService {
 
 	public Long authenticateAndGetAdminId(String authorizationHeader) {
 		if (authorizationHeader == null || !authorizationHeader.startsWith(BEARER_PREFIX)) {
-			log.info("Authorization header is invalid {}", authorizationHeader);
-			log.error("Authorization header is invalid {}", authorizationHeader);
-			System.out.println(authorizationHeader);
 			throw new subport.common.exception.CustomException(AdminErrorCode.INVALID_AUTHORIZATION_HEADER);
 		}
 
