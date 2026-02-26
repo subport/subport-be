@@ -22,12 +22,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import subport.admin.application.auth.AuthenticateTokenService;
 import subport.admin.application.exception.AdminErrorCode;
 import subport.common.exception.ErrorCode;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class AdminJwtAuthFilter extends OncePerRequestFilter {
 
 	private static final List<String> EXCLUDE_PATTERNS = List.of(
@@ -46,6 +48,9 @@ public class AdminJwtAuthFilter extends OncePerRequestFilter {
 		@NonNull HttpServletResponse response,
 		@NonNull FilterChain filterChain
 	) throws ServletException, IOException {
+		log.info("In doFilterInternal : {}", request.getRequestURI());
+		log.error("In doFilterInternal : {}", request.getRequestURI());
+		System.out.println("In doFilterInternal : " + request.getRequestURI());
 		Long adminId;
 		try {
 			adminId = authenticateTokenService.authenticateAndGetAdminId(

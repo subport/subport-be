@@ -3,12 +3,14 @@ package subport.admin.application.auth;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import subport.admin.application.exception.AdminErrorCode;
 import subport.common.jwt.dto.TokenClaims;
 import subport.domain.token.Role;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticateTokenService {
 
 	private final ExtractTokenClaimsPort extractTokenClaimsPort;
@@ -17,6 +19,9 @@ public class AuthenticateTokenService {
 
 	public Long authenticateAndGetAdminId(String authorizationHeader) {
 		if (authorizationHeader == null || !authorizationHeader.startsWith(BEARER_PREFIX)) {
+			log.info("Authorization header is invalid {}", authorizationHeader);
+			log.error("Authorization header is invalid {}", authorizationHeader);
+			System.out.println(authorizationHeader);
 			throw new subport.common.exception.CustomException(AdminErrorCode.INVALID_AUTHORIZATION_HEADER);
 		}
 
