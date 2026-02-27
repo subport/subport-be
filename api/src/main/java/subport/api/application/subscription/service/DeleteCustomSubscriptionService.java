@@ -1,5 +1,6 @@
 package subport.api.application.subscription.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -7,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import subport.api.application.exception.ApiErrorCode;
 import subport.api.application.plan.port.out.DeletePlanPort;
 import subport.api.application.subscription.port.in.DeleteCustomSubscriptionUseCase;
+import subport.api.application.subscription.port.out.DeleteCustomSubscriptionImagePort;
 import subport.api.application.subscription.port.out.DeleteSubscriptionPort;
 import subport.api.application.subscription.port.out.LoadSubscriptionPort;
 import subport.common.exception.CustomException;
@@ -20,6 +22,10 @@ public class DeleteCustomSubscriptionService implements DeleteCustomSubscription
 	private final LoadSubscriptionPort loadSubscriptionPort;
 	private final DeleteSubscriptionPort deleteSubscriptionPort;
 	private final DeletePlanPort deletePlanPort;
+	private final DeleteCustomSubscriptionImagePort deleteCustomSubscriptionImagePort;
+
+	@Value("${subscription.default-logo-url}")
+	private String defaultLogoImageUrl;
 
 	@Override
 	public void delete(Long memberId, Long subscriptionId) {
@@ -33,11 +39,13 @@ public class DeleteCustomSubscriptionService implements DeleteCustomSubscription
 			throw new CustomException(ApiErrorCode.SUBSCRIPTION_WRITE_FORBIDDEN);
 		}
 
-		// 관련 플랜 삭제
 		deletePlanPort.deleteBySubscriptionId(subscriptionId);
 
-		deleteSubscriptionPort.delete(subscription);
+		String logoImageUrl = subscription.getLogoImageUrl();
+		if (!defaultLogoImageUrl.equals(logoImageUrl)) {
+			deleteCustomSubscriptionImagePort.delete(logoImageUrl);
+		}
 
-		// 버킷에서 이미지 삭제 (추가 예정)
+		deleteSubscriptionPort.delete(subscription);
 	}
 }

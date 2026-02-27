@@ -1,5 +1,6 @@
 package subport.api.application.subscription.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,6 +10,7 @@ import subport.api.application.exception.ApiErrorCode;
 import subport.api.application.subscription.port.in.UpdateCustomSubscriptionUseCase;
 import subport.api.application.subscription.port.in.dto.GetSubscriptionResponse;
 import subport.api.application.subscription.port.in.dto.UpdateCustomSubscriptionRequest;
+import subport.api.application.subscription.port.out.DeleteCustomSubscriptionImagePort;
 import subport.api.application.subscription.port.out.LoadSubscriptionPort;
 import subport.api.application.subscription.port.out.UploadCustomSubscriptionImagePort;
 import subport.common.exception.CustomException;
@@ -23,13 +25,17 @@ public class UpdateCustomSubscriptionService implements UpdateCustomSubscription
 	private final LoadSubscriptionPort loadSubscriptionPort;
 	private final UploadCustomSubscriptionImagePort uploadSubscriptionImagePort;
 	private final SubscriptionQueryService subscriptionQueryService;
+	private final DeleteCustomSubscriptionImagePort deleteCustomSubscriptionImagePort;
+
+	@Value("${subscription.default-logo-url}")
+	private String defaultLogoImageUrl;
 
 	@Override
 	public GetSubscriptionResponse update(
 		Long memberId,
 		Long subscriptionId,
 		UpdateCustomSubscriptionRequest request,
-		MultipartFile image
+		MultipartFile newImage
 	) {
 		Subscription subscription = loadSubscriptionPort.loadSubscription(subscriptionId);
 
@@ -42,9 +48,12 @@ public class UpdateCustomSubscriptionService implements UpdateCustomSubscription
 		}
 
 		String logoImageUrl = subscription.getLogoImageUrl();
-		if (image != null) {
-			logoImageUrl = uploadSubscriptionImagePort.upload(image);
-			// 기존 이미지 버킷에서 삭제 (추가 예정)
+		if (newImage != null) {
+			if (!defaultLogoImageUrl.equals(logoImageUrl)) {
+				deleteCustomSubscriptionImagePort.delete(logoImageUrl);
+			}
+
+			logoImageUrl = uploadSubscriptionImagePort.upload(newImage);
 		}
 
 		subscription.update(
