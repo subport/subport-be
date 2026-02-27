@@ -2,8 +2,10 @@ package subport.api.adapter.in.web.member;
 
 import java.time.LocalDate;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import subport.api.adapter.in.security.oauth2.CustomOAuth2User;
+import subport.api.adapter.in.web.AuthCookieProvider;
+import subport.api.application.member.port.in.DeleteMemberUseCase;
 import subport.api.application.member.port.in.MemberQueryUseCase;
 import subport.api.application.member.port.in.UpdateMemberUseCase;
 import subport.api.application.member.port.in.dto.GetMemberProfileResponse;
@@ -28,6 +32,7 @@ public class MemberController {
 
 	private final MemberQueryUseCase memberQueryUseCase;
 	private final UpdateMemberUseCase updateMemberUseCase;
+	private final DeleteMemberUseCase deleteMemberUseCase;
 
 	@GetMapping("/me/profile")
 	public ResponseEntity<GetMemberProfileResponse> getMemberProfile(
@@ -71,5 +76,19 @@ public class MemberController {
 		return ResponseEntity.ok(
 			updateMemberUseCase.updateReminderSettings(oAuth2User.getMemberId(), request)
 		);
+	}
+
+	@DeleteMapping("/me")
+	public ResponseEntity<Void> deleteMember(
+		@AuthenticationPrincipal CustomOAuth2User oAuth2User
+	) {
+		deleteMemberUseCase.deleteMember(oAuth2User.getMemberId());
+
+		return ResponseEntity.noContent()
+			.header(
+				HttpHeaders.SET_COOKIE,
+				AuthCookieProvider.deleteRefreshTokenCookie().toString()
+			)
+			.build();
 	}
 }
