@@ -4,6 +4,6 @@ ENV TZ=Asia/Seoul
 
 WORKDIR /app
 
-COPY api/build/libs/batch.jar batch.jar
+COPY batch/build/libs/batch.jar batch.jar
 
 ENTRYPOINT ["java", "-jar", "batch.jar"]
