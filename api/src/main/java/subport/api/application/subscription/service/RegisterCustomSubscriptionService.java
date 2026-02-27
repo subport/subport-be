@@ -1,5 +1,6 @@
 package subport.api.application.subscription.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,12 +21,12 @@ import subport.domain.subscription.SubscriptionType;
 @RequiredArgsConstructor
 public class RegisterCustomSubscriptionService implements RegisterCustomSubscriptionUseCase {
 
-	private static final String SUBSCRIPTION_DEFAULT_LOGO_IMAGE_URL =
-		"https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axnklumwzgke/b/subpport-bucket/o/subscription_default.png";
-
 	private final SaveSubscriptionPort saveSubscriptionPort;
 	private final LoadMemberPort loadMemberPort;
 	private final UploadCustomSubscriptionImagePort uploadSubscriptionImagePort;
+
+	@Value("${subscription.default-logo-url}")
+	private String defaultLogoImageUrl;
 
 	@Override
 	public RegisterCustomSubscriptionResponse register(
@@ -33,7 +34,7 @@ public class RegisterCustomSubscriptionService implements RegisterCustomSubscrip
 		RegisterCustomSubscriptionRequest request,
 		MultipartFile image
 	) {
-		String logoImageUrl = SUBSCRIPTION_DEFAULT_LOGO_IMAGE_URL;
+		String logoImageUrl = defaultLogoImageUrl;
 		if (image != null) {
 			logoImageUrl = uploadSubscriptionImagePort.upload(image);
 		}
