@@ -77,11 +77,11 @@ public class Member extends BaseTimeEntity {
 		this.lastActiveAt = now;
 	}
 
-	public void deactivate() {
+	public void withdraw() {
 		this.deleted = true;
 	}
 
-	public void activate() {
+	public void reactivate() {
 		this.deleted = false;
 	}
 }
