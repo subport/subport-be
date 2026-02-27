@@ -9,6 +9,7 @@ import subport.admin.application.exception.AdminErrorCode;
 import subport.admin.application.membersubscription.MemberSubscriptionPort;
 import subport.admin.application.subscription.dto.RegisterSubscriptionRequest;
 import subport.admin.application.subscription.dto.UpdateSubscriptionRequest;
+import subport.common.exception.CustomException;
 import subport.domain.subscription.Subscription;
 import subport.domain.subscription.SubscriptionType;
 
@@ -17,22 +18,20 @@ import subport.domain.subscription.SubscriptionType;
 @RequiredArgsConstructor
 public class SubscriptionCommandService {
 
-	private static final String SUBSCRIPTION_DEFAULT_LOGO_IMAGE_URL =
-		"https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axnklumwzgke/b/subpport-bucket/o/subscription_default.png";
-
 	private final SubscriptionPort subscriptionPort;
 	private final UploadSubscriptionImagePort uploadSubscriptionImagePort;
-
+	private final DeleteSubscriptionImagePort deleteSubscriptionImagePort;
 	private final MemberSubscriptionPort memberSubscriptionPort;
 
 	public Long registerSubscription(
 		RegisterSubscriptionRequest request,
 		MultipartFile image
 	) {
-		String logoImageUrl = SUBSCRIPTION_DEFAULT_LOGO_IMAGE_URL;
-		if (image != null) {
-			logoImageUrl = uploadSubscriptionImagePort.upload(image);
+		if (image == null || image.isEmpty()) {
+			throw new CustomException(AdminErrorCode.IMAGE_FILE_REQUIRED);
 		}
+
+		String logoImageUrl = uploadSubscriptionImagePort.upload(image);
 
 		Subscription subscription = new Subscription(
 			request.name(),
@@ -49,13 +48,14 @@ public class SubscriptionCommandService {
 	public void updateSubscription(
 		Long subscriptionId,
 		UpdateSubscriptionRequest request,
-		MultipartFile image
+		MultipartFile newImage
 	) {
 		Subscription subscription = subscriptionPort.loadSubscription(subscriptionId);
 
 		String logoImageUrl = subscription.getLogoImageUrl();
-		if (image != null) {
-			logoImageUrl = uploadSubscriptionImagePort.upload(image);
+		if (newImage != null) {
+			deleteSubscriptionImagePort.delete(logoImageUrl);
+			logoImageUrl = uploadSubscriptionImagePort.upload(newImage);
 		}
 
 		subscription.update(
@@ -72,6 +72,7 @@ public class SubscriptionCommandService {
 		}
 
 		Subscription subscription = subscriptionPort.loadSubscription(subscriptionId);
+		deleteSubscriptionImagePort.delete(subscription.getLogoImageUrl());
 		subscriptionPort.delete(subscription);
 	}
 }
