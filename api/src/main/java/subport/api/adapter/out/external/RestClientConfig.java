@@ -13,4 +13,11 @@ public class RestClientConfig {
 			.baseUrl("https://oapi.koreaexim.go.kr/site/program/financial/exchangeJSON")
 			.build();
 	}
+
+	@Bean
+	public RestClient kakaoClient() {
+		return RestClient.builder()
+			.baseUrl("https://kapi.kakao.com/v1/user")
+			.build();
+	}
 }
