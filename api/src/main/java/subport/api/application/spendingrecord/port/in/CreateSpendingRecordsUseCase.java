@@ -6,7 +6,5 @@ import subport.domain.membersubscription.MemberSubscription;
 
 public interface CreateSpendingRecordsUseCase {
 
-	void createForScheduling(LocalDateTime currentDateTime);
-
 	void createMissing(MemberSubscription memberSubscription, LocalDateTime currentDateTime);
 }

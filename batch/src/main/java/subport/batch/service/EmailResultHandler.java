@@ -1,4 +1,4 @@
-package subport.api.application.emailnotification.service;
+package subport.batch.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,7 +14,7 @@ public class EmailResultHandler {
 
 	public void handleSuccess(
 		List<EmailNotification> emailNotifications,
-		LocalDateTime currentDateTime,
+		LocalDateTime now,
 		boolean isRetry
 	) {
 		if (isRetry) {
@@ -25,20 +25,20 @@ public class EmailResultHandler {
 			if (isRetry) {
 				notification.increaseRetryCount();
 			}
-			notification.markSent(currentDateTime);
+			notification.markSent(now);
 		});
 	}
 
 	public void handleFailure(
 		List<EmailNotification> emailNotifications,
-		LocalDateTime currentDateTime,
+		LocalDateTime now,
 		boolean isRetry
 	) {
 		emailNotifications.forEach(notification -> {
 			if (isRetry) {
 				notification.increaseRetryCount();
 			} else {
-				notification.markFailed(currentDateTime);
+				notification.markFailed(now);
 			}
 		});
 	}

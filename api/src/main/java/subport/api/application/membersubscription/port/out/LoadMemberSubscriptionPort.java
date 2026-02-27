@@ -17,10 +17,6 @@ public interface LoadMemberSubscriptionPort {
 		String sortBy
 	);
 
-	List<MemberSubscription> loadMemberSubscriptions(LocalDate currentDate);
-
-	List<MemberSubscription> loadMemberSubscriptionsForEmail(LocalDate currentDate);
-
 	List<MemberSubscription> loadMemberSubscriptions(Long memberId, LocalDate start, LocalDate end);
 
 	List<MemberSubscription> loadMemberSubscriptions(Long memberId, LocalDate targetDate);

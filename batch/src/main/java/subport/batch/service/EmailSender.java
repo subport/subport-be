@@ -1,4 +1,4 @@
-package subport.api.application.emailnotification.service;
+package subport.batch.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,7 +33,7 @@ public class EmailSender {
 	public void sendAsync(
 		List<EmailNotification> emailNotifications,
 		boolean isRetry,
-		LocalDateTime currentDateTime
+		LocalDateTime now
 	) {
 		String recipientEmail = emailNotifications.get(0).getRecipientEmail();
 		int subscriptionCount = emailNotifications.size();
@@ -65,7 +65,7 @@ public class EmailSender {
 			mailSender.send(message);
 			emailResultHandler.handleSuccess(
 				emailNotifications,
-				currentDateTime,
+				now,
 				isRetry
 			);
 		} catch (MessagingException e) {
@@ -77,7 +77,7 @@ public class EmailSender {
 			);
 			emailResultHandler.handleFailure(
 				emailNotifications,
-				currentDateTime,
+				now,
 				isRetry
 			);
 		}

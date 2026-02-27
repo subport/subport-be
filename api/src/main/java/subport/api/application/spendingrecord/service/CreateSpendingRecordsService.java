@@ -31,22 +31,6 @@ public class CreateSpendingRecordsService implements CreateSpendingRecordsUseCas
 	private final LoadSpendingRecordPort loadSpendingRecordPort;
 
 	@Override
-	public void createForScheduling(LocalDateTime currentDateTime) {
-		List<MemberSubscription> memberSubscriptions =
-			loadMemberSubscriptionPort.loadMemberSubscriptions(currentDateTime.toLocalDate());
-
-		List<SpendingRecord> spendingRecords = memberSubscriptions.stream()
-			.map(memberSubscription -> {
-				SpendingRecord spendingRecord = createSpendingRecord(memberSubscription);
-				updateMemberSubscription(memberSubscription, currentDateTime);
-
-				return spendingRecord;
-			})
-			.toList();
-		saveSpendingRecordPort.save(spendingRecords);
-	}
-
-	@Override
 	public void createMissing(MemberSubscription memberSubscription, LocalDateTime currentDateTime) {
 		List<SpendingRecord> spendingRecords = new ArrayList<>();
 		LocalDate nextPaymentDate = memberSubscription.getNextPaymentDate();

@@ -13,9 +13,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
 
-    implementation("org.springframework.boot:spring-boot-starter-mail")
-    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-
     implementation("software.amazon.awssdk:s3:2.40.15")
 
     runtimeOnly("com.mysql:mysql-connector-j")

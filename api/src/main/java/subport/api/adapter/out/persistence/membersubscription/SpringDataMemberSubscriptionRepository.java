@@ -36,19 +36,6 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 		Sort sort
 	);
 
-	@EntityGraph(attributePaths = {
-		"member",
-		"subscription",
-		"plan"
-	})
-	List<MemberSubscription> findByNextPaymentDateAndActiveTrue(LocalDate nextPaymentDate);
-
-	@EntityGraph(attributePaths = {
-		"member",
-		"subscription"
-	})
-	List<MemberSubscription> findByPaymentReminderDateAndActiveTrue(LocalDate reminderDate);
-
 	List<MemberSubscription> findByMemberIdAndLastPaymentDateGreaterThanEqualAndLastPaymentDateLessThan(
 		Long memberId,
 		LocalDate lastPaymentDateIsGreaterThan,
