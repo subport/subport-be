@@ -28,6 +28,10 @@ public class SyncMemberService implements SyncMemberUseCase {
 			return new SyncMemberInfo(newMemberId, true);
 		}
 
+		if (member.isDeleted()) {
+			member.reactivate();
+		}
+
 		member.updateLastActiveAt(loginMemberInfo.loginAt());
 
 		return new SyncMemberInfo(member.getId(), false);
