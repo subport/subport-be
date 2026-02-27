@@ -1,4 +1,4 @@
-package subport.api.adapter.out.external;
+package subport.api.adapter.out.external.exchangerate;
 
 import java.math.BigDecimal;
 
