@@ -10,14 +10,18 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.RequiredArgsConstructor;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import subport.admin.application.exception.AdminErrorCode;
+import subport.admin.application.subscription.DeleteSubscriptionImagePort;
 import subport.admin.application.subscription.UploadSubscriptionImagePort;
 import subport.common.exception.CustomException;
 
 @Component
 @RequiredArgsConstructor
-public class OciObjectStorageAdapter implements UploadSubscriptionImagePort { // 수정 예정
+public class OciObjectStorageAdapter implements
+	UploadSubscriptionImagePort,
+	DeleteSubscriptionImagePort {
 
 	private static final String IMAGE_TYPE_PREFIX = "image/";
 	private static final int MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -55,6 +59,18 @@ public class OciObjectStorageAdapter implements UploadSubscriptionImagePort { //
 		return getPublicUrl(fileName);
 	}
 
+	@Override
+	public void delete(String imageUrl) {
+		String fileName = extractFileNameFromUrl(imageUrl);
+
+		DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+			.bucket(bucketName)
+			.key(fileName)
+			.build();
+
+		s3Client.deleteObject(deleteObjectRequest);
+	}
+
 	private void validateFile(MultipartFile image) {
 		String contentType = image.getContentType();
 		if (contentType == null || !contentType.startsWith(IMAGE_TYPE_PREFIX)) {
@@ -90,5 +106,9 @@ public class OciObjectStorageAdapter implements UploadSubscriptionImagePort { //
 			bucketName,
 			fileName
 		);
+	}
+
+	private String extractFileNameFromUrl(String imageUrl) {
+		return imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
 	}
 }
