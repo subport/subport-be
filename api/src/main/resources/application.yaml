@@ -35,6 +35,9 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 
+kakao:
+  admin-key: ${KAKAO_ADMIN_KEY}
+
 oci:
   bucket-name: ${OCI_BUCKET_NAME}
   namespace: ${OCI_NAMESPACE}
