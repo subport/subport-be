@@ -1,7 +1,6 @@
 package subport.admin.adapter.out.objectstorage;
 
 import java.io.IOException;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -38,10 +37,10 @@ public class OciObjectStorageAdapter implements
 	private String region;
 
 	@Override
-	public String upload(MultipartFile image) {
+	public String upload(MultipartFile image, String subscriptionName) {
 		validateFile(image);
 
-		String fileName = generateFileName(image.getOriginalFilename());
+		String fileName = subscriptionName + extractExtension(image.getOriginalFilename());
 
 		byte[] fileBytes = readFileBytes(image);
 
@@ -82,12 +81,11 @@ public class OciObjectStorageAdapter implements
 		}
 	}
 
-	private String generateFileName(String originalFilename) {
-		String extension = "";
+	private String extractExtension(String originalFilename) {
 		if (originalFilename != null && originalFilename.contains(".")) {
-			extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+			return originalFilename.substring(originalFilename.lastIndexOf("."));
 		}
-		return UUID.randomUUID() + extension;
+		return "";
 	}
 
 	private byte[] readFileBytes(MultipartFile image) {

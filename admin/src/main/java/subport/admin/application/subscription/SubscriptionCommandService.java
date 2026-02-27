@@ -31,10 +31,11 @@ public class SubscriptionCommandService {
 			throw new CustomException(AdminErrorCode.IMAGE_FILE_REQUIRED);
 		}
 
-		String logoImageUrl = uploadSubscriptionImagePort.upload(image);
+		String subscriptionName = request.name();
+		String logoImageUrl = uploadSubscriptionImagePort.upload(image, subscriptionName);
 
 		Subscription subscription = new Subscription(
-			request.name(),
+			subscriptionName,
 			SubscriptionType.fromDisplayName(request.type()),
 			logoImageUrl,
 			request.planUrl(),
@@ -52,14 +53,15 @@ public class SubscriptionCommandService {
 	) {
 		Subscription subscription = subscriptionPort.loadSubscription(subscriptionId);
 
+		String subscriptionName = request.name();
 		String logoImageUrl = subscription.getLogoImageUrl();
 		if (newImage != null) {
 			deleteSubscriptionImagePort.delete(logoImageUrl);
-			logoImageUrl = uploadSubscriptionImagePort.upload(newImage);
+			logoImageUrl = uploadSubscriptionImagePort.upload(newImage, subscriptionName);
 		}
 
 		subscription.update(
-			request.name(),
+			subscriptionName,
 			SubscriptionType.fromDisplayName(request.type()),
 			logoImageUrl,
 			request.planUrl()
