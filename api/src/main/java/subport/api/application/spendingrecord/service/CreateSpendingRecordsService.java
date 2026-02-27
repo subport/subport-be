@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import subport.api.application.exchangeRate.service.ExchangeRateService;
-import subport.api.application.membersubscription.port.out.LoadMemberSubscriptionPort;
 import subport.api.application.spendingrecord.port.in.CreateSpendingRecordsUseCase;
 import subport.api.application.spendingrecord.port.out.LoadSpendingRecordPort;
 import subport.api.application.spendingrecord.port.out.SaveSpendingRecordPort;
@@ -25,7 +24,6 @@ import subport.domain.subscription.Subscription;
 @RequiredArgsConstructor
 public class CreateSpendingRecordsService implements CreateSpendingRecordsUseCase {
 
-	private final LoadMemberSubscriptionPort loadMemberSubscriptionPort;
 	private final SaveSpendingRecordPort saveSpendingRecordPort;
 	private final ExchangeRateService exchangeRateService;
 	private final LoadSpendingRecordPort loadSpendingRecordPort;
