@@ -11,4 +11,6 @@ public interface SpringDataRefreshTokenRepository extends JpaRepository<RefreshT
 	Optional<RefreshToken> findByTokenValue(String tokenValue);
 
 	void deleteByTokenValue(String tokenValue);
+
+	void deleteBySubjectId(Long subjectId);
 }

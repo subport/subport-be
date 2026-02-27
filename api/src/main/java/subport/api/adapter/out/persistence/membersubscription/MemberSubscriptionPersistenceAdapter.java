@@ -70,6 +70,11 @@ public class MemberSubscriptionPersistenceAdapter implements
 		memberSubscriptionRepository.delete(memberSubscription);
 	}
 
+	@Override
+	public void delete(Long memberId) {
+		memberSubscriptionRepository.deleteByMemberId(memberId);
+	}
+
 	private Sort createSort(String sortBy) {
 		return switch (sortBy) {
 			case "nextPaymentDate" -> Sort.by(

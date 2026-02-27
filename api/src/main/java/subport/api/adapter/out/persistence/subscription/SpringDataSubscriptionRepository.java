@@ -3,6 +3,7 @@ package subport.api.adapter.out.persistence.subscription;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -21,4 +22,13 @@ public interface SpringDataSubscriptionRepository extends JpaRepository<Subscrip
 		@Param("memberId") Long memberId,
 		@Param("name") String name
 	);
+
+	@Modifying
+	@Query("""
+		DELETE
+		FROM Subscription s
+		WHERE s.member.id = :memberId
+		AND s.systemProvided = false
+		""")
+	void deleteByMemberId(@Param("memberId") Long memberId);
 }

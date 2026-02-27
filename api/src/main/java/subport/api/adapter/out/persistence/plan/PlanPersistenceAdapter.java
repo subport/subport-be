@@ -43,7 +43,12 @@ public class PlanPersistenceAdapter implements
 	}
 
 	@Override
-	public void delete(Long subscriptionId) {
+	public void deleteBySubscriptionId(Long subscriptionId) {
 		planRepository.deleteBySubscriptionId(subscriptionId);
+	}
+
+	@Override
+	public void deleteByMemberId(Long memberId) {
+		planRepository.deleteByMemberId(memberId);
 	}
 }

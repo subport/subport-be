@@ -12,10 +12,15 @@ import subport.domain.member.Member;
 @Component
 @RequiredArgsConstructor
 public class MemberPersistenceAdapter implements
-	LoadMemberPort,
-	SaveMemberPort {
+	SaveMemberPort,
+	LoadMemberPort {
 
 	private final SpringDataMemberRepository memberRepository;
+
+	@Override
+	public Long save(Member member) {
+		return memberRepository.save(member).getId();
+	}
 
 	@Override
 	public Member load(Long memberId) {
@@ -27,10 +32,5 @@ public class MemberPersistenceAdapter implements
 	public Member load(String providerId) {
 		return memberRepository.findByProviderId(providerId)
 			.orElse(null);
-	}
-
-	@Override
-	public Long save(Member member) {
-		return memberRepository.save(member).getId();
 	}
 }

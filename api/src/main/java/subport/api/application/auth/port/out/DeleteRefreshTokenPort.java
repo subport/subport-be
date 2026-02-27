@@ -7,4 +7,6 @@ public interface DeleteRefreshTokenPort {
 	void delete(String refreshTokenValue);
 
 	void delete(RefreshToken refreshToken);
+
+	void deleteByMemberId(Long memberId);
 }

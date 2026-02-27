@@ -41,4 +41,9 @@ public class SubscriptionPersistenceAdapter implements
 	public void delete(Subscription subscription) {
 		subscriptionRepository.delete(subscription);
 	}
+
+	@Override
+	public void deleteByMemberId(Long memberId) {
+		subscriptionRepository.deleteByMemberId(memberId);
+	}
 }

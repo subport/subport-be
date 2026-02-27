@@ -6,5 +6,7 @@ public interface DeletePlanPort {
 
 	void delete(Plan plan);
 
-	void delete(Long subscriptionId);
+	void deleteBySubscriptionId(Long subscriptionId);
+
+	void deleteByMemberId(Long memberId);
 }

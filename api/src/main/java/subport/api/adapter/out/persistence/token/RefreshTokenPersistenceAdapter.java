@@ -39,4 +39,9 @@ public class RefreshTokenPersistenceAdapter implements
 	public void delete(RefreshToken refreshToken) {
 		refreshTokenRepository.delete(refreshToken);
 	}
+
+	@Override
+	public void deleteByMemberId(Long memberId) {
+		refreshTokenRepository.deleteBySubjectId(memberId);
+	}
 }
