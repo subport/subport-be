@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import subport.batch.persistence.SpringDataEmailNotificationRepository;
@@ -27,6 +28,7 @@ public class EmailNotificationService {
 	private final SpringDataMemberSubscriptionRepository memberSubscriptionRepository;
 	private final EmailSender emailSender;
 
+	@Transactional
 	public void create(LocalDate today) {
 		List<EmailNotification> emailNotifications =
 			memberSubscriptionRepository.findActiveByPaymentReminderDate(today).stream()
@@ -61,6 +63,7 @@ public class EmailNotificationService {
 		emailNotificationRepository.saveAll(emailNotifications);
 	}
 
+	@Transactional(readOnly = true)
 	public void send(LocalDateTime now) {
 		List<EmailNotification> emailNotifications = getEmailNotifications(now, SendingStatus.PENDING);
 
@@ -72,6 +75,7 @@ public class EmailNotificationService {
 		}
 	}
 
+	@Transactional(readOnly = true)
 	public void retry(LocalDateTime now) {
 		List<EmailNotification> emailNotifications = getEmailNotifications(now, SendingStatus.FAILED);
 
