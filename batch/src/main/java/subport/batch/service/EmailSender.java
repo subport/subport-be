@@ -1,5 +1,6 @@
 package subport.batch.service;
 
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -37,6 +38,9 @@ public class EmailSender {
 	) {
 		String recipientEmail = emailNotifications.get(0).getRecipientEmail();
 		int subscriptionCount = emailNotifications.size();
+		List<Long> ids = emailNotifications.stream()
+			.map(EmailNotification::getId)
+			.toList();
 		try {
 			Context context = new Context();
 			context.setVariable("emailNotifications", emailNotifications);
@@ -47,7 +51,7 @@ public class EmailSender {
 			MimeMessage message = mailSender.createMimeMessage();
 			MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-			helper.setFrom("noreply@subport.site");
+			helper.setFrom("noreply@subport.site", "Subport");
 			helper.setTo(recipientEmail);
 			helper.setText(template, true);
 
@@ -64,11 +68,11 @@ public class EmailSender {
 
 			mailSender.send(message);
 			emailResultHandler.handleSuccess(
-				emailNotifications,
+				ids,
 				now,
 				isRetry
 			);
-		} catch (MessagingException e) {
+		} catch (MessagingException | UnsupportedEncodingException e) {
 			log.warn(
 				"Send email failed for recipient {} (count: {}): {}",
 				recipientEmail,
@@ -76,7 +80,7 @@ public class EmailSender {
 				e.getMessage()
 			);
 			emailResultHandler.handleFailure(
-				emailNotifications,
+				ids,
 				now,
 				isRetry
 			);
