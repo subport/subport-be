@@ -1,6 +1,7 @@
 package subport.admin.application.emailnotification;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -32,8 +33,16 @@ public class EmailNotificationQueryService {
 		String email,
 		Pageable pageable
 	) {
+		LocalDateTime start = null;
+		LocalDateTime end = null;
+		if (date != null) {
+			start = date.atStartOfDay();
+			end = start.plusDays(1);
+		}
+
 		Page<String> emailsPage = emailNotificationPort.searchDistinctRecipientEmails(
-			date,
+			start,
+			end,
 			status,
 			daysBeforePayment,
 			email,
@@ -42,7 +51,8 @@ public class EmailNotificationQueryService {
 
 		List<EmailNotification> emailNotifications = emailNotificationPort.searchEmailNotifications(
 			emailsPage.getContent(),
-			date,
+			start,
+			end,
 			status,
 			daysBeforePayment,
 			email

@@ -1,6 +1,5 @@
 package subport.admin.adapter.out.persistence.emailnotification;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,13 +26,15 @@ public interface SpringDataEmailNotificationRepository extends JpaRepository<Ema
 	@Query("""
 		SELECT distinct e.recipientEmail
 		FROM EmailNotification e
-		WHERE (:date IS NULL OR e.paymentDate = :date)
+		WHERE (:start IS NULL OR e.sentAt >= :start)
+		AND (:end IS NULL OR e.sentAt < :end)
 		AND (:status IS NULL OR e.status = :status)
 		AND (:daysBeforePayment IS NULL OR e.daysBeforePayment = :daysBeforePayment)
 		AND (:email IS NULL OR e.recipientEmail LIKE %:email%)
 		""")
 	Page<String> findDistinctRecipientEmails(
-		LocalDate date,
+		LocalDateTime start,
+		LocalDateTime end,
 		SendingStatus status,
 		Integer daysBeforePayment,
 		String email,
@@ -44,14 +45,16 @@ public interface SpringDataEmailNotificationRepository extends JpaRepository<Ema
 		SELECT e
 		FROM EmailNotification e
 		WHERE e.recipientEmail in :emails
-		AND (:date IS NULL OR e.paymentDate = :date)
+		AND (:start IS NULL OR e.sentAt >= :start)
+		AND (:end IS NULL OR e.sentAt < :end)
 		AND (:status IS NULL OR e.status = :status)
 		AND (:daysBeforePayment IS NULL OR e.daysBeforePayment = :daysBeforePayment)
 		AND (:email IS NULL OR e.recipientEmail LIKE %:email%)
 		""")
 	List<EmailNotification> findEmailNotifications(
 		List<String> emails,
-		LocalDate date,
+		LocalDateTime start,
+		LocalDateTime end,
 		SendingStatus status,
 		Integer daysBeforePayment,
 		String email

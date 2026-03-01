@@ -1,6 +1,7 @@
 package subport.admin.adapter.out.persistence.emailnotification;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -28,14 +29,16 @@ public class EmailNotificationPersistenceAdapter implements EmailNotificationPor
 
 	@Override
 	public Page<String> searchDistinctRecipientEmails(
-		LocalDate date,
+		LocalDateTime start,
+		LocalDateTime end,
 		SendingStatus status,
 		Integer daysBeforePayment,
 		String email,
 		Pageable pageable
 	) {
 		return emailNotificationRepository.findDistinctRecipientEmails(
-			date,
+			start,
+			end,
 			status,
 			daysBeforePayment,
 			email,
@@ -46,14 +49,16 @@ public class EmailNotificationPersistenceAdapter implements EmailNotificationPor
 	@Override
 	public List<EmailNotification> searchEmailNotifications(
 		List<String> emails,
-		LocalDate date,
+		LocalDateTime start,
+		LocalDateTime end,
 		SendingStatus status,
 		Integer daysBeforePayment,
 		String email
 	) {
 		return emailNotificationRepository.findEmailNotifications(
 			emails,
-			date,
+			start,
+			end,
 			status,
 			daysBeforePayment,
 			email

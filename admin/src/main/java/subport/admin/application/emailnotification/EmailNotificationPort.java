@@ -1,6 +1,7 @@
 package subport.admin.application.emailnotification;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -14,7 +15,8 @@ public interface EmailNotificationPort {
 	List<EmailNotification> loadEmailNotifications(LocalDate date);
 
 	Page<String> searchDistinctRecipientEmails(
-		LocalDate date,
+		LocalDateTime start,
+		LocalDateTime end,
 		SendingStatus status,
 		Integer daysBeforePayment,
 		String email,
@@ -23,7 +25,8 @@ public interface EmailNotificationPort {
 
 	List<EmailNotification> searchEmailNotifications(
 		List<String> emails,
-		LocalDate date,
+		LocalDateTime start,
+		LocalDateTime end,
 		SendingStatus status,
 		Integer daysBeforePayment,
 		String email
