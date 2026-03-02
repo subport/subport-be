@@ -31,6 +31,7 @@ public class SecurityConfig {
 	private final CustomSuccessHandler successHandler;
 	private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 	private final JwtAuthFilter jwtAuthFilter;
+	private final MdcFilter mdcFilter;
 
 	@Bean
 	public SecurityFilterChain webFilterChain(HttpSecurity http) throws Exception {
@@ -51,6 +52,7 @@ public class SecurityConfig {
 				.requestMatchers("/api/auth/refresh", "/h2-console/**").permitAll()
 				.anyRequest().authenticated())
 			.addFilterAt(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+			.addFilterAfter(mdcFilter, JwtAuthFilter.class)
 			.sessionManagement(s -> s
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.headers(headerConfig -> headerConfig
