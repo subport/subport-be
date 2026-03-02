@@ -41,6 +41,9 @@ public class EmailSender {
 		List<Long> ids = emailNotifications.stream()
 			.map(EmailNotification::getId)
 			.toList();
+
+		log.info("메일 발송 시도 - 수신자: {}, 건수: {}, 재시도: {}", recipientEmail, subscriptionCount, isRetry);
+
 		try {
 			Context context = new Context();
 			context.setVariable("emailNotifications", emailNotifications);
@@ -67,23 +70,13 @@ public class EmailSender {
 			helper.setSubject(subject);
 
 			mailSender.send(message);
-			emailResultHandler.handleSuccess(
-				ids,
-				now,
-				isRetry
-			);
+			emailResultHandler.handleSuccess(ids, now, isRetry);
+
+			log.info("메일 발송 성공 - 수신자: {}", recipientEmail);
 		} catch (MessagingException | UnsupportedEncodingException e) {
-			log.warn(
-				"Send email failed for recipient {} (count: {}): {}",
-				recipientEmail,
-				subscriptionCount,
-				e.getMessage()
-			);
-			emailResultHandler.handleFailure(
-				ids,
-				now,
-				isRetry
-			);
+			emailResultHandler.handleFailure(ids, now, isRetry);
+
+			log.warn("메일 발송 실패 - 수신자: {}, 건수: {}, 사유: {}", recipientEmail, subscriptionCount, e.getMessage());
 		}
 	}
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import subport.batch.persistence.SpringDataEmailNotificationRepository;
 import subport.batch.persistence.SpringDataMemberSubscriptionRepository;
 import subport.domain.emailnotification.EmailNotification;
@@ -22,6 +23,7 @@ import subport.domain.subscription.Subscription;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class EmailNotificationService {
 
 	private final SpringDataEmailNotificationRepository emailNotificationRepository;
@@ -30,6 +32,8 @@ public class EmailNotificationService {
 
 	@Transactional
 	public void create(LocalDate today) {
+		log.info("이메일 알림 생성 시작");
+
 		List<EmailNotification> emailNotifications =
 			memberSubscriptionRepository.findActiveByPaymentReminderDate(today).stream()
 				.map(memberSubscription -> {
@@ -61,11 +65,15 @@ public class EmailNotificationService {
 				.toList();
 
 		emailNotificationRepository.saveAll(emailNotifications);
+
+		log.info("이메일 알림 생성 완료 - 생성 건수: {}", emailNotifications.size());
 	}
 
 	@Transactional(readOnly = true)
 	public void send(LocalDateTime now) {
 		List<EmailNotification> emailNotifications = getEmailNotifications(now, SendingStatus.PENDING);
+
+		log.info("이메일 발송 시작 - 대상 건수: {}", emailNotifications.size());
 
 		Map<String, List<EmailNotification>> groupedEmailNotifications = emailNotifications.stream()
 			.collect(Collectors.groupingBy(EmailNotification::getRecipientEmail));
@@ -73,11 +81,15 @@ public class EmailNotificationService {
 		for (Map.Entry<String, List<EmailNotification>> entry : groupedEmailNotifications.entrySet()) {
 			emailSender.sendAsync(entry.getValue(), false, now);
 		}
+
+		log.info("이메일 발송 요청 완료 - 수신자 수: {}", groupedEmailNotifications.size());
 	}
 
 	@Transactional(readOnly = true)
 	public void retry(LocalDateTime now) {
 		List<EmailNotification> emailNotifications = getEmailNotifications(now, SendingStatus.FAILED);
+
+		log.info("이메일 재발송 시작 - 대상 건수: {}", emailNotifications.size());
 
 		Map<String, List<EmailNotification>> groupedEmailNotifications = emailNotifications.stream()
 			.collect(Collectors.groupingBy(EmailNotification::getRecipientEmail));
@@ -85,6 +97,8 @@ public class EmailNotificationService {
 		for (Map.Entry<String, List<EmailNotification>> entry : groupedEmailNotifications.entrySet()) {
 			emailSender.sendAsync(entry.getValue(), true, now);
 		}
+
+		log.info("이메일 재발송 요청 완료 - 수신자 수: {}", groupedEmailNotifications.size());
 	}
 
 	private List<EmailNotification> getEmailNotifications(LocalDateTime now, SendingStatus status) {
