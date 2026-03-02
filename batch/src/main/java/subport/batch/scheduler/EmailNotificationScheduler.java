@@ -2,7 +2,9 @@ package subport.batch.scheduler;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
+import org.slf4j.MDC;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -15,18 +17,33 @@ public class EmailNotificationScheduler {
 
 	private final EmailNotificationService emailNotificationService;
 
-	@Scheduled(cron = "0 30 08 * * *")
+	@Scheduled(cron = "0 30 06 * * *")
 	public void createEmailNotifications() {
-		emailNotificationService.create(LocalDate.now());
+		try {
+			MDC.put("jobId", UUID.randomUUID().toString().substring(0, 8));
+			emailNotificationService.create(LocalDate.now());
+		} finally {
+			MDC.clear();
+		}
 	}
 
-	@Scheduled(cron = "0 0 09 * * *")
+	@Scheduled(cron = "0 0 07 * * *")
 	public void sendEmailNotifications() {
-		emailNotificationService.send(LocalDateTime.now());
+		try {
+			MDC.put("jobId", UUID.randomUUID().toString().substring(0, 8));
+			emailNotificationService.send(LocalDateTime.now());
+		} finally {
+			MDC.clear();
+		}
 	}
 
-	@Scheduled(cron = "0 30-45/5 09 * * *")
+	@Scheduled(cron = "0 5-15/5 07 * * *")
 	public void retryFailedEmailNotifications() {
-		emailNotificationService.retry(LocalDateTime.now());
+		try {
+			MDC.put("jobId", UUID.randomUUID().toString().substring(0, 8));
+			emailNotificationService.retry(LocalDateTime.now());
+		} finally {
+			MDC.clear();
+		}
 	}
 }
