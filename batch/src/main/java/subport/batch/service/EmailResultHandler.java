@@ -23,10 +23,6 @@ public class EmailResultHandler {
 		boolean isRetry
 	) {
 		List<EmailNotification> emailNotifications = emailNotificationRepository.findAllById(ids);
-		if (isRetry) {
-			emailNotifications.forEach(EmailNotification::increaseRetryCount);
-		}
-
 		emailNotifications.forEach(notification -> {
 			if (isRetry) {
 				notification.increaseRetryCount();
