@@ -9,8 +9,10 @@ import subport.api.application.plan.port.in.PlanQueryUseCase;
 import subport.api.application.plan.port.in.dto.GetPlanResponse;
 import subport.api.application.plan.port.in.dto.GetPlansResponse;
 import subport.api.application.plan.port.out.LoadPlanPort;
+import subport.api.application.subscription.port.out.LoadSubscriptionPort;
 import subport.common.exception.CustomException;
 import subport.domain.plan.Plan;
+import subport.domain.subscription.Subscription;
 
 @Service
 @Transactional(readOnly = true)
@@ -18,6 +20,7 @@ import subport.domain.plan.Plan;
 public class PlanQueryService implements PlanQueryUseCase {
 
 	private final LoadPlanPort loadPlanPort;
+	private final LoadSubscriptionPort loadSubscriptionPort;
 
 	@Override
 	public GetPlanResponse getPlan(Long memberId, Long planId) {
@@ -32,7 +35,10 @@ public class PlanQueryService implements PlanQueryUseCase {
 
 	@Override
 	public GetPlansResponse getPlans(Long memberId, Long subscriptionId) {
-		return GetPlansResponse.from(
+		Subscription subscription = loadSubscriptionPort.loadSubscription(subscriptionId);
+
+		return GetPlansResponse.of(
+			subscription.getPlanUrl(),
 			loadPlanPort.loadPlans(memberId, subscriptionId)
 		);
 	}
