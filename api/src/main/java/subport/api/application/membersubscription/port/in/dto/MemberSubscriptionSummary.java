@@ -12,8 +12,8 @@ public record MemberSubscriptionSummary(
 	String name,
 	String logoImageUrl,
 	BigDecimal amount,
-	int period,
-	long daysUntilPayment
+	Integer period,
+	Long daysUntilPayment
 ) {
 
 	public static MemberSubscriptionSummary of(
@@ -31,6 +31,19 @@ public record MemberSubscriptionSummary(
 			actualPaymentAmount.setScale(0, RoundingMode.HALF_UP),
 			plan.getDurationMonths(),
 			daysUntilPayment
+		);
+	}
+
+	public static MemberSubscriptionSummary from(MemberSubscription memberSubscription) {
+		Subscription subscription = memberSubscription.getSubscription();
+
+		return new MemberSubscriptionSummary(
+			memberSubscription.getId(),
+			subscription.getName(),
+			subscription.getLogoImageUrl(),
+			null,
+			null,
+			null
 		);
 	}
 }

@@ -85,13 +85,24 @@ public class MemberSubscriptionQueryService implements MemberSubscriptionQueryUs
 			sortBy
 		);
 
+		if (!active) {
+			return new GetMemberSubscriptionsResponse(null, memberSubscriptions);
+		}
+
 		List<ComputedMemberSubscription> computed = memberSubscriptions.stream()
 			.map(ms -> {
 				BigDecimal actualPaymentAmount = ms.calculateActualPaymentAmount();
+
+				LocalDate nextPaymentDate = ms.getNextPaymentDate();
+				long daysUntilPayment = DAYS.between(currentDate, nextPaymentDate);
+				if (currentDate.isEqual(ms.getLastPaymentDate()) || currentDate.isEqual(nextPaymentDate)) {
+					daysUntilPayment = 0;
+				}
+
 				return new ComputedMemberSubscription(
 					ms,
 					actualPaymentAmount,
-					DAYS.between(currentDate, ms.getNextPaymentDate())
+					daysUntilPayment
 				);
 			})
 			.toList();
@@ -105,7 +116,7 @@ public class MemberSubscriptionQueryService implements MemberSubscriptionQueryUs
 			.reduce(BigDecimal.ZERO, BigDecimal::add)
 			.setScale(0, RoundingMode.HALF_UP);
 
-		if (active & sortBy.equals("type")) {
+		if (sortBy.equals("type")) {
 			return new GetMemberSubscriptionsResponse(
 				currentMonthTotalAmount,
 				computed.stream()
