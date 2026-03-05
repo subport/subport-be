@@ -8,6 +8,7 @@ public record MemberResponse(
 	String nickname,
 	Long memberSubscriptionCount,
 	Long customSubscriptionCount,
+	boolean paymentReminderEnabled,
 	Integer reminderDaysBefore,
 	LocalDateTime lastActiveAt,
 	LocalDateTime createdAt,

@@ -63,6 +63,7 @@ public class MemberQueryService {
 				member.getNickname(),
 				memberSubscriptionCountMap.getOrDefault(member.getId(), 0L),
 				CustommemberSubscriptionCountMap.getOrDefault(member.getId(), 0L),
+				member.isPaymentReminderEnabled(),
 				member.getReminderDaysBefore(),
 				member.getLastActiveAt(),
 				member.getCreatedAt(),
