@@ -86,7 +86,12 @@ public class MemberSubscriptionQueryService implements MemberSubscriptionQueryUs
 		);
 
 		if (!active) {
-			return new GetMemberSubscriptionsResponse(null, memberSubscriptions);
+			return new GetMemberSubscriptionsResponse(
+				null,
+				memberSubscriptions.stream()
+					.map(MemberSubscriptionSummary::from)
+					.toList()
+			);
 		}
 
 		List<ComputedMemberSubscription> computed = memberSubscriptions.stream()
