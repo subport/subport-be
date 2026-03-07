@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import subport.domain.membersubscription.MemberSubscription;
 
@@ -36,10 +37,18 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 		Sort sort
 	);
 
-	List<MemberSubscription> findByMemberIdAndLastPaymentDateGreaterThanEqualAndLastPaymentDateLessThan(
-		Long memberId,
-		LocalDate lastPaymentDateIsGreaterThan,
-		LocalDate lastPaymentDateIsLessThan
+	@Query("""
+		SELECT ms
+		FROM MemberSubscription ms
+		WHERE ms.member.id = :memberId
+		AND ms.lastPaymentDate >= :start
+		AND ms.lastPaymentDate < :end
+		AND ms.active = true
+		""")
+	List<MemberSubscription> findByMemberIdAndLastPaymentDateBetween(
+		@Param("memberId") Long memberId,
+		@Param("start") LocalDate start,
+		@Param("end") LocalDate end
 	);
 
 	List<MemberSubscription> findByMemberIdAndLastPaymentDateAndActiveTrue(Long memberId, LocalDate lastPaymentDate);
