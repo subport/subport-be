@@ -35,6 +35,11 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
 kakao:
   admin-key: ${KAKAO_ADMIN_KEY}
 

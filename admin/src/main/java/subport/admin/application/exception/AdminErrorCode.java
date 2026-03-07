@@ -31,7 +31,7 @@ public enum AdminErrorCode implements ErrorCode {
 	// 이미지 파일 관련
 	IMAGE_FILE_REQUIRED(HttpStatus.BAD_REQUEST, "이미지 파일은 필수입니다."),
 	IMAGE_FILE_TYPE_NOT_SUPPORTED(HttpStatus.BAD_REQUEST, "이미지 파일만 업로드 가능합니다."),
-	IMAGE_FILE_SIZE_EXCEEDED(HttpStatus.BAD_REQUEST, "이미지 파일의 크기는 5MB를 초과할 수 없습니다."),
+	IMAGE_FILE_SIZE_EXCEEDED(HttpStatus.PAYLOAD_TOO_LARGE, "이미지 파일의 크기는 5MB를 초과할 수 없습니다."),
 	IMAGE_FILE_READ_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 파일 읽기에 실패했습니다."),
 
 	// 구독 서비스 관련

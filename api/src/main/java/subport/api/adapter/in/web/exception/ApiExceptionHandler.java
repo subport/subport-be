@@ -14,6 +14,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -62,7 +63,8 @@ public class ApiExceptionHandler {
 
 	@ExceptionHandler(MissingServletRequestParameterException.class)
 	public ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(
-		MissingServletRequestParameterException e) {
+		MissingServletRequestParameterException e
+	) {
 		log.warn("Missing required parameter: parameter='{}', type='{}'",
 			e.getParameterName(),
 			e.getParameterType());
@@ -75,7 +77,8 @@ public class ApiExceptionHandler {
 
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
 	public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(
-		MethodArgumentTypeMismatchException e) {
+		MethodArgumentTypeMismatchException e
+	) {
 		log.warn("Method argument type mismatch: parameter='{}', value='{}', requiredType='{}'",
 			e.getName(),
 			e.getValue(),
@@ -110,10 +113,22 @@ public class ApiExceptionHandler {
 
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	public ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(
-		HttpRequestMethodNotSupportedException e) {
+		HttpRequestMethodNotSupportedException e
+	) {
 		log.warn("Method not supported: {}", e.getMessage());
 
 		ErrorCode errorCode = ApiErrorCode.METHOD_NOT_ALLOWED;
+
+		return ResponseEntity
+			.status(errorCode.getStatus())
+			.body(ErrorResponse.of(errorCode));
+	}
+
+	@ExceptionHandler(MaxUploadSizeExceededException.class)
+	public ResponseEntity<ErrorResponse> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e) {
+		log.warn("Maximum upload size exceeded: {}", e.getMessage());
+
+		ApiErrorCode errorCode = ApiErrorCode.IMAGE_FILE_SIZE_EXCEEDED;
 
 		return ResponseEntity
 			.status(errorCode.getStatus())

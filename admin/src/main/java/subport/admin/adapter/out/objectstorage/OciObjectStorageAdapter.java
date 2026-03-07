@@ -23,7 +23,6 @@ public class OciObjectStorageAdapter implements
 	DeleteSubscriptionImagePort {
 
 	private static final String IMAGE_TYPE_PREFIX = "image/";
-	private static final int MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 	private final S3Client s3Client;
 
@@ -74,10 +73,6 @@ public class OciObjectStorageAdapter implements
 		String contentType = image.getContentType();
 		if (contentType == null || !contentType.startsWith(IMAGE_TYPE_PREFIX)) {
 			throw new CustomException(AdminErrorCode.IMAGE_FILE_TYPE_NOT_SUPPORTED);
-		}
-
-		if (image.getSize() > MAX_FILE_SIZE) {
-			throw new CustomException(AdminErrorCode.IMAGE_FILE_SIZE_EXCEEDED);
 		}
 	}
 
