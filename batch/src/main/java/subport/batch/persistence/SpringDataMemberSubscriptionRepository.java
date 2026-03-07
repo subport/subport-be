@@ -33,8 +33,9 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 		FROM MemberSubscription ms
 		JOIN FETCH ms.member m
 		JOIN FETCH ms.subscription s
-		WHERE ms.paymentReminderDate = :reminderDate
-		AND ms.active = true
+		WHERE ms.active = true
+		AND ms.member.paymentReminderEnabled = true
+		AND ms.paymentReminderDate = :reminderDate
 		""")
 	List<MemberSubscription> findActiveByPaymentReminderDate(@Param("reminderDate") LocalDate reminderDate);
 }
