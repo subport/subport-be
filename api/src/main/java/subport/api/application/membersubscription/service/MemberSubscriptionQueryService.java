@@ -42,7 +42,7 @@ public class MemberSubscriptionQueryService implements MemberSubscriptionQueryUs
 		MemberSubscription memberSubscription = loadMemberSubscriptionPort.loadMemberSubscription(memberSubscriptionId);
 
 		if (!memberSubscription.getMember().getId().equals(memberId)) {
-			throw new CustomException(ApiErrorCode.MEMBER_SUBSCRIPTION_FORBIDDEN);
+			throw new CustomException(ApiErrorCode.MEMBER_SUBSCRIPTION_ACCESS_FORBIDDEN);
 		}
 
 		List<SpendingRecordSummary> spendingRecords = loadSpendingRecordPort.loadSpendingRecords(memberSubscriptionId)

@@ -53,7 +53,7 @@ public class AuthService {
 
 	public TokenPair reissue(String refreshTokenValue, Instant now) {
 		if (refreshTokenValue == null) {
-			throw new CustomException(AdminErrorCode.REFRESH_TOKEN_NOT_NULL);
+			throw new CustomException(AdminErrorCode.REFRESH_TOKEN_REQUIRED);
 		}
 
 		RefreshToken refreshToken = refreshTokenPort.load(refreshTokenValue);
@@ -80,7 +80,7 @@ public class AuthService {
 
 	public void logout(String refreshTokenValue) {
 		if (refreshTokenValue == null) {
-			throw new CustomException(AdminErrorCode.REFRESH_TOKEN_NOT_NULL);
+			throw new CustomException(AdminErrorCode.REFRESH_TOKEN_REQUIRED);
 		}
 
 		refreshTokenPort.delete(refreshTokenValue);

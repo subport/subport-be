@@ -74,11 +74,11 @@ public class OciObjectStorageAdapter implements
 	private void validateFile(MultipartFile image) {
 		String contentType = image.getContentType();
 		if (contentType == null || !contentType.startsWith(IMAGE_TYPE_PREFIX)) {
-			throw new CustomException(ApiErrorCode.INVALID_IMAGE_FILE_TYPE);
+			throw new CustomException(ApiErrorCode.IMAGE_FILE_TYPE_NOT_SUPPORTED);
 		}
 
 		if (image.getSize() > MAX_FILE_SIZE) {
-			throw new CustomException(ApiErrorCode.INVALID_IMAGE_FILE_SIZE);
+			throw new CustomException(ApiErrorCode.IMAGE_FILE_SIZE_EXCEEDED);
 		}
 	}
 
@@ -94,7 +94,7 @@ public class OciObjectStorageAdapter implements
 		try {
 			return image.getBytes();
 		} catch (IOException e) {
-			throw new CustomException(ApiErrorCode.FILE_READ_FAILED, e);
+			throw new CustomException(ApiErrorCode.IMAGE_FILE_READ_FAILED, e);
 		}
 	}
 

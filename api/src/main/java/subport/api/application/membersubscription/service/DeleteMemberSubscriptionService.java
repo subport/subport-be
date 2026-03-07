@@ -25,7 +25,7 @@ public class DeleteMemberSubscriptionService implements DeleteMemberSubscription
 			loadMemberSubscriptionPort.loadMemberSubscription(memberSubscriptionId);
 
 		if (!memberSubscription.getMember().getId().equals(memberId)) {
-			throw new CustomException(ApiErrorCode.MEMBER_SUBSCRIPTION_FORBIDDEN);
+			throw new CustomException(ApiErrorCode.MEMBER_SUBSCRIPTION_ACCESS_FORBIDDEN);
 		}
 
 		deleteMemberSubscriptionPort.delete(memberSubscription);

@@ -58,12 +58,12 @@ public class UpdateMemberSubscriptionService implements
 		}
 
 		if (!memberSubscription.getMember().getId().equals(memberId)) {
-			throw new CustomException(ApiErrorCode.MEMBER_SUBSCRIPTION_FORBIDDEN);
+			throw new CustomException(ApiErrorCode.MEMBER_SUBSCRIPTION_ACCESS_FORBIDDEN);
 		}
 
 		Plan newPlan = loadPlanPort.loadPlan(newPlanId);
 		if (!newPlan.getSubscription().getId().equals(memberSubscription.getSubscription().getId())) {
-			throw new CustomException(ApiErrorCode.INVALID_MEMBER_SUBSCRIPTION_PLAN);
+			throw new CustomException(ApiErrorCode.PLAN_NOT_BELONG_TO_SUBSCRIPTION);
 		}
 
 		if (!newPlan.isSystemProvided() && !newPlan.getMember().getId().equals(memberId)) {
@@ -103,7 +103,7 @@ public class UpdateMemberSubscriptionService implements
 		MemberSubscription memberSubscription = loadMemberSubscriptionPort.loadMemberSubscription(memberSubscriptionId);
 
 		if (!memberSubscription.getMember().getId().equals(memberId)) {
-			throw new CustomException(ApiErrorCode.MEMBER_SUBSCRIPTION_FORBIDDEN);
+			throw new CustomException(ApiErrorCode.MEMBER_SUBSCRIPTION_ACCESS_FORBIDDEN);
 		}
 
 		boolean dutchPay = request.dutchPay();
@@ -134,7 +134,7 @@ public class UpdateMemberSubscriptionService implements
 		MemberSubscription memberSubscription = loadMemberSubscriptionPort.loadMemberSubscription(memberSubscriptionId);
 
 		if (!memberSubscription.getMember().getId().equals(memberId)) {
-			throw new CustomException(ApiErrorCode.MEMBER_SUBSCRIPTION_FORBIDDEN);
+			throw new CustomException(ApiErrorCode.MEMBER_SUBSCRIPTION_ACCESS_FORBIDDEN);
 		}
 
 		memberSubscription.updateMemo(request.memo());

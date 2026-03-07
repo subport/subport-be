@@ -63,7 +63,7 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 
 		Plan plan = loadPlanPort.loadPlan(request.planId());
 		if (!plan.getSubscription().getId().equals(subscriptionId)) {
-			throw new CustomException(ApiErrorCode.INVALID_MEMBER_SUBSCRIPTION_PLAN);
+			throw new CustomException(ApiErrorCode.PLAN_NOT_BELONG_TO_SUBSCRIPTION);
 		}
 		if (!plan.isSystemProvided() && !plan.getMember().getId().equals(memberId)) {
 			throw new CustomException(ApiErrorCode.PLAN_USE_FORBIDDEN);
@@ -99,10 +99,10 @@ public class RegisterMemberSubscriptionService implements RegisterMemberSubscrip
 
 	private void validateStartDate(LocalDate startDate, LocalDate currentDate) {
 		if (startDate.isAfter(currentDate)) {
-			throw new CustomException(ApiErrorCode.INVALID_START_DATE_FUTURE);
+			throw new CustomException(ApiErrorCode.START_DATE_IN_FUTURE);
 		}
 		if (startDate.isBefore(currentDate.minusYears(1))) {
-			throw new CustomException(ApiErrorCode.INVALID_START_DATE_TOO_OLD);
+			throw new CustomException(ApiErrorCode.START_DATE_TOO_OLD);
 		}
 	}
 }

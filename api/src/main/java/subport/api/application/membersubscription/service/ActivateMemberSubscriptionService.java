@@ -43,17 +43,17 @@ public class ActivateMemberSubscriptionService implements ActivateMemberSubscrip
 
 		LocalDate startDate = request.startDate();
 		if (startDate.isBefore(memberSubscription.getLastPaymentDate())) {
-			throw new CustomException(ApiErrorCode.INVALID_REACTIVATION_START_DATE);
+			throw new CustomException(ApiErrorCode.REACTIVATION_START_DATE_BEFORE_LAST_PAYMENT);
 		}
 		if (startDate.isAfter(currentDateTime.toLocalDate())) {
-			throw new CustomException(ApiErrorCode.INVALID_START_DATE_FUTURE);
+			throw new CustomException(ApiErrorCode.START_DATE_IN_FUTURE);
 		}
 		if (startDate.isBefore(currentDateTime.toLocalDate().minusYears(1))) {
-			throw new CustomException(ApiErrorCode.INVALID_START_DATE_TOO_OLD);
+			throw new CustomException(ApiErrorCode.START_DATE_TOO_OLD);
 		}
 
 		if (!memberSubscription.getMember().getId().equals(memberId)) {
-			throw new CustomException(ApiErrorCode.MEMBER_SUBSCRIPTION_FORBIDDEN);
+			throw new CustomException(ApiErrorCode.MEMBER_SUBSCRIPTION_ACCESS_FORBIDDEN);
 		}
 		if (memberSubscription.isActive()) {
 			return memberSubscriptionQueryUseCase.getMemberSubscription(

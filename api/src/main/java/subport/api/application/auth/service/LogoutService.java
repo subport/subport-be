@@ -19,7 +19,7 @@ public class LogoutService implements LogoutUseCase {
 	@Override
 	public void logout(String refreshTokenValue) {
 		if (refreshTokenValue == null) {
-			throw new CustomException(ApiErrorCode.REFRESH_TOKEN_NOT_NULL);
+			throw new CustomException(ApiErrorCode.REFRESH_TOKEN_REQUIRED);
 		}
 
 		deleteRefreshTokenPort.delete(refreshTokenValue);

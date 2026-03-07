@@ -37,7 +37,7 @@ public class ReissueTokenService implements ReissueTokenUseCase {
 	@Override
 	public TokenPair reissue(String refreshTokenValue, Instant currentInstant) {
 		if (refreshTokenValue == null) {
-			throw new CustomException(ApiErrorCode.REFRESH_TOKEN_NOT_NULL);
+			throw new CustomException(ApiErrorCode.REFRESH_TOKEN_REQUIRED);
 		}
 
 		RefreshToken refreshToken = loadRefreshTokenPort.load(refreshTokenValue);

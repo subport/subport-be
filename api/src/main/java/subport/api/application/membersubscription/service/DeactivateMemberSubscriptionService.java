@@ -32,7 +32,7 @@ public class DeactivateMemberSubscriptionService implements DeactivateMemberSubs
 			loadMemberSubscriptionPort.loadMemberSubscription(memberSubscriptionId);
 
 		if (!memberSubscription.getMember().getId().equals(memberId)) {
-			throw new CustomException(ApiErrorCode.MEMBER_SUBSCRIPTION_FORBIDDEN);
+			throw new CustomException(ApiErrorCode.MEMBER_SUBSCRIPTION_ACCESS_FORBIDDEN);
 		}
 		if (!memberSubscription.isActive()) {
 			return memberSubscriptionQueryUseCase.getMemberSubscription(

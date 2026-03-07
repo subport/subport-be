@@ -91,7 +91,7 @@ public class AdminExceptionHandler {
 	public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
 		log.warn("HTTP message not readable: {}", e.getMessage());
 
-		ErrorCode errorCode = AdminErrorCode.INVALID_REQUEST_BODY;
+		ErrorCode errorCode = AdminErrorCode.UNREADABLE_REQUEST_BODY;
 
 		return ResponseEntity.status(errorCode.getStatus())
 			.body(ErrorResponse.of(errorCode));
