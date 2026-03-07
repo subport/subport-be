@@ -46,7 +46,7 @@ public class Member extends BaseTimeEntity {
 		this.providerId = providerId;
 		this.nickname = nickname;
 		this.email = email;
-		this.paymentReminderEnabled = false;
+		this.paymentReminderEnabled = true;
 		this.reminderDaysBefore = 3;
 		this.lastActiveAt = now;
 		this.deleted = false;
