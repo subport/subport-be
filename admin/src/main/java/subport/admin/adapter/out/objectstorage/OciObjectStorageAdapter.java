@@ -1,10 +1,13 @@
 package subport.admin.adapter.out.objectstorage;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+
+import net.coobird.thumbnailator.Thumbnails;
 
 import lombok.RequiredArgsConstructor;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -37,11 +40,11 @@ public class OciObjectStorageAdapter implements
 
 	@Override
 	public String upload(MultipartFile image, String subscriptionName) {
-		validateFile(image);
+		validateImage(image);
 
 		String fileName = subscriptionName + extractExtension(image.getOriginalFilename());
 
-		byte[] fileBytes = readFileBytes(image);
+		byte[] fileBytes = resizeImage(image);
 
 		PutObjectRequest putObjectRequest = PutObjectRequest.builder()
 			.bucket(bucketName)
@@ -69,7 +72,7 @@ public class OciObjectStorageAdapter implements
 		s3Client.deleteObject(deleteObjectRequest);
 	}
 
-	private void validateFile(MultipartFile image) {
+	private void validateImage(MultipartFile image) {
 		String contentType = image.getContentType();
 		if (contentType == null || !contentType.startsWith(IMAGE_TYPE_PREFIX)) {
 			throw new CustomException(AdminErrorCode.IMAGE_FILE_TYPE_NOT_SUPPORTED);
@@ -83,9 +86,14 @@ public class OciObjectStorageAdapter implements
 		return "";
 	}
 
-	private byte[] readFileBytes(MultipartFile image) {
+	private byte[] resizeImage(MultipartFile image) {
 		try {
-			return image.getBytes();
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			Thumbnails.of(image.getInputStream())
+				.size(240, 240)
+				.keepAspectRatio(true)
+				.toOutputStream(outputStream);
+			return outputStream.toByteArray();
 		} catch (IOException e) {
 			throw new CustomException(AdminErrorCode.IMAGE_FILE_READ_FAILED, e);
 		}

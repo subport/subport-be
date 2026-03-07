@@ -14,6 +14,8 @@ dependencies {
 
     implementation("software.amazon.awssdk:s3:2.40.15")
 
+    implementation("net.coobird:thumbnailator:0.4.20")
+
     runtimeOnly("com.mysql:mysql-connector-j")
     runtimeOnly("com.h2database:h2")
 
