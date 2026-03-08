@@ -9,6 +9,8 @@ public record RegisterCustomSubscriptionRequest(
 	String name,
 
 	@NotBlank
-	String type
+	String type,
+
+	String defaultImageName
 ) {
 }

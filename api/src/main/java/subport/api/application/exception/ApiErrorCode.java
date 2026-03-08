@@ -43,6 +43,7 @@ public enum ApiErrorCode implements ErrorCode {
 	SUBSCRIPTION_WRITE_FORBIDDEN(HttpStatus.FORBIDDEN, "본인이 등록한 구독 서비스가 아니면 수정 및 삭제가 불가능합니다."),
 	SUBSCRIPTION_READ_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공이 아니면 본인이 등록한 구독 서비스만 조회가 가능합니다."),
 	SUBSCRIPTION_USE_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공 구독 서비스이거나 본인이 등록한 구독 서비스만 사용이 가능합니다."),
+	INVALID_DEFAULT_IMAGE_NAME(HttpStatus.BAD_REQUEST, "유효하지 않은 기본 이미지 이름입니다."),
 
 	// 구독 정보 관련
 	MEMBER_SUBSCRIPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 구독 정보입니다."),

@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import subport.api.application.member.port.out.LoadMemberPort;
+import subport.api.application.subscription.SubscriptionDefaultImage;
 import subport.api.application.subscription.port.in.RegisterCustomSubscriptionUseCase;
 import subport.api.application.subscription.port.in.dto.RegisterCustomSubscriptionRequest;
 import subport.api.application.subscription.port.in.dto.RegisterCustomSubscriptionResponse;
@@ -34,9 +35,13 @@ public class RegisterCustomSubscriptionService implements RegisterCustomSubscrip
 		RegisterCustomSubscriptionRequest request,
 		MultipartFile image
 	) {
+		String imageName = request.defaultImageName();
 		String logoImageUrl = defaultLogoImageUrl;
-		if (image != null) {
+		if (image != null && imageName == null) {
 			logoImageUrl = uploadSubscriptionImagePort.upload(image);
+		}
+		if (image == null && imageName != null) {
+			logoImageUrl = SubscriptionDefaultImage.fromName(imageName).getUrl();
 		}
 
 		Member member = loadMemberPort.load(memberId);
