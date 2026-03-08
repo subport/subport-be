@@ -1,6 +1,7 @@
 package subport.api.application.subscription.service;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -16,8 +17,9 @@ public class GetSubscriptionTypesService implements GetSubscriptionTypesUseCase 
 		SubscriptionType[] subscriptionTypes = SubscriptionType.values();
 
 		return Arrays.stream(subscriptionTypes)
+			.sorted(Comparator.comparingInt((SubscriptionType type) -> type == SubscriptionType.ETC ? 1 : 0)
+				.thenComparing(SubscriptionType::getDisplayName))
 			.map(SubscriptionType::getDisplayName)
-			.sorted()
 			.toList();
 	}
 }
