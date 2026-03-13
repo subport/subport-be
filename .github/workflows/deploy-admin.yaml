@@ -6,13 +6,10 @@ on:
       - main
     paths:
       - 'admin/**'
-      - 'common/**'
-      - 'domain/**'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -64,3 +61,4 @@ jobs:
             docker compose pull admin
             docker compose up -d --no-deps admin
             docker image prune -f || true
+            docker exec subport-nginx-1 nginx -s reload
