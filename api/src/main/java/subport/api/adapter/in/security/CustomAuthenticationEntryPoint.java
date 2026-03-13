@@ -35,19 +35,25 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 		Object exception = request.getAttribute("exception");
 
 		if (exception instanceof ExpiredJwtException) {
+			log.info("[AUTH] Access token expired");
 			setErrorResponse(response, ApiErrorCode.ACCESS_TOKEN_EXPIRED);
 			return;
 		}
 
 		// ExpiredJwtException을 제외한 나머지 JwtException 처리
-		if (exception instanceof JwtException) {
+		if (exception instanceof JwtException e) {
+			log.warn("[AUTH] Invalid token format: {}", e.getMessage());
 			setErrorResponse(response, ApiErrorCode.INVALID_TOKEN_FORMAT);
 			return;
 		}
 
-		if (exception instanceof CustomException) {
-			setErrorResponse(response, ((CustomException)exception).getErrorCode());
+		if (exception instanceof CustomException e) {
+			log.warn("[AUTH] Auth failed: code={}", e.getErrorCode().getCode());
+			setErrorResponse(response, e.getErrorCode());
 		}
+
+		log.warn("[AUTH] Unauthorized access: {}", authException.getMessage());
+		setErrorResponse(response, ApiErrorCode.UNAUTHORIZED);
 	}
 
 	private void setErrorResponse(HttpServletResponse response, ErrorCode errorCode) throws IOException {

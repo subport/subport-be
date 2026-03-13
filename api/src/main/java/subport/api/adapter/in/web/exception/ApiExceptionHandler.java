@@ -32,7 +32,7 @@ public class ApiExceptionHandler {
 	@ExceptionHandler(CustomException.class)
 	public ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
 		ErrorCode errorCode = e.getErrorCode();
-		log.warn("Business exception: {}", errorCode.getCode());
+		log.warn("[BIZ] code={}, message={}", errorCode.getCode(), errorCode.getMessage());
 
 		return ResponseEntity.status(errorCode.getStatus())
 			.body(ErrorResponse.of(errorCode));
@@ -41,7 +41,7 @@ public class ApiExceptionHandler {
 	@ExceptionHandler(RefreshTokenExpiredException.class)
 	public ResponseEntity<ErrorResponse> handleRefreshTokenExpiredException(RefreshTokenExpiredException e) {
 		ErrorCode errorCode = e.getErrorCode();
-		log.warn("Refresh token expired");
+		log.warn("[AUTH] Refresh token expired");
 
 		return ResponseEntity.status(errorCode.getStatus())
 			.header(
@@ -53,21 +53,20 @@ public class ApiExceptionHandler {
 
 	@ExceptionHandler(BindException.class)
 	public ResponseEntity<ErrorResponse> handleBindException(BindException e) {
-		log.warn("Validation failed: {}", e.getBindingResult().getAllErrors());
+		Map<String, String> fieldErrors = extractFieldErrors(e.getBindingResult());
+		log.warn("[VALIDATION] errors={}", fieldErrors);
 
 		ErrorCode errorCode = ApiErrorCode.INVALID_INPUT_VALUE;
 
 		return ResponseEntity.status(errorCode.getStatus())
-			.body(ErrorResponse.of(errorCode, extractFieldErrors(e.getBindingResult())));
+			.body(ErrorResponse.of(errorCode, fieldErrors));
 	}
 
 	@ExceptionHandler(MissingServletRequestParameterException.class)
 	public ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(
 		MissingServletRequestParameterException e
 	) {
-		log.warn("Missing required parameter: parameter='{}', type='{}'",
-			e.getParameterName(),
-			e.getParameterType());
+		log.warn("[PARAM] Missing parameter='{}', type='{}'", e.getParameterName(), e.getParameterType());
 
 		ErrorCode errorCode = ApiErrorCode.MISSING_REQUEST_PARAMETER;
 
@@ -79,7 +78,7 @@ public class ApiExceptionHandler {
 	public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(
 		MethodArgumentTypeMismatchException e
 	) {
-		log.warn("Method argument type mismatch: parameter='{}', value='{}', requiredType='{}'",
+		log.warn("[PARAM] Type mismatch: parameter='{}', value='{}', requiredType='{}'",
 			e.getName(),
 			e.getValue(),
 			e.getRequiredType() != null ? e.getRequiredType().getSimpleName() : "unknown");
@@ -92,7 +91,7 @@ public class ApiExceptionHandler {
 
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
-		log.warn("HTTP message not readable: {}", e.getMessage());
+		log.warn("[REQUEST] Unreadable body: {}", e.getMessage());
 
 		ErrorCode errorCode = ApiErrorCode.UNREADABLE_REQUEST_BODY;
 
@@ -101,9 +100,7 @@ public class ApiExceptionHandler {
 	}
 
 	@ExceptionHandler(NoResourceFoundException.class)
-	public ResponseEntity<ErrorResponse> handleNoResourceFoundException(NoResourceFoundException e) {
-		log.warn("No resource found: {}", e.getMessage());
-
+	public ResponseEntity<ErrorResponse> handleNoResourceFoundException(NoResourceFoundException ignored) {
 		ErrorCode errorCode = ApiErrorCode.RESOURCE_NOT_FOUND;
 
 		return ResponseEntity
@@ -115,7 +112,7 @@ public class ApiExceptionHandler {
 	public ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(
 		HttpRequestMethodNotSupportedException e
 	) {
-		log.warn("Method not supported: {}", e.getMessage());
+		log.warn("[ROUTE] Method not allowed: {}", e.getMessage());
 
 		ErrorCode errorCode = ApiErrorCode.METHOD_NOT_ALLOWED;
 
@@ -126,7 +123,7 @@ public class ApiExceptionHandler {
 
 	@ExceptionHandler(MaxUploadSizeExceededException.class)
 	public ResponseEntity<ErrorResponse> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e) {
-		log.warn("Maximum upload size exceeded: {}", e.getMessage());
+		log.warn("[UPLOAD] File size exceeded: {}", e.getMessage());
 
 		ApiErrorCode errorCode = ApiErrorCode.IMAGE_FILE_SIZE_EXCEEDED;
 
@@ -137,7 +134,7 @@ public class ApiExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorResponse> handleRemainingExceptions(Exception e) {
-		log.error("Unexpected exception occurred", e);
+		log.error("[SYSTEM] Unexpected exception: {}", e.getMessage(), e);
 
 		ErrorCode errorCode = ApiErrorCode.INTERNAL_SERVER_ERROR;
 

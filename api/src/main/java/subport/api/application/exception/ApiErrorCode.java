@@ -17,6 +17,7 @@ public enum ApiErrorCode implements ErrorCode {
 	REFRESH_TOKEN_REQUIRED(HttpStatus.UNAUTHORIZED, "Refresh 토큰 값은 필수입니다."),
 	INVALID_TOKEN_FORMAT(HttpStatus.UNAUTHORIZED, "토큰 형식이 올바르지 않습니다."),
 	FORBIDDEN_ACCESS(HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),
+	UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증이 필요합니다."),
 
 	// 서버 에러
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "예상치 못한 문제가 발생했습니다."),
