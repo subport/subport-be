@@ -5,4 +5,6 @@ import subport.domain.spendingrecord.SpendingRecord;
 public interface DeleteSpendingRecordPort {
 
 	void delete(SpendingRecord spendingRecord);
+
+	void delete(Long memberId);
 }

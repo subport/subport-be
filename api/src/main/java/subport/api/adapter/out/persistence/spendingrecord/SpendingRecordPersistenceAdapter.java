@@ -61,4 +61,9 @@ public class SpendingRecordPersistenceAdapter implements
 	public void delete(SpendingRecord spendingRecord) {
 		spendingRecordRepository.delete(spendingRecord);
 	}
+
+	@Override
+	public void delete(Long memberId) {
+		spendingRecordRepository.deleteByMemberId(memberId);
+	}
 }

@@ -20,4 +20,6 @@ public interface SpringDataSpendingRecordRepository extends JpaRepository<Spendi
 	);
 
 	List<SpendingRecord> findByMemberIdAndPaymentDate(Long memberId, LocalDate paymentDate);
+
+	void deleteByMemberId(Long memberId);
 }
