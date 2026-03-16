@@ -20,4 +20,8 @@ public interface LoadMemberSubscriptionPort {
 	List<MemberSubscription> loadMemberSubscriptions(Long memberId, LocalDate start, LocalDate end);
 
 	List<MemberSubscription> loadMemberSubscriptions(Long memberId, LocalDate targetDate);
+
+	boolean existsMemberSubscriptionBySubscriptionId(Long subscriptionId);
+
+	boolean existsMemberSubscriptionByPlanId(Long planId);
 }

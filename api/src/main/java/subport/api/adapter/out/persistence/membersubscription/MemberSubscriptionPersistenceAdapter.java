@@ -66,6 +66,16 @@ public class MemberSubscriptionPersistenceAdapter implements
 	}
 
 	@Override
+	public boolean existsMemberSubscriptionBySubscriptionId(Long subscriptionId) {
+		return memberSubscriptionRepository.existsBySubscriptionId(subscriptionId);
+	}
+
+	@Override
+	public boolean existsMemberSubscriptionByPlanId(Long planId) {
+		return memberSubscriptionRepository.existsByPlanId(planId);
+	}
+
+	@Override
 	public void delete(MemberSubscription memberSubscription) {
 		memberSubscriptionRepository.delete(memberSubscription);
 	}
