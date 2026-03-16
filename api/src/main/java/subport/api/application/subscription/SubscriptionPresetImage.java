@@ -5,7 +5,7 @@ import subport.api.application.exception.ApiErrorCode;
 import subport.common.exception.CustomException;
 
 @Getter
-public enum SubscriptionDefaultImage {
+public enum SubscriptionPresetImage {
 
 	ART("art"),
 	BOOKS("books"),
@@ -25,16 +25,16 @@ public enum SubscriptionDefaultImage {
 
 	private final String imageName;
 
-	SubscriptionDefaultImage(String imageName) {
+	SubscriptionPresetImage(String imageName) {
 		this.imageName = imageName;
 	}
 
 	public String getUrl() {
-		return BASE_URL + "default_" + imageName + ".png";
+		return BASE_URL + "preset_" + imageName + ".png";
 	}
 
-	public static SubscriptionDefaultImage fromName(String name) {
-		for (SubscriptionDefaultImage image : values()) {
+	public static SubscriptionPresetImage fromName(String name) {
+		for (SubscriptionPresetImage image : values()) {
 			if (image.imageName.equals(name)) {
 				return image;
 			}
