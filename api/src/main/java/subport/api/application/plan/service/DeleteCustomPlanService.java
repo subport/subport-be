@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import subport.api.application.exception.ApiErrorCode;
+import subport.api.application.membersubscription.port.out.LoadMemberSubscriptionPort;
 import subport.api.application.plan.port.in.DeleteCustomPlanUseCase;
 import subport.api.application.plan.port.out.DeletePlanPort;
 import subport.api.application.plan.port.out.LoadPlanPort;
@@ -18,6 +19,7 @@ public class DeleteCustomPlanService implements DeleteCustomPlanUseCase {
 
 	private final LoadPlanPort loadPlanPort;
 	private final DeletePlanPort deletePlanPort;
+	private final LoadMemberSubscriptionPort loadMemberSubscriptionPort;
 
 	@Override
 	public void delete(Long memberId, Long planId) {
@@ -29,6 +31,10 @@ public class DeleteCustomPlanService implements DeleteCustomPlanUseCase {
 
 		if (!plan.getMember().getId().equals(memberId)) {
 			throw new CustomException(ApiErrorCode.PLAN_WRITE_FORBIDDEN);
+		}
+
+		if (loadMemberSubscriptionPort.existsMemberSubscriptionByPlanId(planId)) {
+			throw new CustomException(ApiErrorCode.PLAN_IN_USE);
 		}
 
 		deletePlanPort.delete(plan);
