@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import subport.api.application.exception.ApiErrorCode;
+import subport.api.application.subscription.SubscriptionPresetImage;
 import subport.api.application.subscription.port.in.UpdateCustomSubscriptionUseCase;
 import subport.api.application.subscription.port.in.dto.GetSubscriptionResponse;
 import subport.api.application.subscription.port.in.dto.UpdateCustomSubscriptionRequest;
@@ -49,7 +50,7 @@ public class UpdateCustomSubscriptionService implements UpdateCustomSubscription
 
 		String logoImageUrl = subscription.getLogoImageUrl();
 		if (newImage != null) {
-			if (!defaultLogoImageUrl.equals(logoImageUrl)) {
+			if (!defaultLogoImageUrl.equals(logoImageUrl) && !SubscriptionPresetImage.isPresetImage(logoImageUrl)) {
 				deleteCustomSubscriptionImagePort.delete(logoImageUrl);
 			}
 

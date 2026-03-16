@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import subport.api.application.exception.ApiErrorCode;
 import subport.api.application.plan.port.out.DeletePlanPort;
+import subport.api.application.subscription.SubscriptionPresetImage;
 import subport.api.application.subscription.port.in.DeleteCustomSubscriptionUseCase;
 import subport.api.application.subscription.port.out.DeleteCustomSubscriptionImagePort;
 import subport.api.application.subscription.port.out.DeleteSubscriptionPort;
@@ -42,7 +43,7 @@ public class DeleteCustomSubscriptionService implements DeleteCustomSubscription
 		deletePlanPort.deleteBySubscriptionId(subscriptionId);
 
 		String logoImageUrl = subscription.getLogoImageUrl();
-		if (!defaultLogoImageUrl.equals(logoImageUrl)) {
+		if (!defaultLogoImageUrl.equals(logoImageUrl) && !SubscriptionPresetImage.isPresetImage(logoImageUrl)) {
 			deleteCustomSubscriptionImagePort.delete(logoImageUrl);
 		}
 

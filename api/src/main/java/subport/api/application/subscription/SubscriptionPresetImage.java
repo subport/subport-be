@@ -41,4 +41,13 @@ public enum SubscriptionPresetImage {
 		}
 		throw new CustomException(ApiErrorCode.INVALID_DEFAULT_IMAGE_NAME);
 	}
+
+	public static boolean isPresetImage(String url) {
+		for (SubscriptionPresetImage image : values()) {
+			if (image.getUrl().equals(url)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
