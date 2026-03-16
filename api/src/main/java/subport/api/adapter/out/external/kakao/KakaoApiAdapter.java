@@ -16,7 +16,7 @@ public class KakaoApiAdapter implements UnlinkMemberPort {
 
 	private final RestClient kakaoClient;
 
-	@Value("${kakao.admin-key}")
+	@Value("${app.kakao.admin-key}")
 	private String adminKey;
 
 	@Override

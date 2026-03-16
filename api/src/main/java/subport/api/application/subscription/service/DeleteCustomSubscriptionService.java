@@ -24,7 +24,7 @@ public class DeleteCustomSubscriptionService implements DeleteCustomSubscription
 	private final DeletePlanPort deletePlanPort;
 	private final DeleteCustomSubscriptionImagePort deleteCustomSubscriptionImagePort;
 
-	@Value("${subscription.default-logo-url}")
+	@Value("${app.subscription.default-image-url}")
 	private String defaultLogoImageUrl;
 
 	@Override

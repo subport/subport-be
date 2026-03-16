@@ -26,7 +26,7 @@ public class RegisterCustomSubscriptionService implements RegisterCustomSubscrip
 	private final LoadMemberPort loadMemberPort;
 	private final UploadCustomSubscriptionImagePort uploadSubscriptionImagePort;
 
-	@Value("${subscription.default-logo-url}")
+	@Value("${app.subscription.default-image-url}")
 	private String defaultLogoImageUrl;
 
 	@Override

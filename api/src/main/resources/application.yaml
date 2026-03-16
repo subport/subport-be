@@ -40,22 +40,23 @@ spring:
       max-file-size: 5MB
       max-request-size: 5MB
 
-kakao:
-  admin-key: ${KAKAO_ADMIN_KEY}
+app:
+  kakao:
+    admin-key: ${KAKAO_ADMIN_KEY}
 
-oci:
-  bucket-name: ${OCI_BUCKET_NAME}
-  namespace: ${OCI_NAMESPACE}
-  region: ${OCI_REGION}
-  secret-key: ${OCI_SECRET_KEY}
-  access-key: ${OCI_ACCESS_KEY}
+  oci:
+    bucket-name: ${OCI_BUCKET_NAME}
+    namespace: ${OCI_NAMESPACE}
+    region: ${OCI_REGION}
+    secret-key: ${OCI_SECRET_KEY}
+    access-key: ${OCI_ACCESS_KEY}
 
-koreaexim:
-  authkey: ${KOREAEXIM_AUTH_KEY}
-  data: AP01
+  koreaexim:
+    authkey: ${KOREAEXIM_AUTH_KEY}
+    data: AP01
 
-subscription:
-  default-logo-url: https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axnklumwzgke/b/subpport-bucket/o/subscription_default.png
+  subscription:
+    default-image-url: https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axnklumwzgke/b/subpport-bucket/o/subscription_default.png
 
-jwt:
-  secret: ${API_JWT_SECRET}
+  jwt:
+    secret: ${API_JWT_SECRET}

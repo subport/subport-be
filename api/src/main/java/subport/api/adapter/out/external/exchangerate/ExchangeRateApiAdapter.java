@@ -18,10 +18,10 @@ public class ExchangeRateApiAdapter implements FetchExchangeRatePort {
 
 	private final RestClient exchangeRateClient;
 
-	@Value("${koreaexim.authkey}")
+	@Value("${app.koreaexim.authkey}")
 	private String authKey;
 
-	@Value("${koreaexim.data}")
+	@Value("${app.koreaexim.data}")
 	private String data;
 
 	@Override

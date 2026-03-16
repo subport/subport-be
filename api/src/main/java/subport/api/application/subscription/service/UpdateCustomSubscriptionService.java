@@ -27,7 +27,7 @@ public class UpdateCustomSubscriptionService implements UpdateCustomSubscription
 	private final SubscriptionQueryService subscriptionQueryService;
 	private final DeleteCustomSubscriptionImagePort deleteCustomSubscriptionImagePort;
 
-	@Value("${subscription.default-logo-url}")
+	@Value("${app.subscription.default-image-url}")
 	private String defaultLogoImageUrl;
 
 	@Override

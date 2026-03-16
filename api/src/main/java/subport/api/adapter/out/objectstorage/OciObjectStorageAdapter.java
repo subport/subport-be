@@ -30,13 +30,13 @@ public class OciObjectStorageAdapter implements
 
 	private final S3Client s3Client;
 
-	@Value("${oci.bucket-name}")
+	@Value("${app.oci.bucket-name}")
 	private String bucketName;
 
-	@Value("${oci.namespace}")
+	@Value("${app.oci.namespace}")
 	private String namespace;
 
-	@Value("${oci.region}")
+	@Value("${app.oci.region}")
 	private String region;
 
 	@Override

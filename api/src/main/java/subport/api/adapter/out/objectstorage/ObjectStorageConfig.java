@@ -15,16 +15,16 @@ import software.amazon.awssdk.services.s3.S3Configuration;
 @Configuration
 public class ObjectStorageConfig {
 
-	@Value("${oci.namespace}")
+	@Value("${app.oci.namespace}")
 	private String namespace;
 
-	@Value("${oci.region}")
+	@Value("${app.oci.region}")
 	private String region;
 
-	@Value("${oci.access-key}")
+	@Value("${app.oci.access-key}")
 	private String accessKey;
 
-	@Value("${oci.secret-key}")
+	@Value("${app.oci.secret-key}")
 	private String secretKey;
 
 	@Bean
