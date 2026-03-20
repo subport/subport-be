@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import subport.api.application.member.port.in.SyncMemberUseCase;
 import subport.api.application.member.port.in.dto.LoginMemberInfo;
 import subport.api.application.member.port.in.dto.SyncMemberInfo;
+import subport.domain.member.MemberRole;
 
 @Component
 @RequiredArgsConstructor
@@ -30,7 +31,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 		return new CustomOAuth2User(
 			syncMemberInfo.id(),
-			syncMemberInfo.firstLogin()
+			syncMemberInfo.firstLogin(),
+			MemberRole.MEMBER
 		);
 	}
 }
