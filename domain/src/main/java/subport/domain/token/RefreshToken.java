@@ -28,6 +28,8 @@ public class RefreshToken {
 
 	private Long subjectId;
 
+	private RefreshTokenRole role;
+
 	private Instant issuedAt;
 
 	private Instant expiration;
@@ -35,11 +37,13 @@ public class RefreshToken {
 	public RefreshToken(
 		String tokenValue,
 		Long subjectId,
+		RefreshTokenRole role,
 		Instant issuedAt,
 		Instant expiration
 	) {
 		this.tokenValue = tokenValue;
 		this.subjectId = subjectId;
+		this.role = role;
 		this.issuedAt = issuedAt;
 		this.expiration = expiration;
 	}
