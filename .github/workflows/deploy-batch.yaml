@@ -6,6 +6,8 @@ on:
       - main
     paths:
       - 'batch/**'
+      - 'common/**'
+      - 'domain/**'
 
 jobs:
   deploy:
