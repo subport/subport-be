@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import subport.admin.application.exception.AdminErrorCode;
 import subport.common.jwt.dto.TokenClaims;
-import subport.domain.token.Role;
 
 @Service
 @RequiredArgsConstructor
@@ -24,10 +23,6 @@ public class AuthenticateTokenService {
 
 		String accessToken = authorizationHeader.split(" ")[1];
 		TokenClaims tokenClaims = extractTokenClaimsPort.extract(accessToken);
-
-		if (!tokenClaims.role().equals(Role.ADMIN.name())) {
-			throw new subport.common.exception.CustomException(AdminErrorCode.FORBIDDEN_ACCESS);
-		}
 
 		return tokenClaims.subjectId();
 	}

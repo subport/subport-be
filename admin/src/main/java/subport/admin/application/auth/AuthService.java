@@ -16,7 +16,7 @@ import subport.common.exception.CustomException;
 import subport.common.exception.RefreshTokenExpiredException;
 import subport.common.jwt.dto.TokenPair;
 import subport.domain.token.RefreshToken;
-import subport.domain.token.Role;
+import subport.domain.token.RefreshTokenRole;
 
 @Service
 @Transactional
@@ -36,8 +36,12 @@ public class AuthService {
 			throw new CustomException(AdminErrorCode.ADMIN_PASSWORD_MISMATCH);
 		}
 
-		String accessToken = createAccessTokenPort.createAccessToken(admin.getId(), now, Role.ADMIN);
-		RefreshToken refreshToken = createRefreshTokenPort.createRefreshToken(admin.getId(), now, Role.ADMIN);
+		String accessToken = createAccessTokenPort.createAccessToken(admin.getId(), now);
+		RefreshToken refreshToken = createRefreshTokenPort.createRefreshToken(
+			admin.getId(),
+			now,
+			RefreshTokenRole.ADMIN
+		);
 
 		refreshTokenPort.save(refreshToken);
 
@@ -63,9 +67,9 @@ public class AuthService {
 		}
 
 		Long adminId = refreshToken.getSubjectId();
-		String accessToken = createAccessTokenPort.createAccessToken(adminId, now, Role.ADMIN);
+		String accessToken = createAccessTokenPort.createAccessToken(adminId, now);
 
-		RefreshToken newRefreshToken = createRefreshTokenPort.createRefreshToken(adminId, now, Role.ADMIN);
+		RefreshToken newRefreshToken = createRefreshTokenPort.createRefreshToken(adminId, now, RefreshTokenRole.ADMIN);
 		refreshTokenPort.save(newRefreshToken);
 
 		refreshTokenPort.delete(refreshToken);
