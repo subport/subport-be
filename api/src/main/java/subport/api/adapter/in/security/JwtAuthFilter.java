@@ -1,7 +1,6 @@
 package subport.api.adapter.in.security;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +19,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import subport.api.adapter.in.security.oauth2.CustomOAuth2User;
 import subport.api.application.auth.port.in.AuthenticateAccessTokenUseCase;
+import subport.api.application.auth.port.in.dto.AuthMemberInfo;
 import subport.common.exception.CustomException;
 
 @Component
@@ -41,9 +41,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 		@NonNull HttpServletResponse response,
 		@NonNull FilterChain filterChain
 	) throws ServletException, IOException {
-		Long memberId;
+		AuthMemberInfo memberInfo;
 		try {
-			memberId = authenticateAccessTokenUseCase.authenticateAndGetMemberId(
+			memberInfo = authenticateAccessTokenUseCase.authenticateAndGetMemberId(
 				request.getHeader("Authorization")
 			);
 		} catch (JwtException | CustomException e) {
@@ -52,12 +52,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		CustomOAuth2User oAuth2User = new CustomOAuth2User(memberId, false);
+		CustomOAuth2User oAuth2User = new CustomOAuth2User(
+			memberInfo.subjectId(),
+			false,
+			memberInfo.role()
+		);
 		SecurityContextHolder.getContext().setAuthentication(
 			new UsernamePasswordAuthenticationToken(
 				oAuth2User,
 				Optional.empty(),
-				Collections.emptyList()
+				oAuth2User.getAuthorities()
 			)
 		);
 
