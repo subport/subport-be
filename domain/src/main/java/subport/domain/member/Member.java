@@ -37,19 +37,34 @@ public class Member extends BaseTimeEntity {
 
 	private boolean deleted;
 
-	public Member(
+	private MemberRole role;
+
+	public static Member ofMember(
 		String providerId,
 		String nickname,
 		String email,
 		LocalDateTime now
 	) {
-		this.providerId = providerId;
-		this.nickname = nickname;
-		this.email = email;
-		this.paymentReminderEnabled = true;
-		this.reminderDaysBefore = 3;
-		this.lastActiveAt = now;
-		this.deleted = false;
+		Member member = new Member();
+		member.providerId = providerId;
+		member.nickname = nickname;
+		member.email = email;
+		member.paymentReminderEnabled = true;
+		member.reminderDaysBefore = 3;
+		member.lastActiveAt = now;
+		member.deleted = false;
+		member.role = MemberRole.MEMBER;
+		return member;
+	}
+
+	public static Member ofGuest(String nickname) {
+		Member member = new Member();
+		member.nickname = nickname;
+		member.paymentReminderEnabled = false;
+		member.reminderDaysBefore = 3;
+		member.deleted = false;
+		member.role = MemberRole.GUEST;
+		return member;
 	}
 
 	public void update(String nickname, String email) {

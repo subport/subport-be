@@ -12,7 +12,7 @@ public record LoginMemberInfo(
 ) {
 
 	public Member toMember() {
-		return new Member(
+		return Member.ofMember(
 			providerId,
 			nickname,
 			email,
