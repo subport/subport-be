@@ -16,7 +16,6 @@ public enum AdminErrorCode implements ErrorCode {
 	REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "기한이 만료된 Refresh 토큰입니다."),
 	REFRESH_TOKEN_REQUIRED(HttpStatus.UNAUTHORIZED, "Refresh 토큰 값은 필수입니다."),
 	INVALID_TOKEN_FORMAT(HttpStatus.UNAUTHORIZED, "토큰 형식이 올바르지 않습니다."),
-	FORBIDDEN_ACCESS(HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),
 
 	// 서버 에러
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "예상치 못한 문제가 발생했습니다."),
@@ -30,19 +29,19 @@ public enum AdminErrorCode implements ErrorCode {
 
 	// 이미지 파일 관련
 	IMAGE_FILE_REQUIRED(HttpStatus.BAD_REQUEST, "이미지 파일은 필수입니다."),
-	IMAGE_FILE_TYPE_NOT_SUPPORTED(HttpStatus.BAD_REQUEST, "이미지 파일만 업로드 가능합니다."),
+	IMAGE_FILE_TYPE_NOT_SUPPORTED(HttpStatus.BAD_REQUEST, "이미지 파일만 업로드할 수 있습니다."),
 	IMAGE_FILE_SIZE_EXCEEDED(HttpStatus.PAYLOAD_TOO_LARGE, "이미지 파일의 크기는 5MB를 초과할 수 없습니다."),
 	IMAGE_FILE_READ_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 파일 읽기에 실패했습니다."),
 
 	// 구독 서비스 관련
 	SUBSCRIPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 구독 서비스입니다."),
 
-	// 플랜 관련
-	PLAN_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 플랜입니다."),
+	// 멤버십 관련
+	PLAN_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 멤버십입니다."),
 
 	// 어드민
 	SUBSCRIPTION_IN_USE(HttpStatus.CONFLICT, "회원이 사용 중인 구독은 삭제할 수 없습니다."),
-	PLAN_IN_USE(HttpStatus.CONFLICT, "회원이 사용 중인 플랜은 삭제할 수 없습니다."),
+	PLAN_IN_USE(HttpStatus.CONFLICT, "회원이 사용 중인 멤버십은 삭제할 수 없습니다."),
 	ADMIN_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 관리자입니다."),
 	ADMIN_PASSWORD_MISMATCH(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
 	ADMIN_CURRENT_PASSWORD_MISMATCH(HttpStatus.UNAUTHORIZED, "현재 비밀번호가 일치하지 않습니다."),

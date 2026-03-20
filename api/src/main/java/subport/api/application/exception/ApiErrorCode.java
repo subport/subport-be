@@ -34,7 +34,7 @@ public enum ApiErrorCode implements ErrorCode {
 	MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
 
 	// 이미지 파일 관련
-	IMAGE_FILE_TYPE_NOT_SUPPORTED(HttpStatus.BAD_REQUEST, "이미지 파일만 업로드 가능합니다."),
+	IMAGE_FILE_TYPE_NOT_SUPPORTED(HttpStatus.BAD_REQUEST, "이미지 파일만 업로드할 수 있습니다."),
 	IMAGE_FILE_SIZE_EXCEEDED(HttpStatus.PAYLOAD_TOO_LARGE, "이미지 파일의 크기는 5MB를 초과할 수 없습니다."),
 	IMAGE_FILE_READ_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 파일 읽기에 실패했습니다."),
 
@@ -43,33 +43,33 @@ public enum ApiErrorCode implements ErrorCode {
 	INVALID_SUBSCRIPTION_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 구독 타입입니다."),
 	SYSTEM_SUBSCRIPTION_WRITE_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공 구독 서비스는 수정 및 삭제가 불가능합니다."),
 	SUBSCRIPTION_WRITE_FORBIDDEN(HttpStatus.FORBIDDEN, "본인이 등록한 구독 서비스가 아니면 수정 및 삭제가 불가능합니다."),
-	SUBSCRIPTION_READ_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공이 아니면 본인이 등록한 구독 서비스만 조회가 가능합니다."),
-	SUBSCRIPTION_USE_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공 구독 서비스이거나 본인이 등록한 구독 서비스만 사용이 가능합니다."),
+	SUBSCRIPTION_READ_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공이 아니면 본인이 등록한 구독 서비스만 조회할 수 있습니다."),
+	SUBSCRIPTION_USE_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공 구독 서비스이거나 본인이 등록한 구독 서비스만 사용할 수 있습니다."),
 	INVALID_DEFAULT_IMAGE_NAME(HttpStatus.BAD_REQUEST, "유효하지 않은 기본 이미지 이름입니다."),
-	SUBSCRIPTION_IN_USE(HttpStatus.CONFLICT, "사용 중인 구독 서비스는 삭제가 불가능합니다."),
+	SUBSCRIPTION_IN_USE(HttpStatus.CONFLICT, "사용 중인 구독 서비스는 삭제할 수 없습니다"),
 
 	// 구독 정보 관련
 	MEMBER_SUBSCRIPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 구독 정보입니다."),
 	MEMBER_SUBSCRIPTION_ACCESS_FORBIDDEN(HttpStatus.FORBIDDEN, "본인의 구독 정보만 조회, 수정, 삭제가 가능합니다."),
-	PLAN_NOT_BELONG_TO_SUBSCRIPTION(HttpStatus.BAD_REQUEST, "해당 구독 서비스에 속하지 않은 플랜으로는 변경이 불가능합니다."),
+	PLAN_NOT_BELONG_TO_SUBSCRIPTION(HttpStatus.BAD_REQUEST, "해당 구독 서비스에 속하지 않은 멤버십으로는 변경할 수 없습니다."),
 	DUTCH_PAY_AMOUNT_MISSING(HttpStatus.BAD_REQUEST, "더치페이를 선택했으면 더치페이 금액을 반드시 입력해야 합니다."),
 	DUTCH_PAY_AMOUNT_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "더치페이를 선택하지 않았으면 금액을 입력할 수 없습니다."),
 	START_DATE_IN_FUTURE(HttpStatus.BAD_REQUEST, "시작 날짜는 미래일 수 없습니다."),
-	START_DATE_TOO_OLD(HttpStatus.BAD_REQUEST, "시작 날짜는 최근 1년 이내로만 설정 가능합니다."),
+	START_DATE_TOO_OLD(HttpStatus.BAD_REQUEST, "시작 날짜는 최근 1년 이내로만 설정할 수 있습니다."),
 	REACTIVATION_START_DATE_BEFORE_LAST_PAYMENT(HttpStatus.BAD_REQUEST, "재활성화 시 시작 날짜는 최근 결제일 이후여야 합니다."),
 
-	// 플랜 관련
-	PLAN_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 플랜입니다."),
+	// 멤버십 관련
+	PLAN_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 멤버십입니다."),
 	INVALID_AMOUNT_UNIT(HttpStatus.BAD_REQUEST, "유효하지 않은 통화 단위입니다."),
-	SYSTEM_PLAN_WRITE_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공 플랜은 수정 및 삭제가 불가능합니다."),
-	PLAN_WRITE_FORBIDDEN(HttpStatus.FORBIDDEN, "본인이 등록한 플랜이 아니면 수정 및 삭제가 불가능합니다."),
-	PLAN_READ_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공이 아니면 본인이 등록한 플랜만 조회가 가능합니다."),
-	PLAN_USE_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공 플랜이거나 본인이 등록한 플랜만 사용이 가능합니다."),
-	PLAN_IN_USE(HttpStatus.CONFLICT, "사용 중인 플랜은 삭제가 불가능합니다."),
+	SYSTEM_PLAN_WRITE_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공 멤버십은 수정 및 삭제가 불가능합니다."),
+	PLAN_WRITE_FORBIDDEN(HttpStatus.FORBIDDEN, "본인이 등록한 멤버십이 아니면 수정 및 삭제가 불가능합니다."),
+	PLAN_READ_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공이 아니면 본인이 등록한 멤버십만 조회할 수 있습니다."),
+	PLAN_USE_FORBIDDEN(HttpStatus.FORBIDDEN, "시스템 기본 제공 멤버십이거나 본인이 등록한 멤버십만 사용할 수 있습니다."),
+	PLAN_IN_USE(HttpStatus.CONFLICT, "사용 중인 멤버십은 삭제할 수 없습니다"),
 
 	// 소비 내역 관련
 	SPENDING_RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 소비 내역입니다."),
-	SPENDING_RECORD_FORBIDDEN(HttpStatus.FORBIDDEN, "본인의 소비 내역만 삭제가 가능합니다.");
+	SPENDING_RECORD_FORBIDDEN(HttpStatus.FORBIDDEN, "본인의 소비 내역만 삭제할 수 있습니다.");
 
 	private final HttpStatus httpStatus;
 
