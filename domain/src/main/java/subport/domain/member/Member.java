@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -37,6 +39,7 @@ public class Member extends BaseTimeEntity {
 
 	private boolean deleted;
 
+	@Enumerated(EnumType.STRING)
 	private MemberRole role;
 
 	public static Member ofMember(
