@@ -10,6 +10,7 @@ import subport.api.application.feedback.port.out.SaveFeedbackPort;
 import subport.api.application.member.port.out.LoadMemberPort;
 import subport.domain.feedback.Feedback;
 import subport.domain.member.Member;
+import subport.domain.member.MemberRole;
 
 @Service
 @Transactional
@@ -22,6 +23,10 @@ public class SubmitFeedbackService implements SubmitFeedbackUseCase {
 	@Override
 	public void submitFeedback(Long memberId, SubmitFeedbackRequest request) {
 		Member member = loadMemberPort.load(memberId);
+
+		if (member.getRole() == MemberRole.GUEST) {
+			member = null;
+		}
 
 		Feedback feedback = new Feedback(
 			request.category(),
