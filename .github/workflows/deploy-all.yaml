@@ -14,6 +14,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Check changed files
+        id: check_paths
+        run: |
+          CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+          echo "Changed files: $CHANGED"
+
+          if echo "$CHANGED" | grep -vE '^(common/|domain/)' >/dev/null; then
+            echo "No only common/domain changes, skipping deploy-all."
+            exit 0
+          fi
+
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
