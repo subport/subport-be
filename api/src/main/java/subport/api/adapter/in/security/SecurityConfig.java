@@ -30,6 +30,7 @@ public class SecurityConfig {
 	private final CustomOAuth2UserService oAuth2UserService;
 	private final CustomSuccessHandler successHandler;
 	private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+	private final CustomAccessDeniedHandler accessDeniedHandler;
 	private final JwtAuthFilter jwtAuthFilter;
 	private final MdcFilter mdcFilter;
 
@@ -47,9 +48,11 @@ public class SecurityConfig {
 					.userService(oAuth2UserService))
 				.successHandler(successHandler))
 			.exceptionHandling(ex -> ex
-				.authenticationEntryPoint(authenticationEntryPoint))
+				.authenticationEntryPoint(authenticationEntryPoint)
+				.accessDeniedHandler(accessDeniedHandler))
 			.authorizeHttpRequests(auth -> auth
 				.requestMatchers("/api/auth/refresh", "/h2-console/**", "/api/auth/guest").permitAll()
+				.requestMatchers("/api/members/me", "/api/members/me/reminder-settings").hasRole("MEMBER")
 				.anyRequest().authenticated())
 			.addFilterAt(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 			.addFilterAfter(mdcFilter, JwtAuthFilter.class)
