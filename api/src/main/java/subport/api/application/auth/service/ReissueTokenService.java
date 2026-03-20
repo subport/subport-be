@@ -19,8 +19,9 @@ import subport.common.exception.CustomException;
 import subport.common.exception.RefreshTokenExpiredException;
 import subport.common.jwt.dto.TokenPair;
 import subport.domain.member.Member;
+import subport.domain.member.MemberRole;
 import subport.domain.token.RefreshToken;
-import subport.domain.token.Role;
+import subport.domain.token.RefreshTokenRole;
 
 @Service
 @Transactional
@@ -47,10 +48,10 @@ public class ReissueTokenService implements ReissueTokenUseCase {
 		}
 
 		Long memberId = refreshToken.getSubjectId();
-		String accessToken = createAccessTokenPort.createAccessToken(memberId, currentInstant, Role.USER);
+		String accessToken = createAccessTokenPort.createAccessToken(memberId, currentInstant, MemberRole.MEMBER);
 
 		deleteRefreshTokenPort.delete(refreshToken);
-		refreshToken = createRefreshTokenPort.createRefreshToken(memberId, currentInstant, Role.USER);
+		refreshToken = createRefreshTokenPort.createRefreshToken(memberId, currentInstant, RefreshTokenRole.MEMBER);
 		saveRefreshTokenPort.save(refreshToken);
 
 		Member member = loadMemberPort.load(memberId);

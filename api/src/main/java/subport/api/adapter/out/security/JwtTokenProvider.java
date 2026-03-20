@@ -18,8 +18,9 @@ import subport.api.application.auth.port.out.CreateAccessTokenPort;
 import subport.api.application.auth.port.out.CreateRefreshTokenPort;
 import subport.api.application.auth.port.out.ExtractTokenClaimsPort;
 import subport.common.jwt.dto.TokenClaims;
+import subport.domain.member.MemberRole;
 import subport.domain.token.RefreshToken;
-import subport.domain.token.Role;
+import subport.domain.token.RefreshTokenRole;
 
 @Component
 public class JwtTokenProvider implements
@@ -46,13 +47,13 @@ public class JwtTokenProvider implements
 	public String createAccessToken(
 		Long subjectId,
 		Instant now,
-		Role role
+		MemberRole role
 	) {
 		return createToken(
 			subjectId,
 			now,
 			ACCESS_TOKEN_EXPIRATION_TIME,
-			role
+			role.name()
 		);
 	}
 
@@ -60,19 +61,20 @@ public class JwtTokenProvider implements
 	public RefreshToken createRefreshToken(
 		Long subjectId,
 		Instant now,
-		Role role
+		RefreshTokenRole role
 	) {
 		String refreshToken = createToken(
 			subjectId,
 			now,
 			REFRESH_TOKEN_EXPIRATION_TIME,
-			role
+			role.name()
 		);
 		Claims claims = parseClaims(refreshToken);
 
 		return new RefreshToken(
 			refreshToken,
 			subjectId,
+			role,
 			claims.getIssuedAt().toInstant(),
 			claims.getExpiration().toInstant()
 		);
@@ -94,13 +96,13 @@ public class JwtTokenProvider implements
 		Long subjectId,
 		Instant now,
 		Duration ttl,
-		Role role
+		String role
 	) {
 		return Jwts.builder()
 			.subject(subjectId.toString())
 			.issuedAt(Date.from(now))
 			.expiration(Date.from(now.plus(ttl)))
-			.claim("role", role.name())
+			.claim("role", role)
 			.signWith(secretKey)
 			.compact();
 	}

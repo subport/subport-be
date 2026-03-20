@@ -9,7 +9,6 @@ import subport.api.application.auth.port.out.ExtractTokenClaimsPort;
 import subport.api.application.exception.ApiErrorCode;
 import subport.common.exception.CustomException;
 import subport.common.jwt.dto.TokenClaims;
-import subport.domain.token.Role;
 
 @Service
 @RequiredArgsConstructor
@@ -28,10 +27,6 @@ public class AuthenticateAccessTokenService implements AuthenticateAccessTokenUs
 
 		String accessToken = authorizationHeader.split(" ")[1];
 		TokenClaims tokenClaims = extractTokenClaimsPort.extract(accessToken);
-
-		if (!tokenClaims.role().equals(Role.USER.name())) {
-			throw new CustomException(ApiErrorCode.FORBIDDEN_ACCESS);
-		}
 
 		return tokenClaims.subjectId();
 	}

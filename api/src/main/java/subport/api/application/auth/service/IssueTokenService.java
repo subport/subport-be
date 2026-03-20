@@ -11,8 +11,9 @@ import subport.api.application.auth.port.out.CreateAccessTokenPort;
 import subport.api.application.auth.port.out.CreateRefreshTokenPort;
 import subport.api.application.auth.port.out.SaveRefreshTokenPort;
 import subport.common.jwt.dto.TokenPair;
+import subport.domain.member.MemberRole;
 import subport.domain.token.RefreshToken;
-import subport.domain.token.Role;
+import subport.domain.token.RefreshTokenRole;
 
 @Service
 @Transactional
@@ -25,9 +26,13 @@ public class IssueTokenService implements IssueTokenUseCase {
 
 	@Override
 	public TokenPair issue(Long memberId, Instant currentInstant) {
-		String accessToken = createAccessTokenPort.createAccessToken(memberId, currentInstant, Role.USER);
+		String accessToken = createAccessTokenPort.createAccessToken(memberId, currentInstant, MemberRole.MEMBER);
 
-		RefreshToken refreshToken = createRefreshTokenPort.createRefreshToken(memberId, currentInstant, Role.USER);
+		RefreshToken refreshToken = createRefreshTokenPort.createRefreshToken(
+			memberId,
+			currentInstant,
+			RefreshTokenRole.MEMBER
+		);
 		saveRefreshTokenPort.save(refreshToken);
 
 		return new TokenPair(accessToken, refreshToken.getTokenValue());
