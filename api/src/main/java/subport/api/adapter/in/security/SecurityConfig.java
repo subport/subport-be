@@ -49,7 +49,7 @@ public class SecurityConfig {
 			.exceptionHandling(ex -> ex
 				.authenticationEntryPoint(authenticationEntryPoint))
 			.authorizeHttpRequests(auth -> auth
-				.requestMatchers("/api/auth/refresh", "/h2-console/**").permitAll()
+				.requestMatchers("/api/auth/refresh", "/h2-console/**", "/api/auth/guest").permitAll()
 				.anyRequest().authenticated())
 			.addFilterAt(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 			.addFilterAfter(mdcFilter, JwtAuthFilter.class)

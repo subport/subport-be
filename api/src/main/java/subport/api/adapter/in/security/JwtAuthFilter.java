@@ -26,7 +26,11 @@ import subport.common.exception.CustomException;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-	private static final List<String> EXCLUDE_PATTERNS = List.of("/api/auth/refresh", "/h2-console/**");
+	private static final List<String> EXCLUDE_PATTERNS = List.of(
+		"/api/auth/refresh",
+		"/h2-console/**",
+		"/api/auth/guest"
+	);
 	private static final AntPathMatcher pathMatcher = new AntPathMatcher();
 
 	private final AuthenticateAccessTokenUseCase authenticateAccessTokenUseCase;
