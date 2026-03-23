@@ -13,13 +13,13 @@
 
 ## 시스템 아키텍처
 
-<img src="https://github.com/user-attachments/assets/fb4ee744-47aa-4755-a5bf-d4dc379748ed" width="700" alt="System Architecture">
+<img src="https://github.com/user-attachments/assets/67099984-ae2f-4e12-aaa9-451d3e990e9e" width="700" alt="System Architecture">
 
 <br><br>
 
 ## ERD
 
-<img src="https://github.com/user-attachments/assets/9a528440-bcb2-4594-87f1-67c0ffbdb363" width="700" alt="ERD">
+<img src="https://github.com/user-attachments/assets/7d871a5f-bb2b-42b9-84da-8bd5a6dfe445" width="700" alt="ERD">
 
 <br><br>
 
