@@ -22,6 +22,7 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 		SELECT count(ms)
 		FROM MemberSubscription ms
 		WHERE ms.active = true
+		AND ms.member.role = subport.domain.member.MemberRole.MEMBER
 		""")
 	long countActiveMemberSubscriptions();
 
@@ -30,6 +31,7 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 		FROM MemberSubscription ms
 		WHERE (ms.createdAt >= :start AND ms.createdAt < :end)
 		AND ms.active = true
+		AND ms.member.role = subport.domain.member.MemberRole.MEMBER
 		""")
 	long countActiveMemberSubscriptions(LocalDateTime start, LocalDateTime end);
 
@@ -55,10 +57,11 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 		FROM MemberSubscription ms
 		WHERE ms.active = true
 		AND ms.subscription.systemProvided = true
+		AND ms.member.role = subport.domain.member.MemberRole.MEMBER
 		GROUP BY ms.subscription.name, ms.subscription.logoImageUrl
 		ORDER BY COUNT(ms) DESC, ms.subscription.name ASC
 		""")
-	List<DashboardTopSubscriptionResponse> countActiveMemberSubscriptionsBySubscription(Pageable top5);
+	List<DashboardTopSubscriptionResponse> findTopSubscriptions(Pageable pageable);
 
 	@Query("""
 		SELECT new subport.admin.application.dashboard.dto.DashboardTopCustomSubscriptionResponse(
@@ -68,9 +71,10 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 		FROM MemberSubscription ms
 		WHERE ms.active = true
 		AND ms.subscription.systemProvided = false
+		AND ms.member.role = subport.domain.member.MemberRole.MEMBER
 		GROUP BY ms.subscription.normalizedName
 		HAVING COUNT(DISTINCT ms.member.id) >= 2
 		ORDER BY COUNT(DISTINCT ms.member.id) DESC, ms.subscription.normalizedName ASC
 		""")
-	List<DashboardTopCustomSubscriptionResponse> countActiveCustomMemberSubscriptions(Pageable top5);
+	List<DashboardTopCustomSubscriptionResponse> findTopCustomSubscriptions(Pageable pageable);
 }

@@ -3,7 +3,7 @@ package subport.admin.adapter.out.persistence.membersubscription;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -44,16 +44,12 @@ public class MemberSubscriptionAdapter implements MemberSubscriptionPort {
 	}
 
 	@Override
-	public List<DashboardTopSubscriptionResponse> loadTopSubscriptions() {
-		return memberSubscriptionRepository.countActiveMemberSubscriptionsBySubscription(
-			PageRequest.of(0, 5)
-		);
+	public List<DashboardTopSubscriptionResponse> loadTopSubscriptions(Pageable pageable) {
+		return memberSubscriptionRepository.findTopSubscriptions(pageable);
 	}
 
 	@Override
-	public List<DashboardTopCustomSubscriptionResponse> loadTopCustomSubscriptions() {
-		return memberSubscriptionRepository.countActiveCustomMemberSubscriptions(
-			PageRequest.of(0, 5)
-		);
+	public List<DashboardTopCustomSubscriptionResponse> loadTopCustomSubscriptions(Pageable pageable) {
+		return memberSubscriptionRepository.findTopCustomSubscriptions(pageable);
 	}
 }

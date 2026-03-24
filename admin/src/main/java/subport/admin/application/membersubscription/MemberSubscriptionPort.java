@@ -3,6 +3,8 @@ package subport.admin.application.membersubscription;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+
 import subport.admin.application.dashboard.dto.DashboardTopCustomSubscriptionResponse;
 import subport.admin.application.dashboard.dto.DashboardTopSubscriptionResponse;
 import subport.admin.application.membersubscription.dto.MemberSubscriptionCount;
@@ -19,7 +21,7 @@ public interface MemberSubscriptionPort {
 
 	List<MemberSubscriptionCount> countActiveMemberSubscriptions(List<Long> memberIds, Boolean systemProvided);
 
-	List<DashboardTopSubscriptionResponse> loadTopSubscriptions();
+	List<DashboardTopSubscriptionResponse> loadTopSubscriptions(Pageable pageable);
 
-	List<DashboardTopCustomSubscriptionResponse> loadTopCustomSubscriptions();
+	List<DashboardTopCustomSubscriptionResponse> loadTopCustomSubscriptions(Pageable pageable);
 }

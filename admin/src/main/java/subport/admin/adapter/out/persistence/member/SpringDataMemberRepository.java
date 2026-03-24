@@ -17,15 +17,23 @@ public interface SpringDataMemberRepository extends JpaRepository<Member, Long> 
 		FROM Member m
 		WHERE (m.createdAt >= :start AND m.createdAt < :end)
 		AND m.deleted = false
+		AND m.role = subport.domain.member.MemberRole.MEMBER
 		""")
-	List<Member> getMembers(LocalDateTime start, LocalDateTime end);
+	List<Member> findMembers(LocalDateTime start, LocalDateTime end);
 
-	List<Member> findTop4ByOrderByCreatedAtDescIdAsc();
+	@Query("""
+		SELECT m
+		FROM Member m
+		WHERE m.role = subport.domain.member.MemberRole.MEMBER
+		ORDER BY m.createdAt DESC, m.id ASC
+		""")
+	List<Member> findRecentMembers(Pageable pageable);
 
 	@Query("""
 		SELECT count(m)
 		FROM Member m
 		WHERE m.deleted = false
+		AND m.role = subport.domain.member.MemberRole.MEMBER
 		""")
 	long countMembers();
 
@@ -34,6 +42,7 @@ public interface SpringDataMemberRepository extends JpaRepository<Member, Long> 
 		FROM Member m
 		WHERE (m.createdAt >= :start AND m.createdAt < :end)
 		AND m.deleted = false
+		AND m.role = subport.domain.member.MemberRole.MEMBER
 		""")
 	long countMembers(LocalDateTime start, LocalDateTime end);
 
@@ -46,6 +55,7 @@ public interface SpringDataMemberRepository extends JpaRepository<Member, Long> 
 			(m.lastModifiedAt >= :start AND m.lastModifiedAt < :end)
 		)
 		AND m.deleted = false
+		AND m.role = subport.domain.member.MemberRole.MEMBER
 		""")
 	long countActiveMembers(LocalDateTime start, LocalDateTime end);
 

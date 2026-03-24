@@ -19,12 +19,12 @@ public class MemberPersistenceAdapter implements MemberPort {
 
 	@Override
 	public List<Member> loadMembers(LocalDateTime start, LocalDateTime end) {
-		return memberRepository.getMembers(start, end);
+		return memberRepository.findMembers(start, end);
 	}
 
 	@Override
-	public List<Member> loadLatestMembers() {
-		return memberRepository.findTop4ByOrderByCreatedAtDescIdAsc();
+	public List<Member> loadRecentMembers(Pageable pageable) {
+		return memberRepository.findRecentMembers(pageable);
 	}
 
 	@Override

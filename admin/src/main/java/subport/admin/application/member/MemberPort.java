@@ -12,7 +12,7 @@ public interface MemberPort {
 
 	List<Member> loadMembers(LocalDateTime start, LocalDateTime end);
 
-	List<Member> loadLatestMembers();
+	List<Member> loadRecentMembers(Pageable pageable);
 
 	long countMembers();
 

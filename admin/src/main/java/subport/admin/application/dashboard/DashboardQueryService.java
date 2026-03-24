@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -111,7 +112,7 @@ public class DashboardQueryService {
 	}
 
 	public DashboardRecentMembersResponse getRecentMembers() {
-		List<Member> members = memberPort.loadLatestMembers();
+		List<Member> members = memberPort.loadRecentMembers(PageRequest.of(0, 4));
 
 		List<Long> memberIds = members.stream()
 			.map(Member::getId)
@@ -138,12 +139,14 @@ public class DashboardQueryService {
 
 	public DashboardTopSubscriptionsResponse getTopSubscriptions() {
 		return new DashboardTopSubscriptionsResponse(
-			memberSubscriptionPort.loadTopSubscriptions()
+			memberSubscriptionPort.loadTopSubscriptions(PageRequest.of(0, 5))
 		);
 	}
 
 	public DashboardTopCustomSubscriptionsResponse getTopCustomSubscriptions() {
-		return new DashboardTopCustomSubscriptionsResponse(memberSubscriptionPort.loadTopCustomSubscriptions());
+		return new DashboardTopCustomSubscriptionsResponse(
+			memberSubscriptionPort.loadTopCustomSubscriptions(PageRequest.of(0, 5))
+		);
 	}
 
 	public DashboardTodayEmailNotificationsResponse getTodayEmailNotifications(LocalDate today) {
