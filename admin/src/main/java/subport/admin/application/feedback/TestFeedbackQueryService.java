@@ -22,8 +22,12 @@ public class TestFeedbackQueryService {
 	private final TestFeedbackPort testFeedbackPort;
 
 	public TestFeedbacksResponse getTestFeedbacks(LocalDate date, Pageable pageable) {
-		LocalDateTime start = date.atStartOfDay();
-		LocalDateTime end = start.plusDays(1);
+		LocalDateTime start = null;
+		LocalDateTime end = null;
+		if (date != null) {
+			start = date.atStartOfDay();
+			end = start.plusDays(1);
+		}
 
 		Page<TestFeedback> testFeedbacksPage = testFeedbackPort.loadTestFeedbacks(start, end, pageable);
 

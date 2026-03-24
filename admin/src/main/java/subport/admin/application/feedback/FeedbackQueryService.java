@@ -27,8 +27,12 @@ public class FeedbackQueryService {
 		String category,
 		Pageable pageable
 	) {
-		LocalDateTime start = date.atStartOfDay();
-		LocalDateTime end = start.plusDays(1);
+		LocalDateTime start = null;
+		LocalDateTime end = null;
+		if (date != null) {
+			start = date.atStartOfDay();
+			end = start.plusDays(1);
+		}
 
 		Page<Feedback> feedbacksPage = feedbackPort.loadFeedbacks(
 			start,
