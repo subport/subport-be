@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import subport.admin.application.feedback.FeedbackQueryService;
 import subport.admin.application.feedback.dto.FeedbacksResponse;
+import subport.domain.feedback.FeedbackCategory;
 
 @RestController
 @RequestMapping("/admin/feedbacks")
@@ -25,7 +26,7 @@ public class FeedbackController {
 	@GetMapping
 	public ResponseEntity<FeedbacksResponse> getFeedbacks(
 		@RequestParam(required = false) LocalDate date,
-		@RequestParam(required = false) String category,
+		@RequestParam(required = false) FeedbackCategory category,
 		@PageableDefault(
 			sort = "createdAt",
 			direction = Sort.Direction.DESC,

@@ -24,7 +24,7 @@ public class FeedbackQueryService {
 
 	public FeedbacksResponse getFeedbacks(
 		LocalDate date,
-		String category,
+		FeedbackCategory category,
 		Pageable pageable
 	) {
 		LocalDateTime start = null;
@@ -37,7 +37,7 @@ public class FeedbackQueryService {
 		Page<Feedback> feedbacksPage = feedbackPort.loadFeedbacks(
 			start,
 			end,
-			FeedbackCategory.from(category),
+			category,
 			pageable
 		);
 
