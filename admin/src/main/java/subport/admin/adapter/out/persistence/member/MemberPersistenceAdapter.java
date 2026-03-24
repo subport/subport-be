@@ -49,7 +49,7 @@ public class MemberPersistenceAdapter implements MemberPort {
 		String email,
 		Pageable pageable
 	) {
-		return memberRepository.findByDeletedAndReminderEnabledAndEmailContaining(
+		return memberRepository.findAllByFilter(
 			deleted,
 			reminderEnabled,
 			email,

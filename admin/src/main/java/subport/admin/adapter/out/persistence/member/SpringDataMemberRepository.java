@@ -53,10 +53,11 @@ public interface SpringDataMemberRepository extends JpaRepository<Member, Long> 
 		SELECT m
 		FROM Member m
 		WHERE (:deleted IS NULL OR m.deleted = :deleted)
+		AND (m.role = subport.domain.member.MemberRole.MEMBER)
 		AND (:reminderEnabled IS NULL OR m.paymentReminderEnabled = :reminderEnabled)
 		AND (:email IS NULL OR m.email LIKE %:email%)
 		""")
-	Page<Member> findByDeletedAndReminderEnabledAndEmailContaining(
+	Page<Member> findAllByFilter(
 		Boolean deleted,
 		Boolean reminderEnabled,
 		String email,
