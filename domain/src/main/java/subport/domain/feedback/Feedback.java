@@ -1,6 +1,8 @@
 package subport.domain.feedback;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,7 +25,8 @@ public class Feedback extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String category;
+	@Enumerated(EnumType.STRING)
+	private FeedbackCategory category;
 
 	private String subCategory;
 
@@ -33,7 +36,7 @@ public class Feedback extends BaseTimeEntity {
 	private Member member;
 
 	public Feedback(
-		String category,
+		FeedbackCategory category,
 		String subCategory,
 		String content,
 		Member member

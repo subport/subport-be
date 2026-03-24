@@ -9,6 +9,7 @@ import subport.api.application.feedback.port.in.dto.SubmitFeedbackRequest;
 import subport.api.application.feedback.port.out.SaveFeedbackPort;
 import subport.api.application.member.port.out.LoadMemberPort;
 import subport.domain.feedback.Feedback;
+import subport.domain.feedback.FeedbackCategory;
 import subport.domain.member.Member;
 import subport.domain.member.MemberRole;
 
@@ -29,7 +30,7 @@ public class SubmitFeedbackService implements SubmitFeedbackUseCase {
 		}
 
 		Feedback feedback = new Feedback(
-			request.category(),
+			FeedbackCategory.from(request.category()),
 			request.subCategory(),
 			request.content(),
 			member
