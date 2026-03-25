@@ -6,14 +6,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-import subport.domain.spendingrecord.SpendingRecord;
+import subport.domain.plan.Plan;
 
-public interface SpringDataSpendingRecordRepository extends JpaRepository<SpendingRecord, Long> {
+public interface SpringDataPlanRepository extends JpaRepository<Plan, Long> {
 
 	@Modifying
 	@Query("""
-		DELETE FROM SpendingRecord s
-		WHERE s.memberId IN :memberIds
+		DELETE FROM Plan p
+		WHERE p.member.id IN :memberIds
 		""")
 	void deleteAllByMemberIds(List<Long> memberIds);
 }
