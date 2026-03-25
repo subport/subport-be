@@ -1,6 +1,6 @@
 package subport.admin.application.emailnotification.dto;
 
-public record AdminSubscriptionInNotificationResponse(
+public record SubscriptionInNotificationResponse(
 	String logoImageUrl,
 	String name,
 	String amount,
