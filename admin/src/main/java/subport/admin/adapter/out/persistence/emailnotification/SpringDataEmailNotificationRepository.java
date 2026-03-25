@@ -1,5 +1,6 @@
 package subport.admin.adapter.out.persistence.emailnotification;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import subport.admin.application.emailnotification.dto.EmailNotificationDetailResponse;
 import subport.admin.application.emailnotification.dto.EmailNotificationResponse;
 import subport.domain.emailnotification.EmailNotification;
 import subport.domain.emailnotification.SendingStatus;
@@ -26,14 +28,14 @@ public interface SpringDataEmailNotificationRepository extends JpaRepository<Ema
 
 	@Query("""
 		SELECT new subport.admin.application.emailnotification.dto.EmailNotificationResponse(
-		        e.recipientEmail,
-		        COUNT(e),
-		        e.paymentDate,
-		        e.daysBeforePayment,
-		        e.status,
-		        e.retryCount,
-		        e.sentAt
-		    )
+		    e.recipientEmail,
+		    COUNT(e),
+		    e.paymentDate,
+		    e.daysBeforePayment,
+		    e.status,
+		    e.retryCount,
+		    e.sentAt
+		)
 		FROM EmailNotification e
 		WHERE (:start IS NULL OR e.sentAt >= :start)
 		AND (:end IS NULL OR e.sentAt < :end)
@@ -49,5 +51,23 @@ public interface SpringDataEmailNotificationRepository extends JpaRepository<Ema
 		Integer daysBeforePayment,
 		String email,
 		Pageable pageable
+	);
+
+	@Query("""
+		SELECT new subport.admin.application.emailnotification.dto.EmailNotificationDetailResponse(
+		    e.subscriptionName,
+		    e.subscriptionLogoImageUrl,
+		    e.amount,
+		    e.amountUnit
+		)
+		FROM EmailNotification e
+		WHERE e.recipientEmail = :email
+		AND e.paymentDate = :paymentDate
+		AND e.daysBeforePayment = :daysBeforePayment
+		""")
+	List<EmailNotificationDetailResponse> findByGroupKey(
+		String email,
+		LocalDate paymentDate,
+		Integer daysBeforePayment
 	);
 }

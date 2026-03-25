@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import subport.admin.application.emailnotification.EmailNotificationPort;
+import subport.admin.application.emailnotification.dto.EmailNotificationDetailResponse;
 import subport.admin.application.emailnotification.dto.EmailNotificationResponse;
 import subport.domain.emailnotification.EmailNotification;
 import subport.domain.emailnotification.SendingStatus;
@@ -45,5 +46,14 @@ public class EmailNotificationPersistenceAdapter implements EmailNotificationPor
 			email,
 			pageable
 		);
+	}
+
+	@Override
+	public List<EmailNotificationDetailResponse> loadEmailNotificationDetails(
+		String email,
+		LocalDate paymentDate,
+		Integer daysBeforePayment
+	) {
+		return emailNotificationRepository.findByGroupKey(email, paymentDate, daysBeforePayment);
 	}
 }
