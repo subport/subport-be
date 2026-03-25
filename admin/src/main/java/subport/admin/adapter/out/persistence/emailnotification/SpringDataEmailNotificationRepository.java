@@ -43,6 +43,7 @@ public interface SpringDataEmailNotificationRepository extends JpaRepository<Ema
 		AND (:daysBeforePayment IS NULL OR e.daysBeforePayment = :daysBeforePayment)
 		AND (:email IS NULL OR e.recipientEmail LIKE %:email%)
 		GROUP BY e.recipientEmail, e.paymentDate, e.daysBeforePayment, e.status, e.retryCount, e.sentAt
+		ORDER BY e.sentAt DESC
 		""")
 	Page<EmailNotificationResponse> findEmailNotificationGroups(
 		LocalDateTime start,
