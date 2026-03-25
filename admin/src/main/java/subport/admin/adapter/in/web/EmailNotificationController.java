@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import subport.admin.application.emailnotification.EmailNotificationQueryService;
-import subport.admin.application.emailnotification.dto.AdminEmailNotificationsResponse;
+import subport.admin.application.emailnotification.dto.EmailNotificationsResponse;
 import subport.domain.emailnotification.SendingStatus;
 
 @RestController
@@ -23,7 +23,7 @@ public class EmailNotificationController {
 	private final EmailNotificationQueryService emailNotificationQueryService;
 
 	@GetMapping
-	public ResponseEntity<AdminEmailNotificationsResponse> searchEmailNotifications(
+	public ResponseEntity<EmailNotificationsResponse> searchEmailNotifications(
 		@RequestParam(required = false) LocalDate date,
 		@RequestParam(required = false) SendingStatus status,
 		@RequestParam(required = false) Integer daysBeforePayment,

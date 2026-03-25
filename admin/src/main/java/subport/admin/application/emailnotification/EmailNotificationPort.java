@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import subport.admin.application.emailnotification.dto.EmailNotificationResponse;
 import subport.domain.emailnotification.EmailNotification;
 import subport.domain.emailnotification.SendingStatus;
 
@@ -14,21 +15,12 @@ public interface EmailNotificationPort {
 
 	List<EmailNotification> loadEmailNotifications(LocalDate date);
 
-	Page<String> searchDistinctRecipientEmails(
+	Page<EmailNotificationResponse> loadEmailNotificationGroups(
 		LocalDateTime start,
 		LocalDateTime end,
 		SendingStatus status,
 		Integer daysBeforePayment,
 		String email,
 		Pageable pageable
-	);
-
-	List<EmailNotification> searchEmailNotifications(
-		List<String> emails,
-		LocalDateTime start,
-		LocalDateTime end,
-		SendingStatus status,
-		Integer daysBeforePayment,
-		String email
 	);
 }

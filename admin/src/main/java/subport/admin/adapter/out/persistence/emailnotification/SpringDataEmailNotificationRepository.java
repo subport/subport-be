@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import subport.admin.application.emailnotification.dto.EmailNotificationResponse;
 import subport.domain.emailnotification.EmailNotification;
 import subport.domain.emailnotification.SendingStatus;
 
@@ -24,39 +25,29 @@ public interface SpringDataEmailNotificationRepository extends JpaRepository<Ema
 	);
 
 	@Query("""
-		SELECT distinct e.recipientEmail
+		SELECT new subport.admin.application.emailnotification.dto.EmailNotificationResponse(
+		        e.recipientEmail,
+		        COUNT(e),
+		        e.paymentDate,
+		        e.daysBeforePayment,
+		        e.status,
+		        e.retryCount,
+		        e.sentAt
+		    )
 		FROM EmailNotification e
 		WHERE (:start IS NULL OR e.sentAt >= :start)
 		AND (:end IS NULL OR e.sentAt < :end)
 		AND (:status IS NULL OR e.status = :status)
 		AND (:daysBeforePayment IS NULL OR e.daysBeforePayment = :daysBeforePayment)
 		AND (:email IS NULL OR e.recipientEmail LIKE %:email%)
+		GROUP BY e.recipientEmail, e.paymentDate, e.daysBeforePayment, e.status, e.retryCount, e.sentAt
 		""")
-	Page<String> findDistinctRecipientEmails(
+	Page<EmailNotificationResponse> findEmailNotificationGroups(
 		LocalDateTime start,
 		LocalDateTime end,
 		SendingStatus status,
 		Integer daysBeforePayment,
 		String email,
 		Pageable pageable
-	);
-
-	@Query("""
-		SELECT e
-		FROM EmailNotification e
-		WHERE e.recipientEmail in :emails
-		AND (:start IS NULL OR e.sentAt >= :start)
-		AND (:end IS NULL OR e.sentAt < :end)
-		AND (:status IS NULL OR e.status = :status)
-		AND (:daysBeforePayment IS NULL OR e.daysBeforePayment = :daysBeforePayment)
-		AND (:email IS NULL OR e.recipientEmail LIKE %:email%)
-		""")
-	List<EmailNotification> findEmailNotifications(
-		List<String> emails,
-		LocalDateTime start,
-		LocalDateTime end,
-		SendingStatus status,
-		Integer daysBeforePayment,
-		String email
 	);
 }

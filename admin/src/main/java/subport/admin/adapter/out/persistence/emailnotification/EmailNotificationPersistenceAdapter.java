@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import subport.admin.application.emailnotification.EmailNotificationPort;
+import subport.admin.application.emailnotification.dto.EmailNotificationResponse;
 import subport.domain.emailnotification.EmailNotification;
 import subport.domain.emailnotification.SendingStatus;
 
@@ -28,7 +29,7 @@ public class EmailNotificationPersistenceAdapter implements EmailNotificationPor
 	}
 
 	@Override
-	public Page<String> searchDistinctRecipientEmails(
+	public Page<EmailNotificationResponse> loadEmailNotificationGroups(
 		LocalDateTime start,
 		LocalDateTime end,
 		SendingStatus status,
@@ -36,32 +37,13 @@ public class EmailNotificationPersistenceAdapter implements EmailNotificationPor
 		String email,
 		Pageable pageable
 	) {
-		return emailNotificationRepository.findDistinctRecipientEmails(
+		return emailNotificationRepository.findEmailNotificationGroups(
 			start,
 			end,
 			status,
 			daysBeforePayment,
 			email,
 			pageable
-		);
-	}
-
-	@Override
-	public List<EmailNotification> searchEmailNotifications(
-		List<String> emails,
-		LocalDateTime start,
-		LocalDateTime end,
-		SendingStatus status,
-		Integer daysBeforePayment,
-		String email
-	) {
-		return emailNotificationRepository.findEmailNotifications(
-			emails,
-			start,
-			end,
-			status,
-			daysBeforePayment,
-			email
 		);
 	}
 }
