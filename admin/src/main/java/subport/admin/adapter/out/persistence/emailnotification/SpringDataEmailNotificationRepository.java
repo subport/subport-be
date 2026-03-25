@@ -55,8 +55,8 @@ public interface SpringDataEmailNotificationRepository extends JpaRepository<Ema
 
 	@Query("""
 		SELECT new subport.admin.application.emailnotification.dto.EmailNotificationDetailResponse(
-		    e.subscriptionName,
 		    e.subscriptionLogoImageUrl,
+		    e.subscriptionName,
 		    e.amount,
 		    e.amountUnit
 		)
