@@ -24,12 +24,15 @@ import subport.admin.application.dashboard.dto.DashboardTodayEmailNotificationsR
 import subport.admin.application.dashboard.dto.DashboardTopCustomSubscriptionsResponse;
 import subport.admin.application.dashboard.dto.DashboardTopSubscriptionsResponse;
 import subport.admin.application.emailnotification.EmailNotificationPort;
+import subport.admin.application.guestdailystats.GuestDailyStatsPort;
 import subport.admin.application.member.MemberPort;
 import subport.admin.application.membersubscription.MemberSubscriptionPort;
 import subport.admin.application.membersubscription.dto.MemberSubscriptionCount;
 import subport.domain.emailnotification.EmailNotification;
 import subport.domain.emailnotification.SendingStatus;
+import subport.domain.guestdailystats.GuestDailyStats;
 import subport.domain.member.Member;
+import subport.domain.member.MemberRole;
 
 @Service
 @Transactional(readOnly = true)
@@ -39,6 +42,7 @@ public class DashboardQueryService {
 	private final MemberPort memberPort;
 	private final MemberSubscriptionPort memberSubscriptionPort;
 	private final EmailNotificationPort emailNotificationPort;
+	private final GuestDailyStatsPort guestDailyStatsPort;
 
 	public DashboardStatsResponse getStats(LocalDate today) {
 		long totalMemberCount = memberPort.countMembers();
@@ -46,19 +50,22 @@ public class DashboardQueryService {
 		DateTimeRange thisWeekRange = weekRange(today);
 		long weeklyNewMemberCount = memberPort.countMembers(
 			thisWeekRange.start,
-			thisWeekRange.end
+			thisWeekRange.end,
+			MemberRole.MEMBER
 		);
 
 		DateTimeRange todayRange = dayRange(today);
 		long todayNewMemberCount = memberPort.countMembers(
 			todayRange.start,
-			todayRange.end
+			todayRange.end,
+			MemberRole.MEMBER
 		);
 
 		DateTimeRange yesterdayRange = dayRange(today.minusDays(1));
 		long yesterdayNewMemberCount = memberPort.countMembers(
 			yesterdayRange.start,
-			yesterdayRange.end
+			yesterdayRange.end,
+			MemberRole.MEMBER
 		);
 
 		long totalMemberSubscriptionCount = memberSubscriptionPort.countActiveMemberSubscriptions();
@@ -74,6 +81,24 @@ public class DashboardQueryService {
 			lastMonthRange.end
 		);
 
+		long todayGuestCount = memberPort.countMembers(
+			todayRange.start,
+			todayRange.end,
+			MemberRole.GUEST
+		);
+
+		GuestDailyStats guestDailyStats = guestDailyStatsPort.loadGuestDailyStats(today.minusDays(1));
+		long yesterdayGuestCount;
+		if (guestDailyStats != null) {
+			yesterdayGuestCount = guestDailyStats.getCount();
+		} else {
+			yesterdayGuestCount = memberPort.countMembers(
+				yesterdayRange.start,
+				yesterdayRange.end,
+				MemberRole.GUEST
+			);
+		}
+
 		return new DashboardStatsResponse(
 			totalMemberCount,
 			weeklyNewMemberCount,
@@ -81,7 +106,9 @@ public class DashboardQueryService {
 			yesterdayNewMemberCount,
 			totalMemberSubscriptionCount,
 			weeklyNewMemberSubscriptionCount,
-			currentActiveMemberCount
+			currentActiveMemberCount,
+			todayGuestCount,
+			yesterdayGuestCount
 		);
 	}
 

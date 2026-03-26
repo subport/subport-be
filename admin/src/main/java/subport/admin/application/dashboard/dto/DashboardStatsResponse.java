@@ -7,6 +7,8 @@ public record DashboardStatsResponse(
 	long yesterdayNewMemberCount,
 	long totalMemberSubscriptionCount,
 	long weeklyNewMemberSubscriptionCount,
-	long currentActiveMemberCount
+	long currentActiveMemberCount,
+	long todayGuestCount,
+	long yesterdayGuestCount
 ) {
 }
