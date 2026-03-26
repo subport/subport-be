@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 import subport.admin.application.member.MemberPort;
 import subport.domain.member.Member;
+import subport.domain.member.MemberRole;
 
 @Component
 @RequiredArgsConstructor
@@ -33,8 +34,8 @@ public class MemberPersistenceAdapter implements MemberPort {
 	}
 
 	@Override
-	public long countMembers(LocalDateTime start, LocalDateTime end) {
-		return memberRepository.countMembers(start, end);
+	public long countMembers(LocalDateTime start, LocalDateTime end, MemberRole role) {
+		return memberRepository.countMembers(start, end, role);
 	}
 
 	@Override

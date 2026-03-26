@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import subport.domain.member.Member;
+import subport.domain.member.MemberRole;
 
 public interface SpringDataMemberRepository extends JpaRepository<Member, Long> {
 
@@ -42,9 +43,9 @@ public interface SpringDataMemberRepository extends JpaRepository<Member, Long> 
 		FROM Member m
 		WHERE (m.createdAt >= :start AND m.createdAt < :end)
 		AND m.deleted = false
-		AND m.role = subport.domain.member.MemberRole.MEMBER
+		AND m.role = :role
 		""")
-	long countMembers(LocalDateTime start, LocalDateTime end);
+	long countMembers(LocalDateTime start, LocalDateTime end, MemberRole role);
 
 	@Query("""
 		SELECT count(m)

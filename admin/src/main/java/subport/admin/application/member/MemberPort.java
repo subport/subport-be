@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import subport.domain.member.Member;
+import subport.domain.member.MemberRole;
 
 public interface MemberPort {
 
@@ -16,7 +17,7 @@ public interface MemberPort {
 
 	long countMembers();
 
-	long countMembers(LocalDateTime start, LocalDateTime end);
+	long countMembers(LocalDateTime start, LocalDateTime end, MemberRole role);
 
 	long countActiveMembers(LocalDateTime start, LocalDateTime end);
 
