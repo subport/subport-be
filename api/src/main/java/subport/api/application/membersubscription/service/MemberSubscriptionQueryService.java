@@ -88,6 +88,9 @@ public class MemberSubscriptionQueryService implements MemberSubscriptionQueryUs
 
 		if (!active) {
 			return new GetMemberSubscriptionsResponse(
+				null,
+				null,
+				null,
 				memberSubscriptions.stream()
 					.map(MemberSubscriptionSummary::from)
 					.toList()
@@ -112,8 +115,33 @@ public class MemberSubscriptionQueryService implements MemberSubscriptionQueryUs
 			})
 			.toList();
 
+		BigDecimal currentMonthPaidAmount = computed.stream()
+			.filter(c ->
+				YearMonth.from(c.memberSubscription.getLastPaymentDate())
+					.equals(YearMonth.from(currentDate))
+			)
+			.map(ComputedMemberSubscription::actualPaymentAmount)
+			.reduce(BigDecimal.ZERO, BigDecimal::add)
+			.setScale(0, RoundingMode.HALF_UP);
+
+		BigDecimal currentMonthScheduledAmount = computed.stream()
+			.filter(c ->
+				YearMonth.from(c.memberSubscription.getNextPaymentDate())
+					.equals(YearMonth.from(currentDate))
+			)
+			.map(ComputedMemberSubscription::actualPaymentAmount)
+			.reduce(BigDecimal.ZERO, BigDecimal::add)
+			.setScale(0, RoundingMode.HALF_UP);
+
+		BigDecimal currentMonthTotalAmount = currentMonthPaidAmount.add(currentMonthScheduledAmount);
+
+		int paymentProgressPercent = calculatePaymentProgressPercent(currentMonthPaidAmount, currentMonthTotalAmount);
+
 		if (sortBy.equals("type")) {
 			return new GetMemberSubscriptionsResponse(
+				currentMonthPaidAmount,
+				currentMonthTotalAmount,
+				paymentProgressPercent,
 				computed.stream()
 					.collect(Collectors.groupingBy(
 						c -> c.memberSubscription.getSubscription().getType().getDisplayName(),
@@ -130,6 +158,9 @@ public class MemberSubscriptionQueryService implements MemberSubscriptionQueryUs
 		}
 
 		return new GetMemberSubscriptionsResponse(
+			currentMonthPaidAmount,
+			currentMonthTotalAmount,
+			paymentProgressPercent,
 			computed.stream()
 				.map(c -> MemberSubscriptionSummary.of(
 					c.memberSubscription,
