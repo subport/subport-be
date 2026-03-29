@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import subport.api.application.membersubscription.port.in.dto.GetMemberSubscriptionResponse;
 import subport.api.application.membersubscription.port.in.dto.GetMemberSubscriptionsResponse;
+import subport.api.application.membersubscription.port.in.dto.GetMonthlyExpenseSummaryResponse;
 
 public interface MemberSubscriptionQueryUseCase {
 
@@ -19,4 +20,6 @@ public interface MemberSubscriptionQueryUseCase {
 		String sortBy,
 		LocalDate currentDate
 	);
+
+	GetMonthlyExpenseSummaryResponse getMonthlyExpenseSummary(Long memberId, LocalDate currentDate);
 }

@@ -18,6 +18,7 @@ import subport.api.application.exception.ApiErrorCode;
 import subport.api.application.membersubscription.port.in.MemberSubscriptionQueryUseCase;
 import subport.api.application.membersubscription.port.in.dto.GetMemberSubscriptionResponse;
 import subport.api.application.membersubscription.port.in.dto.GetMemberSubscriptionsResponse;
+import subport.api.application.membersubscription.port.in.dto.GetMonthlyExpenseSummaryResponse;
 import subport.api.application.membersubscription.port.in.dto.MemberSubscriptionSummary;
 import subport.api.application.membersubscription.port.in.dto.SpendingRecordSummary;
 import subport.api.application.membersubscription.port.out.LoadMemberSubscriptionPort;
@@ -87,9 +88,6 @@ public class MemberSubscriptionQueryService implements MemberSubscriptionQueryUs
 
 		if (!active) {
 			return new GetMemberSubscriptionsResponse(
-				null,
-				null,
-				null,
 				memberSubscriptions.stream()
 					.map(MemberSubscriptionSummary::from)
 					.toList()
@@ -114,17 +112,8 @@ public class MemberSubscriptionQueryService implements MemberSubscriptionQueryUs
 			})
 			.toList();
 
-		BigDecimal currentMonthPaidAmount = calculateCurrentMonthPaidAmount(currentDate, computed);
-		BigDecimal currentMonthScheduledAmount = calculateCurrentMonthScheduledAmount(currentDate, computed);
-		BigDecimal currentMonthTotalAmount = currentMonthPaidAmount.add(currentMonthScheduledAmount);
-
-		int paymentProgressPercent = calculatePaymentProgressPercent(currentMonthPaidAmount, currentMonthTotalAmount);
-
 		if (sortBy.equals("type")) {
 			return new GetMemberSubscriptionsResponse(
-				currentMonthPaidAmount,
-				currentMonthTotalAmount,
-				paymentProgressPercent,
 				computed.stream()
 					.collect(Collectors.groupingBy(
 						c -> c.memberSubscription.getSubscription().getType().getDisplayName(),
@@ -141,9 +130,6 @@ public class MemberSubscriptionQueryService implements MemberSubscriptionQueryUs
 		}
 
 		return new GetMemberSubscriptionsResponse(
-			currentMonthPaidAmount,
-			currentMonthTotalAmount,
-			paymentProgressPercent,
 			computed.stream()
 				.map(c -> MemberSubscriptionSummary.of(
 					c.memberSubscription,
@@ -154,30 +140,56 @@ public class MemberSubscriptionQueryService implements MemberSubscriptionQueryUs
 		);
 	}
 
+	@Override
+	public GetMonthlyExpenseSummaryResponse getMonthlyExpenseSummary(Long memberId, LocalDate currentDate) {
+		LocalDate start = currentDate.withDayOfMonth(1);
+		LocalDate end = start.plusMonths(1);
+
+		List<MemberSubscription> memberSubscriptions = loadMemberSubscriptionPort.loadMemberSubscriptionsForMonth(
+			memberId,
+			start,
+			end
+		);
+
+		BigDecimal currentMonthPaidAmount = calculateCurrentMonthPaidAmount(currentDate, memberSubscriptions);
+		BigDecimal currentMonthScheduledAmount = calculateCurrentMonthScheduledAmount(currentDate, memberSubscriptions);
+		BigDecimal currentMonthTotalAmount = currentMonthPaidAmount.add(currentMonthScheduledAmount);
+
+		int paymentProgressPercent = calculatePaymentProgressPercent(currentMonthPaidAmount, currentMonthTotalAmount);
+
+		return new GetMonthlyExpenseSummaryResponse(
+			currentMonthPaidAmount,
+			currentMonthTotalAmount,
+			paymentProgressPercent
+		);
+	}
+
 	private BigDecimal calculateCurrentMonthPaidAmount(
 		LocalDate currentDate,
-		List<ComputedMemberSubscription> computed
+		List<MemberSubscription> memberSubscriptions
 	) {
-		return computed.stream()
-			.filter(c ->
-				YearMonth.from(c.memberSubscription.getLastPaymentDate())
-					.equals(YearMonth.from(currentDate))
+		return memberSubscriptions.stream()
+			.filter(ms ->
+				!ms.getLastPaymentDate().isAfter(currentDate) &&
+					YearMonth.from(ms.getLastPaymentDate())
+						.equals(YearMonth.from(currentDate))
 			)
-			.map(ComputedMemberSubscription::actualPaymentAmount)
+			.map(MemberSubscription::calculateActualPaymentAmount)
 			.reduce(BigDecimal.ZERO, BigDecimal::add)
 			.setScale(0, RoundingMode.HALF_UP);
 	}
 
 	private BigDecimal calculateCurrentMonthScheduledAmount(
 		LocalDate currentDate,
-		List<ComputedMemberSubscription> computed
+		List<MemberSubscription> memberSubscriptions
 	) {
-		return computed.stream()
-			.filter(c ->
-				YearMonth.from(c.memberSubscription.getNextPaymentDate())
-					.equals(YearMonth.from(currentDate))
+		return memberSubscriptions.stream()
+			.filter(ms ->
+				ms.getNextPaymentDate().isAfter(currentDate) &&
+					YearMonth.from(ms.getLastPaymentDate())
+						.equals(YearMonth.from(currentDate))
 			)
-			.map(ComputedMemberSubscription::actualPaymentAmount)
+			.map(MemberSubscription::calculateActualPaymentAmount)
 			.reduce(BigDecimal.ZERO, BigDecimal::add)
 			.setScale(0, RoundingMode.HALF_UP);
 	}

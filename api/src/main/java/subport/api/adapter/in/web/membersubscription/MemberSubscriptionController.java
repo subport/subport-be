@@ -29,6 +29,7 @@ import subport.api.application.membersubscription.port.in.UpdateMemberSubscripti
 import subport.api.application.membersubscription.port.in.dto.ActivateMemberSubscriptionRequest;
 import subport.api.application.membersubscription.port.in.dto.GetMemberSubscriptionResponse;
 import subport.api.application.membersubscription.port.in.dto.GetMemberSubscriptionsResponse;
+import subport.api.application.membersubscription.port.in.dto.GetMonthlyExpenseSummaryResponse;
 import subport.api.application.membersubscription.port.in.dto.RegisterMemberSubscriptionRequest;
 import subport.api.application.membersubscription.port.in.dto.RegisterMemberSubscriptionResponse;
 import subport.api.application.membersubscription.port.in.dto.UpdateMemberSubscriptionDutchPayRequest;
@@ -85,6 +86,15 @@ public class MemberSubscriptionController {
 			sortBy,
 			LocalDate.now()
 		));
+	}
+
+	@GetMapping("/monthly-summary")
+	public ResponseEntity<GetMonthlyExpenseSummaryResponse> getMonthlyExpenseSummary(
+		@AuthenticationPrincipal CustomOAuth2User oAuth2User
+	) {
+		return ResponseEntity.ok(
+			memberSubscriptionQueryUseCase.getMonthlyExpenseSummary(oAuth2User.getMemberId(), LocalDate.now())
+		);
 	}
 
 	@PutMapping("/{id}/plan")
