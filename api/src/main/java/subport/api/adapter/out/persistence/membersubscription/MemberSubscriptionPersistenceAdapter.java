@@ -66,6 +66,11 @@ public class MemberSubscriptionPersistenceAdapter implements
 	}
 
 	@Override
+	public List<MemberSubscription> loadMemberSubscriptionsForMonth(Long memberId, LocalDate start, LocalDate end) {
+		return memberSubscriptionRepository.findByPaymentDateBetween(memberId, start, end);
+	}
+
+	@Override
 	public boolean existsMemberSubscriptionBySubscriptionId(Long subscriptionId) {
 		return memberSubscriptionRepository.existsBySubscriptionId(subscriptionId);
 	}

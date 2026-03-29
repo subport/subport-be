@@ -51,6 +51,22 @@ public interface SpringDataMemberSubscriptionRepository extends JpaRepository<Me
 		@Param("end") LocalDate end
 	);
 
+	@Query("""
+		SELECT ms
+		FROM MemberSubscription ms
+		WHERE ms.member.id = :memberId
+		AND ms.active = true
+		AND (
+		  (ms.lastPaymentDate >= :start AND ms.lastPaymentDate < :end)
+		  OR (ms.nextPaymentDate >= :start AND ms.nextPaymentDate < :end)
+		)
+		""")
+	List<MemberSubscription> findByPaymentDateBetween(
+		@Param("memberId") Long memberId,
+		@Param("start") LocalDate start,
+		@Param("end") LocalDate end
+	);
+
 	List<MemberSubscription> findByMemberIdAndLastPaymentDateAndActiveTrue(Long memberId, LocalDate lastPaymentDate);
 
 	void deleteByMemberId(Long memberId);
