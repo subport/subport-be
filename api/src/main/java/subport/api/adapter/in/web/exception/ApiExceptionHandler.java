@@ -32,7 +32,7 @@ public class ApiExceptionHandler {
 	@ExceptionHandler(CustomException.class)
 	public ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
 		ErrorCode errorCode = e.getErrorCode();
-		log.warn("[BIZ] code={}, message={}", errorCode.getCode(), errorCode.getMessage());
+		log.warn("[BIZ] code={}, message={}", errorCode.getCode(), errorCode.getMessage(), e);
 
 		return ResponseEntity.status(errorCode.getStatus())
 			.body(ErrorResponse.of(errorCode));

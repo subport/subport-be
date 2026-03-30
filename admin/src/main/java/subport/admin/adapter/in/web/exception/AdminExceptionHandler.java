@@ -32,7 +32,7 @@ public class AdminExceptionHandler {
 	@ExceptionHandler(CustomException.class)
 	public ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
 		ErrorCode errorCode = e.getErrorCode();
-		log.warn("Business exception: {}", errorCode.getCode());
+		log.warn("Business exception: {}", errorCode.getCode(), e);
 
 		return ResponseEntity.status(errorCode.getStatus())
 			.body(ErrorResponse.of(errorCode));
