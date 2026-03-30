@@ -54,13 +54,12 @@ jobs:
       - name: Deploy to Oracle Cloud
         uses: appleboy/ssh-action@v1
         with:
-          host: ${{ secrets.ORACLE_HOST }}
+          host: ${{ secrets.BATCH_HOST }}
           username: ${{ secrets.ORACLE_USER }}
           key: ${{ secrets.ORACLE_SSH_KEY }}
           script: |
             cd ~/subport
             echo ${{ secrets.DOCKER_HUB_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
             docker compose pull batch
-            docker compose up -d --no-deps batch
+            docker compose up -d batch
             docker image prune -f || true
-            docker exec subport-nginx-1 nginx -s reload
