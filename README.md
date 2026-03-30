@@ -13,7 +13,7 @@
 
 ## 시스템 아키텍처
 
-<img src="https://github.com/user-attachments/assets/67099984-ae2f-4e12-aaa9-451d3e990e9e" width="700" alt="System Architecture">
+<img src="https://github.com/user-attachments/assets/4f2c021e-107e-414b-b52b-6f18a61df527" width="700" alt="System Architecture">
 
 <br><br>
 
