@@ -87,6 +87,15 @@ public class OciObjectStorageAdapter implements
 	}
 
 	private byte[] resizeImage(MultipartFile image) {
+		String originalFilename = image.getOriginalFilename();
+		if (originalFilename != null && originalFilename.toLowerCase().endsWith(".webp")) {
+			try {
+				return image.getBytes();
+			} catch (IOException e) {
+				throw new CustomException(AdminErrorCode.IMAGE_FILE_READ_FAILED, e);
+			}
+		}
+
 		try {
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 			Thumbnails.of(image.getInputStream())
