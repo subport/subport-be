@@ -48,13 +48,17 @@ public class UpdateCustomSubscriptionService implements UpdateCustomSubscription
 			throw new CustomException(ApiErrorCode.SUBSCRIPTION_WRITE_FORBIDDEN);
 		}
 
+		String imageName = request.defaultImageName();
 		String logoImageUrl = subscription.getLogoImageUrl();
-		if (newImage != null) {
+		if (newImage != null && imageName == null) {
 			if (!defaultLogoImageUrl.equals(logoImageUrl) && !SubscriptionPresetImage.isPresetImage(logoImageUrl)) {
 				deleteCustomSubscriptionImagePort.delete(logoImageUrl);
 			}
 
 			logoImageUrl = uploadSubscriptionImagePort.upload(newImage);
+		}
+		if (newImage == null && imageName != null) {
+			logoImageUrl = SubscriptionPresetImage.fromName(imageName).getUrl();
 		}
 
 		subscription.update(
